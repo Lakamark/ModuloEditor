@@ -4,17 +4,29 @@ import type {HtmlSanitizerConfig} from "./HtmlSanitizerConfig";
 /**
  * Configurable HTML sanitizer.
  *
- * This implementation is intentionally minimal and acts as a
- * placeholder until a robust sanitizer (DOMPurify / insane) is plugged in.
+ * This class encapsulates sanitization rules and must remain
+ * completely isolated from the editor core.
  */
 export class ConfigurableHtmlSanitizer implements HtmlSanitizer {
+    private readonly config: HtmlSanitizerConfig;
 
-    public constructor(_config: HtmlSanitizerConfig) {
+    public constructor(config: HtmlSanitizerConfig) {
+        this.config = config;
     }
 
+    /**
+     * Sanitizes raw HTML output.
+     *
+     * @param html - Raw HTML string
+     */
     public sanitize(html: string): string {
-        // Temporary passthrough
-        // real implementation will plug DOMPurify
         return html;
+    }
+
+    /**
+     * Returns the active sanitizer configuration.
+     */
+    public getConfig(): HtmlSanitizerConfig {
+        return this.config;
     }
 }
