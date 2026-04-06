@@ -5,11 +5,12 @@ import {
     HiddenTextareaBridge,
     HtmlPreviewAdapter,
     ModuloEditor,
-    NoopHtmlSanitizer,
     PlainTextMarkdownParser,
     TextareaInputAdapter
 } from "../src";
 import {DefaultEditorDocument} from "../src/core/DefaultEditorDocument";
+import {ConfigurableHtmlSanitizer} from "../src/markdown/config/ConfigurableHtmlSanitizer";
+import {DEFAULT_SANITIZER_CONFIG} from "../src/markdown/config/DefaultHtmlSanitizerConfig";
 
 const root = document.querySelector<HTMLElement>('[data-mo-editor]');
 
@@ -22,7 +23,7 @@ const slots = resolver.resolve(root);
 
 const processor = new DefaultMarkdownProcessor(
     new PlainTextMarkdownParser(),
-    new NoopHtmlSanitizer()
+    new ConfigurableHtmlSanitizer(DEFAULT_SANITIZER_CONFIG)
 );
 
 const editor = new ModuloEditor(
