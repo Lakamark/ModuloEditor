@@ -14,3 +14,6 @@ export * from './input/TextareaInputAdapter';
 // Editor Output imports.
 export * from './output/EditorOutputAdapter';
 export * from './output/HtmlPreviewAdapter';
+
+// Editor imports
+export * from './core/ModuloEditor';

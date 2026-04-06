@@ -1,4 +1,4 @@
-import type { EditorInputAdapter } from './EditorInputAdapter';
+import type {EditorInputAdapter} from './EditorInputAdapter';
 
 export class TextareaInputAdapter implements EditorInputAdapter {
     private textarea: HTMLTextAreaElement | null = null;
@@ -7,7 +7,7 @@ export class TextareaInputAdapter implements EditorInputAdapter {
     public mount(element: HTMLElement, initialValue: string): void {
         const textarea = document.createElement('textarea');
 
-        textarea.value = initialValue;
+       this.setTextareaAttributes(textarea, initialValue);
 
         textarea.addEventListener('input', () => {
             const value = textarea.value;
@@ -52,5 +52,20 @@ export class TextareaInputAdapter implements EditorInputAdapter {
         this.textarea?.remove();
         this.textarea = null;
         this.listeners = [];
+    }
+
+    private generateId(): string {
+        return `mo-editor-${Math.random().toString(36).slice(2)}`;
+    }
+
+    private setTextareaAttributes(
+        textarea: HTMLTextAreaElement,
+        initialValue: string
+    ): void {
+        textarea.id = this.generateId();
+        textarea.className = 'mo-editor__textarea';
+        textarea.value = initialValue;
+        textarea.spellcheck = false;
+        textarea.ariaLabel = 'Markdown editor';
     }
 }

@@ -33,7 +33,7 @@ Modular Markdown editor with plugins and textarea support.
     </div>
     
     <!-- Hidden textarea for a classic form submitted -->
-    <textarea hidden name="content" data-mo-editor-textarea></textarea>
+    <textarea id="content" name="content" hidden data-mo-editor-textarea></textarea>
 </div>
 ```
 
@@ -47,11 +47,25 @@ ModuloEditor is designed to be:
 * TypeScript first
 
 ## Development
+
+Install dependencies
 ```bash
 npm install
+```
+## Run the playground
+```bash
 npm run dev
+```
+
+## Run tests
+```bash
 npm run test
 ```
+## Run test in watch mode
+```bash
+npm run test:watch
+```
+
 ## Status
 Early development — core architecture in progress.
 
