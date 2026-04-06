@@ -23,3 +23,7 @@ export * from './markdown/MarkdownParser';
 export * from './markdown/HtmlSanitizer';
 export * from './markdown/MarkdownProcessor';
 export * from './markdown/DefaultMarkdownProcessor';
+
+// Markdown dev processor
+export * from './markdown/PlainTextMarkdownParser';
+export * from './markdown/NoopHtmlSanitizer';

@@ -1,9 +1,12 @@
 import './style.css';
 import {
     DefaultEditorDomResolver,
+    DefaultMarkdownProcessor,
     HiddenTextareaBridge,
     HtmlPreviewAdapter,
     ModuloEditor,
+    NoopHtmlSanitizer,
+    PlainTextMarkdownParser,
     TextareaInputAdapter
 } from "../src";
 import {DefaultEditorDocument} from "../src/core/DefaultEditorDocument";
@@ -17,11 +20,17 @@ if (!root) {
 const resolver = new DefaultEditorDomResolver();
 const slots = resolver.resolve(root);
 
+const processor = new DefaultMarkdownProcessor(
+    new PlainTextMarkdownParser(),
+    new NoopHtmlSanitizer()
+);
+
 const editor = new ModuloEditor(
     new DefaultEditorDocument(),
     new TextareaInputAdapter(),
     new HtmlPreviewAdapter(),
-    new HiddenTextareaBridge()
+    new HiddenTextareaBridge(),
+    processor
 );
 
 editor.init(slots);

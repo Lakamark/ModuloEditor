@@ -1,8 +1,9 @@
-import {describe, expect, it} from "vitest";
+import {describe, it, expect} from "vitest";
 import {
     type EditorDomSlots,
     type EditorInputAdapter,
     type EditorOutputAdapter, HiddenTextareaBridge,
+    type MarkdownProcessor,
     ModuloEditor
 } from "../../../src";
 import {DefaultEditorDocument} from "../../../src/core/DefaultEditorDocument";
@@ -11,21 +12,21 @@ class FakeInput implements EditorInputAdapter {
     private value = '';
     private listener: ((value: string) => void) | null = null;
 
-    mount(_: HTMLElement, initialValue: string): void {
+    public mount(_: HTMLElement, initialValue: string): void {
         this.value = initialValue;
     }
 
-    getValue(): string {
+    public getValue(): string {
         return this.value;
     }
 
-    setValue(value: string): void {
+    public setValue(value: string): void {
         this.value = value;
     }
 
-    focus(): void {}
+    public focus(): void {}
 
-    onChange(listener: (value: string) => void): () => void {
+    public onChange(listener: (value: string) => void): () => void {
         this.listener = listener;
 
         return () => {
@@ -33,9 +34,9 @@ class FakeInput implements EditorInputAdapter {
         };
     }
 
-    destroy(): void {}
+    public destroy(): void {}
 
-    emit(value: string): void {
+    public emit(value: string): void {
         this.value = value;
         this.listener?.(value);
     }
@@ -44,14 +45,20 @@ class FakeInput implements EditorInputAdapter {
 class FakeOutput implements EditorOutputAdapter {
     public html = '';
 
-    mount(_: HTMLElement): void {}
+    public mount(_: HTMLElement): void {}
 
-    render(html: string): void {
+    public render(html: string): void {
         this.html = html;
     }
 
-    destroy(): void {
+    public destroy(): void {
         this.html = '';
+    }
+}
+
+class FakeMarkdownProcessor implements MarkdownProcessor {
+    public toHtml(markdown: string): string {
+        return `<p>${markdown}</p>`;
     }
 }
 
@@ -70,21 +77,26 @@ function createSlots(): EditorDomSlots {
 }
 
 describe('ModuloEditor', () => {
-    it('should initializes from textarea value', () => {
+    it('renders processed initial textarea value', () => {
         const slots = createSlots();
         slots.textarea.value = 'hello';
+
+        const output = new FakeOutput();
 
         const editor = new ModuloEditor(
             new DefaultEditorDocument(),
             new FakeInput(),
-            new FakeOutput(),
-            new HiddenTextareaBridge()
+            output,
+            new HiddenTextareaBridge(),
+            new FakeMarkdownProcessor()
         );
 
         editor.init(slots);
+
+        expect(output.html).toBe('<p>hello</p>');
     });
 
-    it('should sync the document and textarea on change', () => {
+    it('syncs document and textarea on change', () => {
         const slots = createSlots();
 
         const input = new FakeInput();
@@ -94,14 +106,14 @@ describe('ModuloEditor', () => {
             new DefaultEditorDocument(),
             input,
             output,
-            new HiddenTextareaBridge()
+            new HiddenTextareaBridge(),
+            new FakeMarkdownProcessor()
         );
 
         editor.init(slots);
-
         input.emit('updated');
 
         expect(slots.textarea.value).toBe('updated');
-        expect(output.html).toBe('updated')
+        expect(output.html).toBe('<p>updated</p>');
     });
 });

@@ -3,6 +3,7 @@ import type {EditorInputAdapter} from "../input/EditorInputAdapter";
 import type {EditorOutputAdapter} from "../output/EditorOutputAdapter";
 import type {TextareaBridge} from "../textarea/TextareaBridge";
 import type {EditorDomSlots} from "../dom/EditorDomSlots";
+import type {MarkdownProcessor} from "../markdown/MarkdownProcessor";
 
 /**
  * Main ModuloEditor class.
@@ -19,40 +20,40 @@ export class ModuloEditor {
     private readonly input: EditorInputAdapter;
     private readonly output: EditorOutputAdapter;
     private readonly textareaBridge: TextareaBridge;
+    private readonly processor: MarkdownProcessor;
 
     public constructor(
         document: EditorDocument,
         input: EditorInputAdapter,
         output: EditorOutputAdapter,
-        textareaBridge: TextareaBridge
+        textareaBridge: TextareaBridge,
+        processor: MarkdownProcessor
     ) {
         this.textareaBridge = textareaBridge;
         this.output = output;
         this.input = input;
         this.document = document;
+        this.processor = processor;
     }
 
     /**
      * Initializes the editor using resolved DOM slots.
      */
     public init(slots: EditorDomSlots): void {
-        const initialValue = this.textareaBridge.getValue();
-
         this.textareaBridge.mount(slots.textarea);
 
-        // Set the inialValue in the EditorDocument (core)
+        const initialValue = this.textareaBridge.getValue();
+
         this.document.setRawContent(initialValue);
 
-        // Mount the input editor
         this.input.mount(slots.input, initialValue);
-
-        // Mount the preview editor
         this.output.mount(slots.preview);
-        this.output.render(initialValue);
 
-        // Connect a listener to watch changes.
-        this.unsubscribeInputChange = this.input.onChange((value: string): void => {
-            this.handleInputChange(value)
+        const initialHtml = this.processor.toHtml(initialValue);
+        this.output.render(initialHtml);
+
+        this.unsubscribeInputChange = this.input.onChange((value) => {
+            this.handleInputChange(value);
         });
     }
 
@@ -69,8 +70,10 @@ export class ModuloEditor {
     }
 
     private handleInputChange(value: string): void {
+        const html = this.processor.toHtml(value);
         this.document.setRawContent(value);
         this.textareaBridge.setValue(value);
-        this.output.render(value);
+
+        this.output.render(html);
     }
 }
