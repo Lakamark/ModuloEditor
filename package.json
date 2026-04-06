@@ -1,0 +1,65 @@
+{
+  "name": "@lakamark/modulo-editor",
+  "private": false,
+  "version": "0.0.0-alpha.1",
+  "description": "Modular, extensible and safe Markdown editor with plugin API and textarea form integration.",
+  "type": "module",
+  "author": {
+    "name": "Marc-Antoine Lacasse"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Lakamark/ModuloEditor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lakamark/ModuloEditor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lakamark/ModuloEditor/issues"
+  },
+  "keywords": [
+    "markdown",
+    "editor",
+    "markdown-editor",
+    "wysiwyg",
+    "plugin",
+    "modular",
+    "typescript",
+    "textarea",
+    "form",
+    "safe",
+    "sanitizer",
+    "dom",
+    "modulo",
+    "modulo-editor"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/modulo-editor.js",
+  "module": "./dist/modulo-editor.js",
+  "types": "./dist/types/index.d.ts",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/modulo-editor.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.2",
+    "jsdom": "26.1.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.4",
+    "vitest": "^4.1.2"
+  }
+}
