@@ -17,3 +17,9 @@ export * from './output/HtmlPreviewAdapter';
 
 // Editor imports
 export * from './core/ModuloEditor';
+
+// Markdown processor imports
+export * from './markdown/MarkdownParser';
+export * from './markdown/HtmlSanitizer';
+export * from './markdown/MarkdownProcessor';
+export * from './markdown/DefaultMarkdownProcessor';
