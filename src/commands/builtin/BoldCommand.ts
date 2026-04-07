@@ -9,16 +9,16 @@ export class BoldCommand implements EditorCommand {
     public readonly name = "bold";
 
     public execute(context: EditorCommandContext): void {
-        const {input, state} = context;
-        const {value, selectionStart, selectionEnd} = state;
+        const { input, state } = context;
+        const { value, selectionStart, selectionEnd } = state;
 
-        const selectedText = value.slice(selectionStart, selectionEnd);
-        const beforeSelection = value.slice(0, selectionStart);
-        const afterSelection = value.slice(selectionEnd);
+        const before = value.slice(0, selectionStart);
+        const selected = value.slice(selectionStart, selectionEnd);
+        const after = value.slice(selectionEnd);
 
-        if (selectedText.length > 0) {
-            const wrappedText = `**${selectedText}**`;
-            const nextValue = `${beforeSelection}${wrappedText}${afterSelection}`;
+        if (selected.length > 0) {
+            const wrapped = `**${selected}**`;
+            const nextValue = `${before}${wrapped}${after}`;
 
             input.setValue(nextValue);
             input.focus();
@@ -30,12 +30,11 @@ export class BoldCommand implements EditorCommand {
             return;
         }
 
-        const insertedText = "****";
-        const nextValue = `${beforeSelection}${insertedText}${afterSelection}`;
-        const cursorPosition = selectionStart + 2;
+        const nextValue = `${before}****${after}`;
+        const cursor = selectionStart + 2;
 
         input.setValue(nextValue);
         input.focus();
-        input.setSelection(cursorPosition, cursorPosition);
+        input.setSelection(cursor, cursor);
     }
 }

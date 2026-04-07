@@ -4,6 +4,14 @@ import type {EditorOutputAdapter} from "../output/EditorOutputAdapter";
 import type {TextareaBridge} from "../textarea/TextareaBridge";
 import type {EditorDomSlots} from "../dom/EditorDomSlots";
 import type {MarkdownProcessor} from "../markdown/MarkdownProcessor";
+import type {ModuloEditorOptions} from "./ModuloEditorOptions";
+import type {EditorPlugin} from "../plugins/EditorPlugin";
+import type {EditorPluginApi} from "../plugins/EditorPluginApi";
+import type {EditorCommandContext} from "../commands/EditorCommandContext";
+
+import {EditorCommandRegistry} from "../commands/EditorCommandRegistry";
+import {RegistryEditorCommandsApi} from "../commands/RegistryEditorCommandsApi";
+import {setupEditorCommands} from "../commands/setupEditorCommands";
 
 /**
  * Main ModuloEditor class.
@@ -13,6 +21,8 @@ import type {MarkdownProcessor} from "../markdown/MarkdownProcessor";
  * - input adapter
  * - output adapter
  * - textarea bridge
+ * - command registry
+ * - plugins
  */
 export class ModuloEditor {
     private unsubscribeInputChange: (() => void) | null = null;
@@ -21,19 +31,30 @@ export class ModuloEditor {
     private readonly output: EditorOutputAdapter;
     private readonly textareaBridge: TextareaBridge;
     private readonly processor: MarkdownProcessor;
+    private readonly commandRegistry: EditorCommandRegistry;
+    private readonly plugins: readonly EditorPlugin[];
 
     public constructor(
         document: EditorDocument,
         input: EditorInputAdapter,
         output: EditorOutputAdapter,
         textareaBridge: TextareaBridge,
-        processor: MarkdownProcessor
+        processor: MarkdownProcessor,
+        options: ModuloEditorOptions = {}
     ) {
         this.textareaBridge = textareaBridge;
         this.output = output;
         this.input = input;
         this.document = document;
         this.processor = processor;
+
+        this.commandRegistry = new EditorCommandRegistry();
+        this.plugins = options.plugins ?? [];
+
+        setupEditorCommands(this.commandRegistry, {
+            builtinCommands: options.builtinCommands,
+            commands: options.commands
+        });
     }
 
     /**
@@ -55,6 +76,19 @@ export class ModuloEditor {
         this.unsubscribeInputChange = this.input.onChange((value) => {
             this.handleInputChange(value);
         });
+
+        const commandsApi = new RegistryEditorCommandsApi(
+            this.commandRegistry,
+            () => this.createCommandContext()
+        );
+
+        const pluginApi: EditorPluginApi = {
+            commands: commandsApi
+        };
+
+        for (const plugin of this.plugins) {
+            plugin.setup(pluginApi);
+        }
     }
 
     /**
@@ -64,9 +98,23 @@ export class ModuloEditor {
         this.unsubscribeInputChange?.();
         this.unsubscribeInputChange = null;
 
+        for (const plugin of this.plugins) {
+            plugin.destroy();
+        }
+
         this.input.destroy();
         this.output.destroy();
         this.textareaBridge.destroy();
+    }
+
+    /**
+     * Creates the current command execution context.
+     */
+    private createCommandContext(): EditorCommandContext {
+        return {
+            input: this.input,
+            state: this.input.getState()
+        };
     }
 
     private handleInputChange(value: string): void {
