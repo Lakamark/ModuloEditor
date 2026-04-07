@@ -79,3 +79,11 @@ body {
     height: 1px;
     overflow: hidden;
 }
+
+.mo-editor__toolbar button {
+    background: none;
+    border: 1px solid #2b2b2b;
+    color: white;
+    padding: 4px;
+    border-radius: 5px;
+}

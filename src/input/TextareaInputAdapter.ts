@@ -1,4 +1,5 @@
 import type {EditorInputAdapter} from './EditorInputAdapter';
+import type {EditorInputState} from "../commands/EditorInputState";
 
 export class TextareaInputAdapter implements EditorInputAdapter {
     private textarea: HTMLTextAreaElement | null = null;
@@ -20,6 +21,20 @@ export class TextareaInputAdapter implements EditorInputAdapter {
         element.appendChild(textarea);
 
         this.textarea = textarea;
+    }
+
+    public getState(): EditorInputState {
+        const element = this.getElement();
+
+        return {
+            value: element.value,
+            selectionStart: element.selectionStart ?? 0,
+            selectionEnd: element.selectionEnd ?? 0
+        }
+    }
+
+    public setSelection(start: number, end: number): void {
+        this.getElement().setSelectionRange(start, end);
     }
 
     public getValue(): string {
@@ -67,5 +82,13 @@ export class TextareaInputAdapter implements EditorInputAdapter {
         textarea.value = initialValue;
         textarea.spellcheck = false;
         textarea.ariaLabel = 'Markdown editor';
+    }
+
+    private getElement(): HTMLTextAreaElement {
+        if (!this.textarea) {
+            throw new Error("Textarea input adapter is not mounted.");
+        }
+
+        return this.textarea;
     }
 }

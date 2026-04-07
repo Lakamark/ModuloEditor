@@ -12,6 +12,7 @@ import type {EditorCommandContext} from "../commands/EditorCommandContext";
 import {EditorCommandRegistry} from "../commands/EditorCommandRegistry";
 import {RegistryEditorCommandsApi} from "../commands/RegistryEditorCommandsApi";
 import {setupEditorCommands} from "../commands/setupEditorCommands";
+import {BoldToolbarPlugin} from "../plugins/BoldToolbarPlugin";
 
 /**
  * Main ModuloEditor class.
@@ -33,6 +34,7 @@ export class ModuloEditor {
     private readonly processor: MarkdownProcessor;
     private readonly commandRegistry: EditorCommandRegistry;
     private readonly plugins: readonly EditorPlugin[];
+    private runtimePlugins: EditorPlugin[] = [];
 
     public constructor(
         document: EditorDocument,
@@ -86,7 +88,13 @@ export class ModuloEditor {
             commands: commandsApi
         };
 
-        for (const plugin of this.plugins) {
+        this.runtimePlugins = [
+            ...this.plugins,
+            ...this.createToolbarPlugins(slots)
+        ];
+
+
+        for (const plugin of this.runtimePlugins) {
             plugin.setup(pluginApi);
         }
     }
@@ -98,9 +106,11 @@ export class ModuloEditor {
         this.unsubscribeInputChange?.();
         this.unsubscribeInputChange = null;
 
-        for (const plugin of this.plugins) {
+        for (const plugin of this.runtimePlugins) {
             plugin.destroy();
         }
+
+        this.runtimePlugins = [];
 
         this.input.destroy();
         this.output.destroy();
@@ -123,5 +133,15 @@ export class ModuloEditor {
         this.textareaBridge.setValue(value);
 
         this.output.render(html);
+    }
+
+    private createToolbarPlugins(slots: EditorDomSlots): EditorPlugin[] {
+        if (!slots.toolbar) {
+            return [];
+        }
+
+        return [
+            new BoldToolbarPlugin(slots.toolbar)
+        ]
     }
 }
