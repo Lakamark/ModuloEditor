@@ -1,30 +1,27 @@
-// Dom Resolver imports.
-export * from './dom/EditorDomSlots';
-export * from './dom/EditorDomResolver';
-export * from './dom/DefaultEditorDomResolver';
+// core
+export {ModuloEditor} from './core';
+export type {ModuloEditorOptions} from './core';
 
-// TextArea Bridge imports.
-export * from './textarea/TextareaBridge';
-export * from './textarea/HiddenTextareaBridge';
+// commands
+export type {
+    EditorCommand,
+    EditorCommandContext,
+    EditorCommandsApi,
+} from "./commands";
 
-// Editor Input imports.
-export * from './input/EditorInputAdapter';
-export * from './input/TextareaInputAdapter';
+// plugins
+export type {
+    EditorPlugin,
+    EditorPluginApi,
+} from "./plugins";
 
-// Editor Output imports.
-export * from './output/EditorOutputAdapter';
-export * from './output/HtmlPreviewAdapter';
+// Markdown
+export type {
+    MarkdownParser,
+    MarkdownProcessor,
+    HtmlSanitizer,
+} from "./markdown";
 
-// Editor imports
-export * from './core/ModuloEditor';
-
-// Markdown processor imports
-export * from './markdown/MarkdownParser';
-export * from './markdown/HtmlSanitizer';
-export * from './markdown/MarkdownProcessor';
-export * from './markdown/DefaultMarkdownProcessor';
-
-// Sanitizer Config imports
-export * from './markdown/config/HtmlSanitizerConfig';
-export * from './markdown/config/DefaultHtmlSanitizerConfig';
-export * from './markdown/config/ConfigurableHtmlSanitizer';
+export {
+    DefaultMarkdownProcessor,
+} from "./markdown";

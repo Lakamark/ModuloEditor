@@ -1,6 +1,8 @@
-import type {MarkdownProcessor} from "./MarkdownProcessor";
-import type {MarkdownParser} from "./MarkdownParser";
-import type {HtmlSanitizer} from "./HtmlSanitizer";
+import type {
+    HtmlSanitizer,
+    MarkdownParser,
+    MarkdownProcessor
+} from "../contracts";
 
 /**
  * Default Markdown processor implementation.

@@ -1,5 +1,5 @@
-import type {EditorInputAdapter} from './EditorInputAdapter';
-import type {EditorInputState} from "../commands/EditorInputState";
+import type {EditorInputAdapter} from "./EditorInputAdapter";
+import type {EditorInputState} from "./EditorInputState";
 
 export class TextareaInputAdapter implements EditorInputAdapter {
     private textarea: HTMLTextAreaElement | null = null;

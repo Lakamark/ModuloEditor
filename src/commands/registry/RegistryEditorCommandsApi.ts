@@ -1,6 +1,6 @@
 import type {EditorCommandsApi} from "./EditorCommandsApi";
 import type {EditorCommandRegistry} from "./EditorCommandRegistry";
-import type {EditorCommandContext} from "./EditorCommandContext";
+import type {EditorCommandContext} from "../contracts";
 
 /**
  * Adapter exposing registry commands as a public API.

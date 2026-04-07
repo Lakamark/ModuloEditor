@@ -1,6 +1,7 @@
 import {describe, expect, it} from "vitest";
 import {FakeEditorInput} from "../../../fakes/FakeEditorInput";
-import {BoldCommand} from "../../../../src/commands/builtin";
+import {createEditorContext} from "../../../helpers/createEditorContext";
+import {BoldCommand} from "../../../../src/commands";
 
 describe('BoldCommand', () => {
     it('wraps the selected text with bold markers', () => {
@@ -9,10 +10,7 @@ describe('BoldCommand', () => {
         input.selectionStart = 6;
         input.selectionEnd = 11;
 
-        const context = {
-            input,
-            state: input.getState()
-        };
+        const context = createEditorContext(input);
 
         const command = new BoldCommand();
 
@@ -31,10 +29,7 @@ describe('BoldCommand', () => {
         input.selectionStart = 6;
         input.selectionEnd = 6;
 
-        const context = {
-            input,
-            state: input.getState()
-        };
+        const context = createEditorContext(input);
 
         const command = new BoldCommand();
         command.execute(context);
@@ -49,10 +44,7 @@ describe('BoldCommand', () => {
         input.selectionStart = 6;
         input.selectionEnd = 11;
 
-        const context = {
-            input,
-            state: input.getState()
-        };
+        const context = createEditorContext(input);
 
         const command = new BoldCommand();
         command.execute(context);
@@ -68,10 +60,7 @@ describe('BoldCommand', () => {
         input.selectionStart = 6;
         input.selectionEnd = 6;
 
-        const context = {
-            input,
-            state: input.getState()
-        };
+        const context = createEditorContext(input);
 
         const command = new BoldCommand();
         command.execute(context);
@@ -84,10 +73,7 @@ describe('BoldCommand', () => {
     it('focuses the input after execution', () => {
         const input = new FakeEditorInput();
 
-        const context = {
-            input,
-            state: input.getState()
-        };
+        const context = createEditorContext(input);
 
         const command = new BoldCommand();
 

@@ -1,4 +1,4 @@
-import type {EditorInputState} from "./EditorInputState";
+import type {EditorInputState} from "../../input";
 
 /**
  * Contract describing editable input behavior required by commands.

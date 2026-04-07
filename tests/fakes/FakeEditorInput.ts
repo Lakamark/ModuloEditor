@@ -1,13 +1,20 @@
-import type {EditorInput} from "../../src/commands/EditorInput";
-import type {EditorInputState} from "../../src/commands/EditorInputState";
+import type {EditorInputAdapter, EditorInputState} from "../../src/input";
 
-export class FakeEditorInput implements EditorInput {
+export class FakeEditorInput implements EditorInputAdapter {
     public value = '';
     public focused = false;
     public selectionStart = 0;
     public selectionEnd = 0;
+    public mounted = false;
+    public mountedElement: HTMLElement | null = null;
 
-    private listeners: ((value: string) => void)[] = [];
+    private listeners: Array<(value: string) => void> = [];
+
+    public mount(element: HTMLElement, initialValue: string): void {
+        this.mounted = true;
+        this.mountedElement = element;
+        this.value = initialValue;
+    }
 
     public setValue(value: string): void {
         this.value = value;
@@ -42,11 +49,13 @@ export class FakeEditorInput implements EditorInput {
         this.listeners.push(listener);
 
         return () => {
-            this.listeners = this.listeners.filter(l => l !== listener);
+            this.listeners = this.listeners.filter((registered) => registered !== listener);
         };
     }
 
     public destroy(): void {
         this.listeners = [];
+        this.mounted = false;
+        this.mountedElement = null;
     }
 }

@@ -1,4 +1,4 @@
-import type {HtmlSanitizer} from "./HtmlSanitizer";
+import type {HtmlSanitizer} from "../contracts";
 
 /**
  * Temporary sanitizer used for development.

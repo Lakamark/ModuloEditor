@@ -1,8 +1,10 @@
-import {describe, expect, it} from "vitest";
-import {EditorCommandRegistry} from "../../../src/commands/EditorCommandRegistry";
+import {
+    BoldCommand,
+    EditorCommandRegistry
+} from "../../../src/commands";
 import {FakeEditorCommand} from "../../fakes/FakeEditorCommand";
-import {createFakeEditorContext} from "../../fakes/FakeEditorContext";
-import {BoldCommand} from "../../../src/commands/builtin";
+import {FakeEditorInput} from "../../fakes/FakeEditorInput";
+import {createEditorContext} from "../../helpers/createEditorContext";
 
 describe('EditorCommandRegistry', () => {
     it('registers a command', () => {
@@ -12,6 +14,7 @@ describe('EditorCommandRegistry', () => {
         registry.register(command);
 
         expect(registry.has('fake')).toBe(true);
+        expect(registry.get("fake")).toBe(command);
     });
 
     it('returns a command by name', () => {
@@ -56,11 +59,8 @@ describe('EditorCommandRegistry', () => {
     it('executes a registered command', () => {
         const registry = new EditorCommandRegistry();
         const command = new FakeEditorCommand();
-        const context = createFakeEditorContext(
-            'fake',
-            1,
-            1
-        );
+        const input = new FakeEditorInput();
+        const context = createEditorContext(input);
 
         registry.register(command);
         registry.execute('fake', context)
@@ -70,11 +70,8 @@ describe('EditorCommandRegistry', () => {
 
     it('throws when executing an unknown command', () => {
         const registry = new EditorCommandRegistry();
-        const context = createFakeEditorContext(
-            'fake',
-            1,
-            1
-        );
+        const input = new FakeEditorInput();
+        const context = createEditorContext(input);
 
         expect(() => {
             registry.execute('fake', context);

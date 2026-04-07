@@ -1,119 +1,130 @@
 import {describe, it, expect} from "vitest";
-import {
-    type EditorDomSlots,
-    type EditorInputAdapter,
-    type EditorOutputAdapter, HiddenTextareaBridge,
-    type MarkdownProcessor,
-    ModuloEditor
-} from "../../../src";
-import {DefaultEditorDocument} from "../../../src/core/DefaultEditorDocument";
-
-class FakeInput implements EditorInputAdapter {
-    private value = '';
-    private listener: ((value: string) => void) | null = null;
-
-    public mount(_: HTMLElement, initialValue: string): void {
-        this.value = initialValue;
-    }
-
-    public getValue(): string {
-        return this.value;
-    }
-
-    public setValue(value: string): void {
-        this.value = value;
-    }
-
-    public focus(): void {}
-
-    public onChange(listener: (value: string) => void): () => void {
-        this.listener = listener;
-
-        return () => {
-            this.listener = null;
-        };
-    }
-
-    public destroy(): void {}
-
-    public emit(value: string): void {
-        this.value = value;
-        this.listener?.(value);
-    }
-}
-
-class FakeOutput implements EditorOutputAdapter {
-    public html = '';
-
-    public mount(_: HTMLElement): void {}
-
-    public render(html: string): void {
-        this.html = html;
-    }
-
-    public destroy(): void {
-        this.html = '';
-    }
-}
-
-class FakeMarkdownProcessor implements MarkdownProcessor {
-    public toHtml(markdown: string): string {
-        return `<p>${markdown}</p>`;
-    }
-}
-
-function createSlots(): EditorDomSlots {
-    return {
-        root: document.createElement('div'),
-        header: null,
-        toolbar: null,
-        body: null,
-        input: document.createElement('div'),
-        preview: document.createElement('div'),
-        footer: null,
-        status: null,
-        textarea: document.createElement('textarea')
-    };
-}
+import {FakeEditorInputAdapter} from "../../fakes/FakeEditorInputAdapter";
+import {FakeEditorOutputAdapter} from "../../fakes/FakeEditorOutputAdapter";
+import {FakeMarkdownProcessor} from "../../fakes/FakeMarkdownProcessor";
+import {DefaultEditorDocument, ModuloEditor} from "../../../src/core";
 
 describe('ModuloEditor', () => {
-    it('renders processed initial textarea value', () => {
-        const slots = createSlots();
-        slots.textarea.value = 'hello';
+    it("renders the initial preview on init", () => {
+        const document = new DefaultEditorDocument("Hello");
 
-        const output = new FakeOutput();
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
 
-        const editor = new ModuloEditor(
-            new DefaultEditorDocument(),
-            new FakeInput(),
-            output,
-            new HiddenTextareaBridge(),
-            new FakeMarkdownProcessor()
-        );
-
-        editor.init(slots);
-
-        expect(output.html).toBe('<p>hello</p>');
-    });
-
-    it('syncs document and textarea on change', () => {
-        const slots = createSlots();
-
-        const input = new FakeInput();
-        const output = new FakeOutput();
-
-        const editor = new ModuloEditor(
-            new DefaultEditorDocument(),
+        const editor = new ModuloEditor({
+            document,
             input,
             output,
-            new HiddenTextareaBridge(),
-            new FakeMarkdownProcessor()
-        );
+            markdown,
+        });
 
-        editor.init(slots);
-        input.emit('updated');
+        editor.init();
 
-        expect(slots.textarea.value).toBe('updated');
-        expect(output.html).toBe('<p>updated</p>');
+        expect(output.renderedHtml).toBe("<p>Hello</p>");
+    });
+
+    it("updates the document and output when the input value changes", () => {
+        const document = new DefaultEditorDocument("Hello");
+
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+        });
+
+        editor.init();
+        input.emitChange("Updated");
+
+        expect(document.getRawContent()).toBe("Updated");
+        expect(output.renderedHtml).toBe("<p>Updated</p>");
+    });
+
+    it("sets the value on the document, input and output", () => {
+        const document = new DefaultEditorDocument("Hello");
+
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+        });
+
+        editor.init();
+        editor.setValue("New value");
+
+        expect(document.getRawContent()).toBe("New value");
+        expect(input.getValue()).toBe("New value");
+        expect(output.renderedHtml).toBe("<p>New value</p>");
+    });
+
+    it("returns the current document value", () => {
+        const document = new DefaultEditorDocument("Hello");
+
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+        });
+
+        expect(editor.getValue()).toBe("Hello");
+    });
+
+    it("focuses the input", () => {
+        const document = new DefaultEditorDocument("Hello");
+
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+        });
+
+        expect(input.focused).toBe(false);
+
+        editor.focus();
+
+        expect(input.focused).toBe(true);
+    });
+
+    it("removes the input listener on destroy", () => {
+        const document = new DefaultEditorDocument("Hello");
+
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+        });
+
+        editor.init();
+        editor.destroy();
+
+        input.emitChange("After destroy");
+
+        expect(document.getRawContent()).toBe("Hello");
+        expect(output.renderedHtml).toBe("<p>Hello</p>");
     });
 });

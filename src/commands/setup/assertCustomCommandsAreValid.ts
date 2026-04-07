@@ -1,5 +1,5 @@
-import type {EditorCommand} from './EditorCommand';
 import {isBuiltinCommandName} from './builtin-command-names';
+import type {EditorCommand} from "../contracts";
 
 /**
  * Validates custom commands provided by the user.

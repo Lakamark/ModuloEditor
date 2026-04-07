@@ -1,5 +1,5 @@
 import {describe, expect, it, vi} from "vitest";
-import {BoldToolbarPlugin} from "../../../src/plugins/BoldToolbarPlugin";
+import {BoldToolbarPlugin} from "../../../src/plugins";
 
 describe('BoldToolbarPlugin', () => {
     it('should render a bold button on setup', () => {

@@ -1,4 +1,4 @@
-import type {EditorCommandsApi} from "../commands/EditorCommandsApi";
+import type {EditorCommandsApi} from "../../commands";
 
 /**
  * Public API exposed to editor plugins.

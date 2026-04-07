@@ -1,15 +1,15 @@
 import {describe, expect, it} from "vitest";
-import {DefaultEditorDocument} from "../../../src/core/DefaultEditorDocument";
+import {DefaultEditorDocument} from "../../../src/core";
 
 describe('DefaultEditorDocument', () => {
     it('should return empty string key by default', () => {
-        const document = new DefaultEditorDocument();
+        const document = new DefaultEditorDocument('');
 
         expect(document.getRawContent()).toBe('');
     });
 
     it('should store the content', () => {
-        const document = new DefaultEditorDocument();
+        const document = new DefaultEditorDocument('');
 
         document.setRawContent('# Hello');
 
@@ -17,7 +17,7 @@ describe('DefaultEditorDocument', () => {
     });
 
     it('should overwrite previous content', () => {
-        const document = new DefaultEditorDocument();
+        const document = new DefaultEditorDocument('');
 
         document.setRawContent('A');
         document.setRawContent('B');

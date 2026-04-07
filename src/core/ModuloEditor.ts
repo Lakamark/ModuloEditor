@@ -1,147 +1,107 @@
-import type {EditorDocument} from "./EditorDocument";
-import type {EditorInputAdapter} from "../input/EditorInputAdapter";
-import type {EditorOutputAdapter} from "../output/EditorOutputAdapter";
-import type {TextareaBridge} from "../textarea/TextareaBridge";
-import type {EditorDomSlots} from "../dom/EditorDomSlots";
-import type {MarkdownProcessor} from "../markdown/MarkdownProcessor";
+import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import type {ModuloEditorOptions} from "./ModuloEditorOptions";
-import type {EditorPlugin} from "../plugins/EditorPlugin";
-import type {EditorPluginApi} from "../plugins/EditorPluginApi";
-import type {EditorCommandContext} from "../commands/EditorCommandContext";
-
-import {EditorCommandRegistry} from "../commands/EditorCommandRegistry";
-import {RegistryEditorCommandsApi} from "../commands/RegistryEditorCommandsApi";
-import {setupEditorCommands} from "../commands/setupEditorCommands";
-import {BoldToolbarPlugin} from "../plugins/BoldToolbarPlugin";
+import type {EditorDocument} from "./EditorDocument";
+import type {EditorInputAdapter} from "../input";
+import type {EditorOutputAdapter} from "../output";
+import type {MarkdownProcessor} from "../markdown";
 
 /**
- * Main ModuloEditor class.
+ * Main editor orchestrator.
  *
- * This class orchestrates:
- * - document
- * - input adapter
- * - output adapter
- * - textarea bridge
- * - command registry
- * - plugins
+ * ModuloEditor coordinates the different editor layers:
+ *
+ * - EditorDocument: source of truth for raw content
+ * - EditorInputAdapter: interactive editing layer
+ * - MarkdownProcessor: transforms raw content to HTML
+ * - EditorOutputAdapter: renders processed HTML
+ *
+ * Responsibilities:
+ *
+ * - Initialize input with document content
+ * - Render initial preview
+ * - Synchronize document and preview on input change
+ * - Expose public editor API (getValue, setValue, focus)
+ * - Manage lifecycle (init / destroy)
  */
 export class ModuloEditor {
-    private unsubscribeInputChange: (() => void) | null = null;
-    private readonly document: EditorDocument;
-    private readonly input: EditorInputAdapter;
-    private readonly output: EditorOutputAdapter;
-    private readonly textareaBridge: TextareaBridge;
-    private readonly processor: MarkdownProcessor;
-    private readonly commandRegistry: EditorCommandRegistry;
-    private readonly plugins: readonly EditorPlugin[];
-    private runtimePlugins: EditorPlugin[] = [];
-
-    public constructor(
-        document: EditorDocument,
-        input: EditorInputAdapter,
-        output: EditorOutputAdapter,
-        textareaBridge: TextareaBridge,
-        processor: MarkdownProcessor,
-        options: ModuloEditorOptions = {}
-    ) {
-        this.textareaBridge = textareaBridge;
-        this.output = output;
-        this.input = input;
-        this.document = document;
-        this.processor = processor;
-
-        this.commandRegistry = new EditorCommandRegistry();
-        this.plugins = options.plugins ?? [];
-
-        setupEditorCommands(this.commandRegistry, {
-            builtinCommands: options.builtinCommands,
-            commands: options.commands
-        });
-    }
+    private document: EditorDocument;
+    private input: EditorInputAdapter;
+    private output: EditorOutputAdapter;
+    private markdown: MarkdownProcessor;
+    private unsubscribeInputChange?: () => void;
 
     /**
-     * Initializes the editor using resolved DOM slots.
+     * Creates a new ModuloEditor instance.
+     *
+     * @param options - Editor configuration options
      */
-    public init(slots: EditorDomSlots): void {
-        this.textareaBridge.mount(slots.textarea);
-
-        const initialValue = this.textareaBridge.getValue();
-
-        this.document.setRawContent(initialValue);
-
-        this.input.mount(slots.input, initialValue);
-        this.output.mount(slots.preview);
-
-        const initialHtml = this.processor.toHtml(initialValue);
-        this.output.render(initialHtml);
-
-        this.unsubscribeInputChange = this.input.onChange((value) => {
-            this.handleInputChange(value);
-        });
-
-        const commandsApi = new RegistryEditorCommandsApi(
-            this.commandRegistry,
-            () => this.createCommandContext()
-        );
-
-        const pluginApi: EditorPluginApi = {
-            commands: commandsApi
-        };
-
-        this.runtimePlugins = [
-            ...this.plugins,
-            ...this.createToolbarPlugins(slots)
-        ];
-
-
-        for (const plugin of this.runtimePlugins) {
-            plugin.setup(pluginApi);
-        }
+    public constructor(
+        {
+            document = new DefaultEditorDocument(),
+            input,
+            output,
+            markdown,
+        }: ModuloEditorOptions) {
+        this.document = document;
+        this.input = input;
+        this.output = output;
+        this.markdown = markdown;
     }
 
     /**
-     * Destroys editor instance.
+     * Initializes the editor and synchronizes all layers.
+     *
+     * - sets input value from document
+     * - renders initial preview
+     * - subscribes to input changes
+     */
+    public init(): void {
+        const content = this.document.getRawContent();
+
+        this.input.setValue(content);
+
+        const html = this.markdown.toHtml(content);
+        this.output.render(html);
+
+        this.unsubscribeInputChange = this.input.onChange((value: string) => {
+            this.document.setRawContent(value);
+
+            const nextHtml = this.markdown.toHtml(value);
+            this.output.render(nextHtml);
+        });
+    }
+
+    /**
+     * Destroys the editor and releases all listeners.
      */
     public destroy(): void {
         this.unsubscribeInputChange?.();
-        this.unsubscribeInputChange = null;
-
-        for (const plugin of this.runtimePlugins) {
-            plugin.destroy();
-        }
-
-        this.runtimePlugins = [];
+        this.unsubscribeInputChange = undefined;
 
         this.input.destroy();
         this.output.destroy();
-        this.textareaBridge.destroy();
     }
 
     /**
-     * Creates the current command execution context.
+     * Sets the editor value and synchronizes all layers.
      */
-    private createCommandContext(): EditorCommandContext {
-        return {
-            input: this.input,
-            state: this.input.getState()
-        };
-    }
-
-    private handleInputChange(value: string): void {
-        const html = this.processor.toHtml(value);
+    public setValue(value: string): void {
         this.document.setRawContent(value);
-        this.textareaBridge.setValue(value);
-
-        this.output.render(html);
+        this.input.setValue(value);
+        this.output.render(this.markdown.toHtml(value));
     }
 
-    private createToolbarPlugins(slots: EditorDomSlots): EditorPlugin[] {
-        if (!slots.toolbar) {
-            return [];
-        }
+    /**
+     * Returns the current editor raw value.
+     */
+    public getValue(): string {
+        return this.document.getRawContent();
+    }
 
-        return [
-            new BoldToolbarPlugin(slots.toolbar)
-        ]
+    /**
+     * Focuses the editor input.
+     */
+    public focus(): void {
+        this.input.focus();
     }
 }

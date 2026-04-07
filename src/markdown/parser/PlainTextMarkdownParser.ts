@@ -1,4 +1,4 @@
-import type {MarkdownParser} from "./MarkdownParser";
+import type {MarkdownParser} from "../contracts";
 
 /**
  * Temporary Markdown parser used for development.

@@ -1,4 +1,4 @@
-import type {HtmlSanitizer} from "../HtmlSanitizer";
+import type {HtmlSanitizer} from "../contracts";
 import type {HtmlSanitizerConfig} from "./HtmlSanitizerConfig";
 
 /**

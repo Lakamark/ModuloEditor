@@ -1,24 +1,19 @@
-import type {EditorCommand} from "../../src/commands/EditorCommand";
-import type {EditorCommandContext} from "../../src/commands/EditorCommandContext";
+import type {
+    EditorCommand,
+    EditorCommandContext
+} from "../../src";
 
 export class FakeEditorCommand implements EditorCommand {
-    public name = 'fake';
-
+    public readonly name: string;
     public executed = false;
+    public receivedContext: EditorCommandContext | null = null;
 
-    public execute(context: EditorCommandContext) {
-        const {input, state} = context;
-        const { value, selectionStart } = state;
+    public constructor(name = "fake") {
+        this.name = name;
+    }
 
-        const before = value.slice(0, selectionStart);
-        const after = value.slice(selectionStart);
-
-        const nextValue = `${before}fake${after}`;
-        const cursor = selectionStart + 4;
-
-        input.setValue(nextValue);
-        input.focus();
-        input.setSelection(cursor, cursor);
+    public execute(context: EditorCommandContext): void {
         this.executed = true;
+        this.receivedContext = context;
     }
 }

@@ -1,6 +1,8 @@
 import {describe, it, expect} from "vitest";
-import {DomPurifyHtmlSanitizer} from "../../../../src/markdown/sanitizers/DomPurifyHtmlSanitizer";
-import {DEFAULT_HTML_SANITIZER_CONFIG} from "../../../../src";
+import {
+    DEFAULT_HTML_SANITIZER_CONFIG,
+    DomPurifyHtmlSanitizer
+} from "../../../../src/markdown";
 
 describe('DomPurifyHtmlSanitizer', () => {
     it('keeps allowed tags', () => {

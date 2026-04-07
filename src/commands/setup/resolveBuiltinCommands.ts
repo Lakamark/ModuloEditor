@@ -1,6 +1,7 @@
 import type {BuiltinCommandName} from "./builtin-command-names";
-import type {EditorCommand} from "./EditorCommand";
-import {createBuiltinCommands} from "./builtin";
+import {createBuiltinCommands} from "../builtin";
+import type {EditorCommand} from "../contracts";
+
 
 export function resolveBuiltinCommands(
     option: boolean | readonly BuiltinCommandName[] | undefined

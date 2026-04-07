@@ -1,8 +1,7 @@
-import type {EditorCommand} from "../EditorCommand";
-
 import {BoldCommand} from "./BoldCommand";
 import {ItalicCommand} from "./ItalicCommand";
 import {HeadingCommand} from "./HeadingCommand";
+import type {EditorCommand} from "../contracts";
 
 export {BoldCommand} from "./BoldCommand";
 export {ItalicCommand} from "./ItalicCommand";
@@ -17,6 +16,11 @@ export function createBuiltinCommands(): readonly EditorCommand[] {
     return [
         new BoldCommand(),
         new ItalicCommand(),
-        new HeadingCommand()
+        new HeadingCommand(1),
+        new HeadingCommand(2),
+        new HeadingCommand(3),
+        new HeadingCommand(4),
+        new HeadingCommand(5),
+        new HeadingCommand(6),
     ];
 }

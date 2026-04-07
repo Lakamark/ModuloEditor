@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {DefaultEditorDomResolver} from "../../../src";
+import {DefaultEditorDomResolver} from "../../../src/dom";
 
 function createEditorFixture(): HTMLElement {
     const root = document.createElement('div');

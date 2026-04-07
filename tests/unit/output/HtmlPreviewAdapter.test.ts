@@ -1,6 +1,5 @@
 import {describe, it, expect} from "vitest";
-import {HtmlPreviewAdapter} from "../../../src";
-
+import {HtmlPreviewAdapter} from "../../../src/output";
 describe('HtmlPreviewAdapter', () => {
     it('renders html inside the mounted element', () => {
         const container = document.createElement('div');

@@ -1,6 +1,7 @@
-import DOMPurify from 'dompurify';
-import type {HtmlSanitizer} from "../HtmlSanitizer";
-import type {HtmlSanitizerConfig} from "../config/HtmlSanitizerConfig";
+import type {HtmlSanitizer} from "../contracts";
+import type {HtmlSanitizerConfig} from "../config";
+
+import DOMPurify from "dompurify";
 
 /**
  * HTML sanitizer implementation backed by DOMPurify.

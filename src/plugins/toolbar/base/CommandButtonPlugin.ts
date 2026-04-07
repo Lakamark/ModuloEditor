@@ -1,5 +1,7 @@
-import type {EditorPlugin} from "../EditorPlugin";
-import type {EditorPluginApi} from "../EditorPluginApi";
+import type {
+    EditorPlugin,
+    EditorPluginApi
+} from "../../contracts";
 import type {CommandButtonPluginOptions} from "./CommandButtonPluginOptions";
 
 /**

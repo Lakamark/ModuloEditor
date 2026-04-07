@@ -1,5 +1,7 @@
-import type {EditorCommand} from "./EditorCommand";
-import type {EditorCommandContext} from "./EditorCommandContext";
+import type {
+    EditorCommand,
+    EditorCommandContext
+} from "../contracts";
 
 /**
  * Registry responsible for storing and executing editor commands.

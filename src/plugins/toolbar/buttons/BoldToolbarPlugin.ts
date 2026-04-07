@@ -1,4 +1,4 @@
-import {CommandButtonPlugin} from "./toolbar/CommandButtonPlugin";
+import {CommandButtonPlugin} from "../base";
 
 /**
  * Toolbar plugin rendering a button for the bold command.

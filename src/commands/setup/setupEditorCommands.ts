@@ -1,6 +1,6 @@
 import type {BuiltinCommandName} from "./builtin-command-names";
-import type {EditorCommand} from "./EditorCommand";
-import type {EditorCommandRegistry} from "./EditorCommandRegistry";
+import type {EditorCommand} from "../contracts";
+import {EditorCommandRegistry} from "../registry";
 import {resolveBuiltinCommands} from "./resolveBuiltinCommands";
 import {assertCustomCommandsAreValid} from "./assertCustomCommandsAreValid";
 

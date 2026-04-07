@@ -1,6 +1,7 @@
-import type {EditorCommand} from "../EditorCommand";
-import type {EditorCommandContext} from "../EditorCommandContext";
-
+import type {
+    EditorCommand,
+    EditorCommandContext
+} from "../contracts";
 
 /**
  * Wraps the current selection with Markdown bold markers.

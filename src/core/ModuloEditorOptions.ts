@@ -1,27 +1,11 @@
-import type {BuiltinCommandName} from "../commands/builtin-command-names";
-import type {EditorCommand} from "../commands/EditorCommand";
-import type {EditorPlugin} from "../plugins/EditorPlugin";
+import type {EditorDocument} from "./EditorDocument";
+import type {EditorInputAdapter} from "../input";
+import type {EditorOutputAdapter} from "../output";
+import type {MarkdownProcessor} from "../markdown";
 
-/**
- * Public options used to configure the editor.
- */
 export interface ModuloEditorOptions {
-    /**
-     * Controls which builtin commands are enabled.
-     *
-     * - true / undefined -> enable all builtin commands
-     * - false -> disable all builtin commands
-     * - string[] -> enable only selected builtin commands
-     */
-    readonly builtinCommands?: boolean | readonly BuiltinCommandName[];
-
-    /**
-     * Custom commands provided by the user.
-     */
-    readonly commands?: readonly EditorCommand[];
-
-    /**
-     * Plugins attached to the editor.
-     */
-    readonly plugins?: readonly EditorPlugin[];
+    document?: EditorDocument;
+    input: EditorInputAdapter;
+    output: EditorOutputAdapter;
+    markdown: MarkdownProcessor;
 }

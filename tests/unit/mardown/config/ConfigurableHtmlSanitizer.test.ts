@@ -2,7 +2,8 @@ import {describe, it, expect} from "vitest";
 import {
     ConfigurableHtmlSanitizer,
     type HtmlSanitizerConfig
-} from "../../../../src";
+} from "../../../../src/markdown";
+
 describe('ConfigurableHtmlSanitizer', () => {
     it('returns html as-is for now', () => {
         const sanitizer = new ConfigurableHtmlSanitizer({});
