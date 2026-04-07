@@ -1,39 +1,51 @@
 import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import type {ModuloEditorOptions} from "./ModuloEditorOptions";
 import type {EditorDocument} from "./EditorDocument";
-import type {EditorInputAdapter} from "../input";
-import type {EditorOutputAdapter} from "../output";
-import type {MarkdownProcessor} from "../markdown";
+import type {EditorPlugin, EditorPluginApi} from "../plugins";
+import {
+    type EditorCommandContext,
+    EditorCommandRegistry,
+    type EditorCommandsApi,
+    RegistryEditorCommandsApi
+} from "../commands";
+import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
 
 /**
  * Main editor orchestrator.
  *
- * ModuloEditor coordinates the different editor layers:
+ * ModuloEditor connects:
  *
- * - EditorDocument: source of truth for raw content
- * - EditorInputAdapter: interactive editing layer
- * - MarkdownProcessor: transforms raw content to HTML
- * - EditorOutputAdapter: renders processed HTML
+ * - EditorDocument → source of truth
+ * - EditorInputAdapter → editing layer
+ * - MarkdownProcessor → transforms content to HTML
+ * - EditorOutputAdapter → preview renderer
+ * - EditorCommandsApi → command execution
+ * - EditorPlugin → UI extensions
  *
  * Responsibilities:
  *
- * - Initialize input with document content
- * - Render initial preview
- * - Synchronize document and preview on input change
- * - Expose public editor API (getValue, setValue, focus)
- * - Manage lifecycle (init / destroy)
+ * - initialize editor state
+ * - synchronize input → document → preview
+ * - execute commands
+ * - mount plugins
+ * - manage lifecycle (init / destroy)
  */
 export class ModuloEditor {
-    private document: EditorDocument;
-    private input: EditorInputAdapter;
-    private output: EditorOutputAdapter;
-    private markdown: MarkdownProcessor;
+    private readonly document: EditorDocument;
+    private readonly input: ModuloEditorOptions["input"];
+    private readonly output: ModuloEditorOptions["output"];
+    private readonly markdown: ModuloEditorOptions["markdown"];
+    private readonly plugins: readonly EditorPlugin[];
+    private readonly commands: EditorCommandsApi;
+
     private unsubscribeInputChange?: () => void;
+    private initialized = false;
 
     /**
      * Creates a new ModuloEditor instance.
      *
-     * @param options - Editor configuration options
+     * Commands and plugins are registered but not initialized
+     * until `init()` is called.
      */
     public constructor(
         {
@@ -41,21 +53,42 @@ export class ModuloEditor {
             input,
             output,
             markdown,
+            commands = [],
+            plugins = [],
+            builtinCommands = true
         }: ModuloEditorOptions) {
         this.document = document;
         this.input = input;
         this.output = output;
         this.markdown = markdown;
+        this.plugins = plugins;
+
+        const registry = new EditorCommandRegistry()
+
+        setupEditorCommands(registry, {
+            builtinCommands,
+            commands
+        });
+
+        this.commands = new RegistryEditorCommandsApi(
+            registry,
+            () => this.createCommandContext()
+        );
     }
 
     /**
-     * Initializes the editor and synchronizes all layers.
+     * Initializes the editor.
      *
-     * - sets input value from document
+     * - hydrates input from document
      * - renders initial preview
      * - subscribes to input changes
+     * - mounts plugins
      */
     public init(): void {
+        if (this.initialized) {
+            return;
+        }
+
         const content = this.document.getRawContent();
 
         this.input.setValue(content);
@@ -64,22 +97,41 @@ export class ModuloEditor {
         this.output.render(html);
 
         this.unsubscribeInputChange = this.input.onChange((value: string) => {
-            this.document.setRawContent(value);
-
-            const nextHtml = this.markdown.toHtml(value);
-            this.output.render(nextHtml);
+            this.handleInputChange(value);
         });
+
+        const pluginApi = this.createPluginApi();
+
+        for (const plugin of this.plugins) {
+            plugin.setup(pluginApi);
+        }
+
+        this.initialized = true;
     }
 
     /**
-     * Destroys the editor and releases all listeners.
+     * Destroys the editor.
+     *
+     * - unsubscribes input listeners
+     * - destroys plugins
+     * - destroys adapters
      */
     public destroy(): void {
+        if (!this.initialized) {
+            return;
+        }
+
         this.unsubscribeInputChange?.();
         this.unsubscribeInputChange = undefined;
 
+        for (const plugin of this.plugins) {
+            plugin.destroy();
+        }
+
         this.input.destroy();
         this.output.destroy();
+
+        this.initialized = false;
     }
 
     /**
@@ -99,9 +151,59 @@ export class ModuloEditor {
     }
 
     /**
+     * Executes a registered command and synchronizes editor state.
+     */
+    public executeCommand(name: string): void {
+        if (!this.commands.has(name)) {
+            return;
+        }
+
+        this.commands.execute(name);
+        this.syncFromInput();
+    }
+
+    /**
      * Focuses the editor input.
      */
     public focus(): void {
         this.input.focus();
+    }
+
+    /**
+     *  Handles input changes by synchronizing the document and preview.
+     */
+    private handleInputChange(value: string): void {
+        this.document.setRawContent(value);
+        this.output.render(this.markdown.toHtml(value));
+    }
+
+    /**
+     * Synchronizes document and preview from the current input value.
+     */
+    private syncFromInput(): void {
+        const value = this.input.getValue();
+
+        this.document.setRawContent(value);
+        this.output.render(this.markdown.toHtml(value));
+    }
+
+    /**
+     * Creates the current command execution context.
+     */
+    private createCommandContext(): EditorCommandContext {
+        return {
+            input: this.input,
+            state: this.input.getState()
+        };
+    }
+
+    /**
+     * Creates the API exposed to plugins.
+     */
+    private createPluginApi(): EditorPluginApi {
+        return {
+            commands: this.commands,
+            executeCommand: (name: string): void => this.executeCommand(name)
+        }
     }
 }

@@ -15,7 +15,6 @@ export class RegistryEditorCommandsApi implements EditorCommandsApi {
     ) {
         this.contextResolver = contextResolver;
         this.registry = registry;
-        this.contextResolver = contextResolver;
     }
 
     /**

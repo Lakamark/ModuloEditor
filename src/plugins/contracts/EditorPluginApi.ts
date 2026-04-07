@@ -5,4 +5,5 @@ import type {EditorCommandsApi} from "../../commands";
  */
 export interface EditorPluginApi {
     readonly commands: EditorCommandsApi;
+    executeCommand(name: string): void;
 }

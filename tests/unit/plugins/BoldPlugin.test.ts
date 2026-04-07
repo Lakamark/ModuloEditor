@@ -1,17 +1,12 @@
-import {describe, expect, it, vi} from "vitest";
-import {BoldToolbarPlugin} from "../../../src/plugins";
+import { describe, expect, it } from "vitest";
+import { BoldToolbarPlugin } from "../../../src/plugins";
+import { FakeEditorPluginApi } from "../../fakes/FakeEditorPluginApi";
 
-describe('BoldToolbarPlugin', () => {
-    it('should render a bold button on setup', () => {
-        const container = document.createElement('div');
+describe("BoldToolbarPlugin", () => {
+    it("should render a bold button on setup", () => {
+        const container = document.createElement("div");
         const plugin = new BoldToolbarPlugin(container);
-
-        const api = {
-            commands: {
-                execute: vi.fn(),
-                has: vi.fn(() => true)
-            }
-        };
+        const api = new FakeEditorPluginApi();
 
         plugin.setup(api);
 
@@ -21,46 +16,31 @@ describe('BoldToolbarPlugin', () => {
         expect(button?.textContent).toBe("Bold");
     });
 
-    it('should execute bold command when clicked', () => {
-        const container = document.createElement('div');
+    it("should execute bold command when clicked", () => {
+        const container = document.createElement("div");
         const plugin = new BoldToolbarPlugin(container);
-
-        const execute = vi.fn();
-        const has = vi.fn(() => true);
-
-        const api = {
-            commands: {
-                execute,
-                has
-            }
-        };
+        const api = new FakeEditorPluginApi();
 
         plugin.setup(api);
 
-        const button = container.querySelector('button');
+        const button = container.querySelector("button");
         button?.click();
 
-        expect(has).toHaveBeenCalledWith('bold');
-        expect(execute).toHaveBeenCalledWith('bold');
+        expect(api.commands.has).toHaveBeenCalledWith("bold");
+        expect(api.executeCommand).toHaveBeenCalledWith("bold");
     });
 
-    it('should remove the button on destroy', () => {
-        const container = document.createElement('div');
+    it("should remove the button on destroy", () => {
+        const container = document.createElement("div");
         const plugin = new BoldToolbarPlugin(container);
-
-        const api = {
-            commands: {
-                execute: vi.fn(),
-                has: vi.fn(() => true)
-            }
-        };
+        const api = new FakeEditorPluginApi();
 
         plugin.setup(api);
 
-        expect(container.querySelector('button')).not.toBeNull();
+        expect(container.querySelector("button")).not.toBeNull();
 
         plugin.destroy();
 
-        expect(container.querySelector('button')).toBeNull();
+        expect(container.querySelector("button")).toBeNull();
     });
 });

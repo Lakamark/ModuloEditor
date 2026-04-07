@@ -81,6 +81,6 @@ export class CommandButtonPlugin implements EditorPlugin {
             return;
         }
 
-        this.api.commands.execute(this.commandName);
+        this.api.executeCommand(this.commandName);
     };
 }

@@ -3,6 +3,8 @@ import {FakeEditorInputAdapter} from "../../fakes/FakeEditorInputAdapter";
 import {FakeEditorOutputAdapter} from "../../fakes/FakeEditorOutputAdapter";
 import {FakeMarkdownProcessor} from "../../fakes/FakeMarkdownProcessor";
 import {DefaultEditorDocument, ModuloEditor} from "../../../src/core";
+import {FakeEditorCommand} from "../../fakes/FakeEditorCommand";
+import {FakeEditorPlugin} from "../../fakes/FakeEditorPlugin";
 
 describe('ModuloEditor', () => {
     it("renders the initial preview on init", () => {
@@ -126,5 +128,117 @@ describe('ModuloEditor', () => {
 
         expect(document.getRawContent()).toBe("Hello");
         expect(output.renderedHtml).toBe("<p>Hello</p>");
+    });
+
+    it("executes a registered command", () => {
+        const document = new DefaultEditorDocument("Hello");
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+        const command = new FakeEditorCommand();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+            commands: [command],
+            builtinCommands: false,
+        });
+
+        editor.init();
+        editor.executeCommand("fake");
+
+        expect(command.executed).toBe(true);
+    });
+
+    it("passes the current input state to the executed command", () => {
+        const document = new DefaultEditorDocument("Hello");
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+        const command = new FakeEditorCommand();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+            commands: [command],
+            builtinCommands: false,
+        });
+
+        editor.init();
+        editor.executeCommand("fake");
+
+        expect(command.receivedContext).not.toBeNull();
+        expect(command.receivedContext?.input).toBe(input);
+        expect(command.receivedContext?.state).toEqual({
+            value: "Hello",
+            selectionStart: 0,
+            selectionEnd: 0,
+        });
+    });
+
+    it("sets up all plugins on init", () => {
+        const document = new DefaultEditorDocument("Hello");
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+        const plugin = new FakeEditorPlugin();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+            plugins: [plugin],
+        });
+
+        editor.init();
+
+        expect(plugin.setupCalled).toBe(true);
+        expect(plugin.receivedApi).not.toBeNull();
+    });
+
+    it("destroys all plugins on destroy", () => {
+        const document = new DefaultEditorDocument("Hello");
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+        const plugin = new FakeEditorPlugin();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+            plugins: [plugin],
+        });
+
+        editor.init();
+        editor.destroy();
+
+        expect(plugin.destroyCalled).toBe(true);
+    });
+
+    it("exposes command execution through the plugin api", () => {
+        const document = new DefaultEditorDocument("Hello");
+        const input = new FakeEditorInputAdapter();
+        const output = new FakeEditorOutputAdapter();
+        const markdown = new FakeMarkdownProcessor();
+        const plugin = new FakeEditorPlugin();
+
+        const editor = new ModuloEditor({
+            document,
+            input,
+            output,
+            markdown,
+            plugins: [plugin],
+        });
+
+        editor.init();
+
+        expect(plugin.receivedApi?.executeCommand).toBeTypeOf("function");
     });
 });
