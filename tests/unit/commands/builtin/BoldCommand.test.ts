@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import {FakeEditorInput} from "../../../fakes/FakeEditorInput";
-import {createEditorContext} from "../../../helpers/createEditorContext";
+import {FakeEditorInput} from "../../../fakes";
+import {createEditorContext} from "../../../helpers";
 import {BoldCommand} from "../../../../src/commands";
 
 describe('BoldCommand', () => {

@@ -1,14 +1,17 @@
 import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import type {ModuloEditorOptions} from "./ModuloEditorOptions";
 import type {EditorDocument} from "./EditorDocument";
-import type {EditorPlugin, EditorPluginApi} from "../plugins";
+import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
+import type {
+    EditorPlugin,
+    EditorPluginApi
+} from "../plugins";
 import {
     type EditorCommandContext,
     EditorCommandRegistry,
     type EditorCommandsApi,
     RegistryEditorCommandsApi
 } from "../commands";
-import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
 import {
     DefaultEditorDomResolver,
     type EditorDomResolver
@@ -102,17 +105,16 @@ export class ModuloEditor {
             return;
         }
 
-        const slot = this.domResolver.resolve(this.root);
-
-        this.textareaBridge?.mount(slot.textarea);
-
+        const slots = this.domResolver.resolve(this.root);
         const content = this.document.getRawContent();
 
-        this.input.setValue(content);
+        this.input.mount(slots.input, content);
+        this.textareaBridge?.mount(slots.textarea);
         this.textareaBridge?.setValue(content);
 
         const html = this.markdown.toHtml(content);
         this.output.render(html);
+        this.output.mount(slots.preview);
 
         this.unsubscribeInputChange = this.input.onChange((value: string) => {
             this.handleInputChange(value);

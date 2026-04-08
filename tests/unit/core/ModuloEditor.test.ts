@@ -1,6 +1,6 @@
 import {describe, it, expect} from "vitest";
 import {FakeEditorCommand} from "../../fakes";
-import {createEditorTestContext} from "../../helpers/createEditorTestContext";
+import {createEditorTestContext} from "../../helpers";
 
 describe("ModuloEditor", () => {
     it("renders the initial preview on init", () => {
@@ -153,5 +153,30 @@ describe("ModuloEditor", () => {
         editor.destroy();
 
         expect(textareaBridge.mountedTextarea).toBe(null);
+    });
+
+    it("mounts the input adapter with resolved input element", () => {
+        const { editor, input, inputElement } = createEditorTestContext();
+
+        editor.init();
+
+        expect(input.mountedElement).toBe(inputElement);
+    });
+
+    it("mounts the input adapter with resolved input element and initial value", () => {
+        const { editor, input, inputElement } = createEditorTestContext();
+
+        editor.init();
+
+        expect(input.mountedElement).toBe(inputElement);
+        expect(input.mountedInitialValue).toBe("Hello");
+    });
+
+    it("mounts the output adapter with resolved preview element", () => {
+        const { editor, output, previewElement } = createEditorTestContext();
+
+        editor.init();
+
+        expect(output.mountedElement).toBe(previewElement);
     });
 });

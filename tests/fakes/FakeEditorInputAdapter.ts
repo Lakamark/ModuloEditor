@@ -4,6 +4,7 @@ export class FakeEditorInputAdapter implements EditorInputAdapter {
     private value = "";
     private changeListener?: (value: string) => void;
     public mountedElement?: HTMLElement;
+    public mountedInitialValue: string | null = null
 
     public focused = false;
     public selectionStart = 0;
@@ -12,6 +13,7 @@ export class FakeEditorInputAdapter implements EditorInputAdapter {
 
     public mount(element: HTMLElement, initialValue: string): void {
         this.mountedElement = element;
+        this.mountedInitialValue = initialValue;
         this.value = initialValue;
     }
 
