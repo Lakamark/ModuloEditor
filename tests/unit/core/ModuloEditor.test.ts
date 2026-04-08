@@ -1,6 +1,7 @@
 import {describe, it, expect} from "vitest";
 import {FakeEditorCommand} from "../../fakes";
 import {createEditorTestContext} from "../../helpers";
+import {BoldToolbarPlugin} from "../../../src/plugins";
 
 describe("ModuloEditor", () => {
     it("renders the initial preview on init", () => {
@@ -178,5 +179,24 @@ describe("ModuloEditor", () => {
         editor.init();
 
         expect(output.mountedElement).toBe(previewElement);
+    });
+
+    it("executes bold command from toolbar button through ModuloEditor", () => {
+        const {editor, toolbar, input} = createEditorTestContext(
+            {
+                builtinCommands: true,
+            },
+            ({toolbar}) => [new BoldToolbarPlugin(toolbar)]
+        );
+
+        input.selectionStart = 0;
+        input.selectionEnd = 5;
+
+        editor.init();
+
+        const button = toolbar.querySelector("button");
+        button?.click();
+
+        expect(input.getValue()).toBe("**Hello**");
     });
 });

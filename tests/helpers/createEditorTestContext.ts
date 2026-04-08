@@ -1,5 +1,6 @@
 import {ModuloEditor, type ModuloEditorOptions} from "../../src";
 import {DefaultEditorDocument} from "../../src/core";
+import type {EditorPlugin} from "../../src";
 import {
     FakeEditorDomResolver,
     FakeEditorInputAdapter,
@@ -10,25 +11,27 @@ import {
 } from "../fakes";
 
 export function createEditorTestContext(
-    overrides: Partial<ModuloEditorOptions> = {}
+    overrides: Partial<ModuloEditorOptions> = {},
+    createPlugins?: (context: { toolbar: HTMLDivElement }) => readonly EditorPlugin[]
 ) {
-    const root = document.createElement('div');
+    const root = document.createElement("div");
+    const toolbar = document.createElement("div");
 
-    const inputElement = document.createElement('div');
-    const previewElement = document.createElement('div');
-    const textarea = document.createElement('textarea');
+    const inputElement = document.createElement("div");
+    const previewElement = document.createElement("div");
+    const textarea = document.createElement("textarea");
 
-    const documentModel = new DefaultEditorDocument('Hello');
+    const documentModel = new DefaultEditorDocument("Hello");
     const input = new FakeEditorInputAdapter();
     const output = new FakeEditorOutputAdapter();
     const markdown = new FakeMarkdownProcessor();
     const textareaBridge = new FakeTextareaBridge();
-    const plugin = new FakeEditorPlugin();
+    const defaultPlugin = new FakeEditorPlugin();
 
     const domResolver = new FakeEditorDomResolver({
         root,
         header: null,
-        toolbar: null,
+        toolbar,
         body: null,
         input: inputElement,
         preview: previewElement,
@@ -37,6 +40,8 @@ export function createEditorTestContext(
         textarea,
     });
 
+    const plugins = createPlugins?.({toolbar}) ?? [defaultPlugin];
+
     const options: ModuloEditorOptions = {
         root,
         domResolver,
@@ -44,7 +49,7 @@ export function createEditorTestContext(
         input,
         output,
         markdown,
-        plugins: [plugin],
+        plugins,
         textareaBridge,
         ...overrides,
     };
@@ -55,6 +60,7 @@ export function createEditorTestContext(
         editor,
         options,
         root,
+        toolbar,
         textarea,
         inputElement,
         previewElement,
@@ -63,7 +69,7 @@ export function createEditorTestContext(
         output,
         markdown,
         textareaBridge,
-        plugin,
+        plugin: defaultPlugin,
         domResolver,
     };
 }
