@@ -8,7 +8,9 @@ import type {
 import type { EditorInputAdapter } from "../input";
 import type { MarkdownProcessor } from "../markdown";
 import type { EditorOutputAdapter } from "../output";
-import type { EditorPlugin } from "../plugins";
+import type { EditorPlugin } from "../plugins"
+import type {TextareaBridge} from "../textarea";
+import type {EditorDomResolver} from "../dom";
 
 /**
  * Options used to configure a ModuloEditor instance.
@@ -52,4 +54,12 @@ export interface ModuloEditorOptions {
      * - string[] → enable only specified builtin commands
      */
     readonly builtinCommands?: boolean | readonly BuiltinCommandName[];
+
+    readonly root: HTMLElement;
+    readonly domResolver?: EditorDomResolver;
+
+    /**
+     * Optional bridge used to synchronize a hidden textarea.
+     */
+    readonly textareaBridge?: TextareaBridge;
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { BoldToolbarPlugin } from "../../../src/plugins";
-import { FakeEditorPluginApi } from "../../fakes/FakeEditorPluginApi";
+import { FakeEditorPluginApi } from "../../fakes";
 
 describe("BoldToolbarPlugin", () => {
     it("should render a bold button on setup", () => {

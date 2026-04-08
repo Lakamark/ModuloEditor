@@ -9,6 +9,10 @@ import {
     RegistryEditorCommandsApi
 } from "../commands";
 import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
+import {
+    DefaultEditorDomResolver,
+    type EditorDomResolver
+} from "../dom";
 
 /**
  * Main editor orchestrator.
@@ -37,6 +41,9 @@ export class ModuloEditor {
     private readonly markdown: ModuloEditorOptions["markdown"];
     private readonly plugins: readonly EditorPlugin[];
     private readonly commands: EditorCommandsApi;
+    private readonly root: HTMLElement;
+    private readonly domResolver: EditorDomResolver;
+    private readonly textareaBridge?: ModuloEditorOptions["textareaBridge"];
 
     private unsubscribeInputChange?: () => void;
     private initialized = false;
@@ -55,13 +62,19 @@ export class ModuloEditor {
             markdown,
             commands = [],
             plugins = [],
-            builtinCommands = true
+            builtinCommands = true,
+            root,
+            domResolver,
+            textareaBridge,
         }: ModuloEditorOptions) {
         this.document = document;
         this.input = input;
         this.output = output;
         this.markdown = markdown;
         this.plugins = plugins;
+        this.root = root;
+        this.domResolver = domResolver ?? new DefaultEditorDomResolver();
+        this.textareaBridge = textareaBridge;
 
         const registry = new EditorCommandRegistry()
 
@@ -89,9 +102,14 @@ export class ModuloEditor {
             return;
         }
 
+        const slot = this.domResolver.resolve(this.root);
+
+        this.textareaBridge?.mount(slot.textarea);
+
         const content = this.document.getRawContent();
 
         this.input.setValue(content);
+        this.textareaBridge?.setValue(content);
 
         const html = this.markdown.toHtml(content);
         this.output.render(html);
@@ -128,6 +146,8 @@ export class ModuloEditor {
             plugin.destroy();
         }
 
+        this.textareaBridge?.destroy();
+
         this.input.destroy();
         this.output.destroy();
 
@@ -140,6 +160,8 @@ export class ModuloEditor {
     public setValue(value: string): void {
         this.document.setRawContent(value);
         this.input.setValue(value);
+        this.textareaBridge?.setValue(value);
+
         this.output.render(this.markdown.toHtml(value));
     }
 
@@ -174,6 +196,7 @@ export class ModuloEditor {
      */
     private handleInputChange(value: string): void {
         this.document.setRawContent(value);
+        this.textareaBridge?.setValue(value);
         this.output.render(this.markdown.toHtml(value));
     }
 

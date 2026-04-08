@@ -1,25 +1,10 @@
 import {describe, it, expect} from "vitest";
-import {FakeEditorInputAdapter} from "../../fakes/FakeEditorInputAdapter";
-import {FakeEditorOutputAdapter} from "../../fakes/FakeEditorOutputAdapter";
-import {FakeMarkdownProcessor} from "../../fakes/FakeMarkdownProcessor";
-import {DefaultEditorDocument, ModuloEditor} from "../../../src/core";
-import {FakeEditorCommand} from "../../fakes/FakeEditorCommand";
-import {FakeEditorPlugin} from "../../fakes/FakeEditorPlugin";
+import {FakeEditorCommand} from "../../fakes";
+import {createEditorTestContext} from "../../helpers/createEditorTestContext";
 
-describe('ModuloEditor', () => {
+describe("ModuloEditor", () => {
     it("renders the initial preview on init", () => {
-        const document = new DefaultEditorDocument("Hello");
-
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-        });
+        const {editor, output} = createEditorTestContext();
 
         editor.init();
 
@@ -27,78 +12,34 @@ describe('ModuloEditor', () => {
     });
 
     it("updates the document and output when the input value changes", () => {
-        const document = new DefaultEditorDocument("Hello");
-
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-        });
+        const {editor, input, output, documentModel} = createEditorTestContext();
 
         editor.init();
         input.emitChange("Updated");
 
-        expect(document.getRawContent()).toBe("Updated");
+        expect(documentModel.getRawContent()).toBe("Updated");
         expect(output.renderedHtml).toBe("<p>Updated</p>");
     });
 
     it("sets the value on the document, input and output", () => {
-        const document = new DefaultEditorDocument("Hello");
-
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-        });
+        const {editor, input, output, documentModel} = createEditorTestContext();
 
         editor.init();
         editor.setValue("New value");
 
-        expect(document.getRawContent()).toBe("New value");
+        expect(documentModel.getRawContent()).toBe("New value");
         expect(input.getValue()).toBe("New value");
         expect(output.renderedHtml).toBe("<p>New value</p>");
     });
 
     it("returns the current document value", () => {
-        const document = new DefaultEditorDocument("Hello");
-
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-        });
+        const {editor} = createEditorTestContext();
 
         expect(editor.getValue()).toBe("Hello");
     });
 
     it("focuses the input", () => {
-        const document = new DefaultEditorDocument("Hello");
-
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-        });
+        const {editor, input} = createEditorTestContext();
 
         expect(input.focused).toBe(false);
 
@@ -108,42 +49,23 @@ describe('ModuloEditor', () => {
     });
 
     it("removes the input listener on destroy", () => {
-        const document = new DefaultEditorDocument("Hello");
-
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-        });
+        const {editor, input, documentModel, output} = createEditorTestContext();
 
         editor.init();
         editor.destroy();
 
         input.emitChange("After destroy");
 
-        expect(document.getRawContent()).toBe("Hello");
+        expect(documentModel.getRawContent()).toBe("Hello");
         expect(output.renderedHtml).toBe("<p>Hello</p>");
     });
 
     it("executes a registered command", () => {
-        const document = new DefaultEditorDocument("Hello");
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
         const command = new FakeEditorCommand();
 
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
+        const {editor} = createEditorTestContext({
             commands: [command],
-            builtinCommands: false,
+            builtinCommands: false
         });
 
         editor.init();
@@ -153,19 +75,11 @@ describe('ModuloEditor', () => {
     });
 
     it("passes the current input state to the executed command", () => {
-        const document = new DefaultEditorDocument("Hello");
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
         const command = new FakeEditorCommand();
 
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
+        const {editor, input} = createEditorTestContext({
             commands: [command],
-            builtinCommands: false,
+            builtinCommands: false
         });
 
         editor.init();
@@ -181,19 +95,7 @@ describe('ModuloEditor', () => {
     });
 
     it("sets up all plugins on init", () => {
-        const document = new DefaultEditorDocument("Hello");
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-        const plugin = new FakeEditorPlugin();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-            plugins: [plugin],
-        });
+        const {editor, plugin} = createEditorTestContext();
 
         editor.init();
 
@@ -202,19 +104,7 @@ describe('ModuloEditor', () => {
     });
 
     it("destroys all plugins on destroy", () => {
-        const document = new DefaultEditorDocument("Hello");
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-        const plugin = new FakeEditorPlugin();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-            plugins: [plugin],
-        });
+        const {editor, plugin} = createEditorTestContext();
 
         editor.init();
         editor.destroy();
@@ -223,22 +113,45 @@ describe('ModuloEditor', () => {
     });
 
     it("exposes command execution through the plugin api", () => {
-        const document = new DefaultEditorDocument("Hello");
-        const input = new FakeEditorInputAdapter();
-        const output = new FakeEditorOutputAdapter();
-        const markdown = new FakeMarkdownProcessor();
-        const plugin = new FakeEditorPlugin();
-
-        const editor = new ModuloEditor({
-            document,
-            input,
-            output,
-            markdown,
-            plugins: [plugin],
-        });
+        const {editor, plugin} = createEditorTestContext();
 
         editor.init();
 
         expect(plugin.receivedApi?.executeCommand).toBeTypeOf("function");
+    });
+
+    it("connects the textarea bridge on init", () => {
+        const {editor, textareaBridge, textarea} = createEditorTestContext();
+
+        editor.init();
+
+        expect(textareaBridge.mountedTextarea).toBe(textarea);
+    });
+
+    it("syncs the textarea value when input changes", () => {
+        const {editor, input, textarea} = createEditorTestContext();
+
+        editor.init();
+        input.emitChange("Updated");
+
+        expect(textarea.value).toBe("Updated");
+    });
+
+    it("syncs the textarea value when setValue is called", () => {
+        const {editor, textarea} = createEditorTestContext();
+
+        editor.init();
+        editor.setValue("New value");
+
+        expect(textarea.value).toBe("New value");
+    });
+
+    it("disconnects the textarea bridge on destroy", () => {
+        const {editor, textareaBridge} = createEditorTestContext();
+
+        editor.init();
+        editor.destroy();
+
+        expect(textareaBridge.mountedTextarea).toBe(null);
     });
 });
