@@ -4,12 +4,11 @@ import {CommandButtonPlugin} from "../base";
  * Toolbar plugin rendering a button for the bold command.
  */
 export class BoldToolbarPlugin extends CommandButtonPlugin {
-    public constructor(container: HTMLElement) {
+    public constructor() {
         super({
             pluginName: "toolbar-bold",
             commandName: "bold",
             content: "Bold",
-            container
         });
     }
 }

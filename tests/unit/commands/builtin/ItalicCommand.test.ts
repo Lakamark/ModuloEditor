@@ -1,7 +1,7 @@
 import {describe, expect, it} from "vitest";
-import {FakeEditorInput} from "../../../fakes/FakeEditorInput";
-import {createEditorContext} from "../../../helpers/createEditorContext";
 import {ItalicCommand} from "../../../../src/commands";
+import {FakeEditorInput} from "../../../fakes";
+import {createEditorContext} from "../../../helpers";
 
 describe('ItalicCommand', () => {
     it('should wraps the selected text with italic markers', () => {

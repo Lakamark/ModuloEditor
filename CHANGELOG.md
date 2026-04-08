@@ -6,6 +6,27 @@ The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
 ---
+## 0.2.0-alpha.1
+
+### Added
+- add fluent editor API via `ModuloEditor.create()`
+- introduce `ModuloEditorBuilder`
+- add default builder-based editor initialization
+
+### Changed
+- refactor toolbar plugins to use `EditorPluginApi.slots`
+- simplify default editor setup
+- improve developer experience and playground setup
+
+### Security
+- escape HTML in `PlainTextMarkdownParser`
+- prevent raw HTML injection in preview
+
+### Tests
+- update plugin tests to use slots API
+- add builder tests
+- update DOM integration tests
+---
 
 ## [0.1.0-alpha.1] - 2026-04-08
 

@@ -4,16 +4,17 @@ import {FakeEditorPluginApi} from "../../../fakes";
 
 describe('createDefaultToolbarPlugins', () => {
     it("renders all default toolbar buttons", () => {
-        const toolbar = document.createElement("div");
 
-        const plugins = createDefaultToolbarPlugins(toolbar);
+        const plugins = createDefaultToolbarPlugins();
 
         const api = new FakeEditorPluginApi();
 
         plugins.forEach(p => p.setup(api));
 
-        const buttons = toolbar.querySelectorAll("button");
+        const buttons = api.slots.toolbar?.querySelectorAll("button");
 
-        expect(buttons.length).toBeGreaterThan(1);
+        expect(buttons?.length).toBeGreaterThan(1);
+
+
     });
 });

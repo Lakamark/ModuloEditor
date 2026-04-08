@@ -1,4 +1,7 @@
-import type {EditorDomResolver, EditorDomSlots} from "../../src/dom";
+import type {
+    EditorDomResolver,
+    EditorDomSlots
+} from "../../src/dom/contracts";
 
 export class FakeEditorDomResolver implements EditorDomResolver {
     private readonly slots: EditorDomSlots;

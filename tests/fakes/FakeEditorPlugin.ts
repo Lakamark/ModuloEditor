@@ -1,4 +1,7 @@
-import type { EditorPlugin, EditorPluginApi } from "../../src";
+import type {
+    EditorPlugin,
+    EditorPluginApi
+} from "../../src";
 
 export class FakeEditorPlugin implements EditorPlugin {
     public readonly name: string;

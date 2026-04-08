@@ -1,7 +1,7 @@
 import {describe, expect, it} from "vitest";
-import {FakeEditorInput} from "../../../fakes/FakeEditorInput";
 import {HeadingCommand} from "../../../../src/commands";
-import {createEditorContext} from "../../../helpers/createEditorContext";
+import {FakeEditorInput} from "../../../fakes";
+import {createEditorContext} from "../../../helpers";
 describe("HeadingCommand", () => {
     it("adds a heading prefix at the start of the current line", () => {
         const input = new FakeEditorInput();

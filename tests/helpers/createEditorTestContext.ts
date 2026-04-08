@@ -1,5 +1,8 @@
-import {ModuloEditor, type ModuloEditorOptions} from "../../src";
-import {DefaultEditorDocument} from "../../src/core";
+import {
+    DefaultEditorDocument,
+    ModuloEditor,
+    type ModuloEditorOptions
+} from "../../src/core";
 import type {EditorPlugin} from "../../src";
 import {
     FakeEditorDomResolver,

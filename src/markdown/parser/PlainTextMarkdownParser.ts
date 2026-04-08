@@ -8,6 +8,8 @@ import type {MarkdownParser} from "../contracts";
  */
 export class PlainTextMarkdownParser implements MarkdownParser {
     public parse(markdown: string): string {
-        return `<p>${markdown}</p>`;
+        const p = document.createElement("p");
+        p.textContent = markdown;
+        return p.outerHTML;
     }
 }

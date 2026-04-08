@@ -2,9 +2,11 @@ import {
     BoldCommand,
     EditorCommandRegistry
 } from "../../../src/commands";
-import {FakeEditorCommand} from "../../fakes/FakeEditorCommand";
-import {FakeEditorInput} from "../../fakes/FakeEditorInput";
-import {createEditorContext} from "../../helpers/createEditorContext";
+import {
+    FakeEditorCommand,
+    FakeEditorInput
+} from "../../fakes";
+import {createEditorContext} from "../../helpers";
 
 describe('EditorCommandRegistry', () => {
     it('registers a command', () => {

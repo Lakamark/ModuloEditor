@@ -1,5 +1,7 @@
-import type {EditorDomResolver} from "./EditorDomResolver";
-import type {EditorDomSlots} from "./EditorDomSlots";
+import type {
+    EditorDomResolver,
+    EditorDomSlots
+} from "./contracts";
 
 /**
  * Default implementation of EditorDomResolver.

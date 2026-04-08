@@ -1,6 +1,7 @@
 export { ModuloEditor } from "./ModuloEditor";
 
-export type { ModuloEditorOptions } from "./ModuloEditorOptions";
+export type { ModuloEditorOptions } from "./contracts/ModuloEditorOptions";
 
-export type { EditorDocument } from "./EditorDocument";
+export type { EditorDocument } from "./contracts/EditorDocument";
 export { DefaultEditorDocument } from "./DefaultEditorDocument";
+export type {ModuloEditorBuilder} from "./contracts";

@@ -1,16 +1,15 @@
 import type { EditorDocument } from "./EditorDocument";
-
+import type {EditorInputAdapter} from "../../input";
+import type {EditorOutputAdapter} from "../../output";
+import type {MarkdownProcessor} from "../../markdown";
+import type {EditorPlugin} from "../../plugins";
+import type {EditorDomResolver} from "../../dom";
+import type {TextareaBridge} from "../../textarea";
 import type {
     BuiltinCommandName,
-    EditorCommand,
-} from "../commands";
+    EditorCommand
+} from "../../commands";
 
-import type { EditorInputAdapter } from "../input";
-import type { MarkdownProcessor } from "../markdown";
-import type { EditorOutputAdapter } from "../output";
-import type { EditorPlugin } from "../plugins"
-import type {TextareaBridge} from "../textarea";
-import type {EditorDomResolver} from "../dom";
 
 /**
  * Options used to configure a ModuloEditor instance.

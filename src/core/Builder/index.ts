@@ -1,0 +1,1 @@
+export { DefaultModuloEditorBuilder } from './DefaultModuloEditorBuilder';

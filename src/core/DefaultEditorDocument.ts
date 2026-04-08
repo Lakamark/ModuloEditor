@@ -1,4 +1,4 @@
-import type {EditorDocument} from "./EditorDocument";
+import type {EditorDocument} from "./contracts";
 
 /**
  * Default implementation of EditorDocument.

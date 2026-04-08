@@ -1,7 +1,8 @@
-import {DefaultEditorDocument} from "./DefaultEditorDocument";
-import type {ModuloEditorOptions} from "./ModuloEditorOptions";
-import type {EditorDocument} from "./EditorDocument";
-import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
+import type {
+    EditorDocument,
+    ModuloEditorBuilder,
+    ModuloEditorOptions
+} from "./contracts";
 import type {
     EditorPlugin,
     EditorPluginApi
@@ -14,8 +15,13 @@ import {
 } from "../commands";
 import {
     DefaultEditorDomResolver,
-    type EditorDomResolver
+    type EditorDomResolver,
+    type EditorDomSlots
 } from "../dom";
+import {DefaultEditorDocument} from "./DefaultEditorDocument";
+import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
+import {DefaultModuloEditorBuilder} from "./Builder";
+
 
 /**
  * Main editor orchestrator.
@@ -50,6 +56,7 @@ export class ModuloEditor {
 
     private unsubscribeInputChange?: () => void;
     private initialized = false;
+    private slots!: EditorDomSlots;
 
     /**
      * Creates a new ModuloEditor instance.
@@ -92,6 +99,10 @@ export class ModuloEditor {
         );
     }
 
+    public static create(root: string | HTMLElement): ModuloEditorBuilder  {
+        return new DefaultModuloEditorBuilder(root);
+    }
+
     /**
      * Initializes the editor.
      *
@@ -105,16 +116,16 @@ export class ModuloEditor {
             return;
         }
 
-        const slots = this.domResolver.resolve(this.root);
+        this.slots = this.domResolver.resolve(this.root);
         const content = this.document.getRawContent();
 
-        this.input.mount(slots.input, content);
-        this.textareaBridge?.mount(slots.textarea);
+        this.input.mount(this.slots.input, content);
+        this.textareaBridge?.mount(this.slots.textarea);
         this.textareaBridge?.setValue(content);
 
         const html = this.markdown.toHtml(content);
         this.output.render(html);
-        this.output.mount(slots.preview);
+        this.output.mount(this.slots.preview);
 
         this.unsubscribeInputChange = this.input.onChange((value: string) => {
             this.handleInputChange(value);
@@ -228,7 +239,10 @@ export class ModuloEditor {
     private createPluginApi(): EditorPluginApi {
         return {
             commands: this.commands,
-            executeCommand: (name: string): void => this.executeCommand(name)
+            slots: this.slots,
+            executeCommand: (name: string): void => {
+                this.executeCommand(name);
+            }
         }
     }
 }

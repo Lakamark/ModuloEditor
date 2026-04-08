@@ -4,26 +4,24 @@ import { FakeEditorPluginApi } from "../../fakes";
 
 describe("BoldToolbarPlugin", () => {
     it("should render a bold button on setup", () => {
-        const container = document.createElement("div");
-        const plugin = new BoldToolbarPlugin(container);
         const api = new FakeEditorPluginApi();
+        const plugin = new BoldToolbarPlugin();
 
         plugin.setup(api);
 
-        const button = container.querySelector("button");
+        const button = api.slots.toolbar?.querySelector("button");
 
         expect(button).not.toBeNull();
         expect(button?.textContent).toBe("Bold");
     });
 
     it("should execute bold command when clicked", () => {
-        const container = document.createElement("div");
-        const plugin = new BoldToolbarPlugin(container);
         const api = new FakeEditorPluginApi();
+        const plugin = new BoldToolbarPlugin();
 
         plugin.setup(api);
 
-        const button = container.querySelector("button");
+        const button = api.slots.toolbar?.querySelector("button");
         button?.click();
 
         expect(api.commands.has).toHaveBeenCalledWith("bold");
@@ -31,16 +29,25 @@ describe("BoldToolbarPlugin", () => {
     });
 
     it("should remove the button on destroy", () => {
-        const container = document.createElement("div");
-        const plugin = new BoldToolbarPlugin(container);
         const api = new FakeEditorPluginApi();
+        const plugin = new BoldToolbarPlugin();
 
         plugin.setup(api);
 
-        expect(container.querySelector("button")).not.toBeNull();
+        expect(api.slots.toolbar?.querySelector("button")).not.toBeNull();
 
         plugin.destroy();
 
-        expect(container.querySelector("button")).toBeNull();
+        expect(api.slots.toolbar?.querySelector("button")).toBeNull();
+    });
+
+    it("should not throw when toolbar slot is missing", () => {
+        const api = new FakeEditorPluginApi();
+        api.slots.toolbar = null;
+        const plugin = new BoldToolbarPlugin();
+
+        expect(() => {
+            plugin.setup(api);
+        }).not.toThrow();
     });
 });

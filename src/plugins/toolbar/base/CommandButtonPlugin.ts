@@ -13,7 +13,6 @@ export class CommandButtonPlugin implements EditorPlugin {
 
     private readonly commandName: string;
     private readonly content: string | HTMLElement | (() => HTMLElement);
-    private readonly container: HTMLElement;
 
     private button: HTMLButtonElement | null = null;
     private api: EditorPluginApi | null = null;
@@ -22,13 +21,18 @@ export class CommandButtonPlugin implements EditorPlugin {
         this.name = options.pluginName;
         this.commandName = options.commandName;
         this.content = options.content;
-        this.container = options.container;
     }
 
     /**
      * Mounts the button and binds click interaction.
      */
     public setup(api: EditorPluginApi):void {
+        const toolbar = api.slots.toolbar;
+
+        if (!toolbar) {
+            return;
+        }
+
         this.api = api;
 
         const button = document.createElement("button");
@@ -38,7 +42,7 @@ export class CommandButtonPlugin implements EditorPlugin {
 
         button.addEventListener("click", this.handleClick);
 
-        this.container.appendChild(button);
+       toolbar.appendChild(button);
         this.button = button;
     }
 

@@ -21,9 +21,4 @@ export interface CommandButtonPluginOptions {
      * - a factory returning an HTMLElement
      */
     readonly content: string | HTMLElement | (() => HTMLElement);
-
-    /**
-     * Container where the button will be mounted.
-     */
-    readonly container: HTMLElement;
 }

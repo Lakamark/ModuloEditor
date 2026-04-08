@@ -11,14 +11,13 @@ export type ToolbarPresetOptions = {
 };
 
 export function createDefaultToolbarPlugins(
-    toolbar: HTMLElement,
     options: ToolbarPresetOptions = {}
 ): readonly EditorPlugin[] {
     const { headings = [1, 2, 3] } = options;
 
     return [
-        new BoldToolbarPlugin(toolbar),
-        new ItalicToolbarPlugin(toolbar),
-        ...headings.map(level => new HeadingToolbarPlugin(toolbar, level)),
+        new BoldToolbarPlugin(),
+        new ItalicToolbarPlugin(),
+        ...headings.map(level => new HeadingToolbarPlugin(level)),
     ];
 }

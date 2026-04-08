@@ -1,4 +1,7 @@
-import type {EditorInputAdapter, EditorInputState} from "../../src/input";
+import type {
+    EditorInputAdapter,
+    EditorInputState
+} from "../../src/input";
 
 export class FakeEditorInput implements EditorInputAdapter {
     public value = '';
