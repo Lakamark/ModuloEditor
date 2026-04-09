@@ -1,5 +1,6 @@
 import type {
     EditorDocument,
+    ModuloEditorBuilder,
     ModuloEditorOptions
 } from "./contracts";
 import type {
@@ -21,8 +22,9 @@ import type {
     EditorDomResolver,
     EditorDomSlots
 } from "../dom/contracts";
+import {DefaultModuloEditorBuilder} from "./Builder";
 
-
+// TODO: rewrite ModuloEditor unit/integration tests after builder refactor
 /**
  * Main editor orchestrator.
  *
@@ -99,11 +101,10 @@ export class ModuloEditor {
         );
     }
 
-    /*
+
     public static create(root: string | HTMLElement): ModuloEditorBuilder  {
         return new DefaultModuloEditorBuilder(root);
     }
-     */
 
     /**
      * Initializes the editor.

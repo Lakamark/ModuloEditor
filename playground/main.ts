@@ -6,13 +6,18 @@ import {
     BoldToolbarPlugin,
     ItalicToolbarPlugin
 } from "../src/plugins";
+import {
+    DefaultEditorPreset,
+    SafeMarkdownPreset
+} from "../src/presets";
 
 
 ModuloEditor
     .create('[data-mo-editor]')
-    .use(
-        new BoldToolbarPlugin(),
+    .withPlugins([
         new BoldToolbarPlugin(),
         new ItalicToolbarPlugin()
-    )
-    .init()
+    ])
+    .usePreset(new DefaultEditorPreset())
+    .usePreset(new SafeMarkdownPreset())
+    .build();

@@ -1,32 +1,27 @@
-import type {ModuloEditorBuilder} from "../contracts";
-import type {EditorPreset} from "../../presets";
-import type {EditorDomResolver} from "../../dom/contracts";
-import type {EditorInputAdapter} from "../../input";
-import type {EditorOutputAdapter} from "../../output";
-import type {TextareaBridge} from "../../textarea";
-import type {MarkdownProcessor} from "../../markdown";
-import type {EditorPlugin} from "../../plugins";
+import type {
+    EditorDocument,
+    ModuloEditorBuilder,
+} from "../contracts";
+import type { EditorPreset } from "../../presets";
+import type { EditorDomResolver } from "../../dom/contracts";
+import type { EditorInputAdapter } from "../../input";
+import type { EditorOutputAdapter } from "../../output";
+import type { TextareaBridge } from "../../textarea";
+import type { MarkdownProcessor } from "../../markdown";
+import type { EditorPlugin } from "../../plugins";
+import {ModuloEditor} from "../ModuloEditor";
+import type {EditorCommand} from "../../commands";
 
 export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
-    // @ts-ignore
     private domResolver?: EditorDomResolver;
-
-    // @ts-ignore
     private input?: EditorInputAdapter;
-
-    // @ts-ignore
     private output?: EditorOutputAdapter;
-
-    // @ts-ignore
     private textareaBridge?: TextareaBridge;
-
-    // @ts-ignore
     private markdown?: MarkdownProcessor;
+    private plugins: EditorPlugin[] = [];
+    private document?: EditorDocument;
+    private commands: EditorCommand[] = [];
 
-    // @ts-ignore
-    private plugins?: EditorPlugin[] = [];
-
-    // @ts-ignore
     private readonly root: string | HTMLElement;
 
     public constructor(root: string | HTMLElement) {
@@ -73,5 +68,77 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         this.plugins = [...plugins];
 
         return this;
+    }
+
+    public withDocument(document: EditorDocument): this {
+        this.document = document;
+
+        return this;
+    }
+
+    public withCommands(commands: readonly EditorCommand[]): this {
+        this.commands = [...commands];
+
+        return this;
+    }
+
+    public build(): ModuloEditor {
+        return new ModuloEditor({
+            root: this.requireRootElement(),
+            domResolver: this.domResolver,
+            input: this.requireInput(),
+            output: this.requireOutput(),
+            textareaBridge: this.textareaBridge,
+            markdown: this.requireMarkdown(),
+            plugins: this.plugins,
+            commands: this.commands,
+            document: this.requireDocument()
+        });
+    }
+
+    private requireRootElement(): HTMLElement {
+        if (this.root instanceof HTMLElement) {
+            return this.root;
+        }
+
+        const element = document.querySelector(this.root);
+
+        if (!(element instanceof HTMLElement)) {
+            throw new Error(`ModuloEditorBuilder could not resolve root element from selector "${this.root}".`);
+        }
+
+        return element;
+    }
+
+    private requireInput(): EditorInputAdapter {
+        if (!this.input) {
+            throw new Error("ModuloEditorBuilder requires an input adapter.");
+        }
+
+        return this.input;
+    }
+
+    private requireOutput(): EditorOutputAdapter {
+        if (!this.output) {
+            throw new Error("ModuloEditorBuilder requires an output adapter.");
+        }
+
+        return this.output;
+    }
+
+    private requireMarkdown(): MarkdownProcessor {
+        if (!this.markdown) {
+            throw new Error("ModuloEditorBuilder requires a markdown processor.");
+        }
+
+        return this.markdown;
+    }
+
+    private requireDocument(): EditorDocument {
+        if (!this.document) {
+            throw new Error("ModuloEditorBuilder requires a document.");
+        }
+
+        return this.document;
     }
 }
