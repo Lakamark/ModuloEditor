@@ -20,7 +20,7 @@ import type {ModuloEditorBuilder} from "../contracts";
  *
  * This builder provides a high-level API for common editor setups.
  * It creates a fully configured editor instance using the default
- * DOM resolver, adapters, markdown processor, sanitizer, textarea bridge,
+ * DOM resolver, adapters, Markdown processor, sanitizer, textarea bridge,
  * and default toolbar plugins.
  *
  * For advanced and fully manual setups, the `ModuloEditor` constructor
@@ -60,9 +60,17 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
     private plugins: EditorPlugin[] | false | undefined;
 
     /**
-     * Root editor selector or root editor element.
+     * Root editor selector or HTMLElement used to initialize the editor.
      */
     private readonly root: string | HTMLElement;
+
+    /**
+     * Indicates whether the builder has already been initialized.
+     *
+     * Used to prevent multiple init() calls and configuration changes
+     * after initialization.
+     */
+    private initialized = false;
 
     /**
      * Creates a new builder bound to the provided root selector or element.
@@ -82,8 +90,12 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
      * @param plugins Plugins to mount on the editor instance.
      *
      * @returns The current builder instance.
+     *
+     * @throws Error When called after init().
      */
     public use(...plugins: EditorPlugin[]): this {
+        this.assertNotInitialized();
+
         this.plugins = plugins;
 
         return this;
@@ -93,8 +105,12 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
      * Disables all plugins for the editor instance.
      *
      * @returns The current builder instance.
+     *
+     * @throws Error When called after init().
      */
     public withoutPlugins(): this {
+        this.assertNotInitialized();
+
         this.plugins = false;
 
         return this;
@@ -112,12 +128,18 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
      * @throws Error When the configured root selector does not match any element.
      */
     public init(): ModuloEditor {
+        if (this.initialized) {
+            throw new Error('ModuloEditorBuilder: already initialized.');
+        }
+
         const root = this.resolveRoot(this.root);
         const domResolver = new DefaultEditorDomResolver();
 
         const plugins = this.plugins === false
             ? []
             : this.plugins ?? createDefaultToolbarPlugins();
+
+        this.initialized = true;
 
         const editor = new ModuloEditor({
             root,
@@ -161,5 +183,18 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         }
 
         return element;
+    }
+
+    /**
+     * Ensures the builder has not been initialized yet.
+     *
+     * @throws Error When a configuration method is called after init().
+     */
+    private assertNotInitialized(): void {
+        if (this.initialized) {
+            throw new Error(
+                'ModuloEditorBuilder: configuration cannot be modified after init().'
+            );
+        }
     }
 }
