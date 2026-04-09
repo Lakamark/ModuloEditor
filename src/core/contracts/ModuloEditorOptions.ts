@@ -3,7 +3,7 @@ import type {EditorInputAdapter} from "../../input";
 import type {EditorOutputAdapter} from "../../output";
 import type {MarkdownProcessor} from "../../markdown";
 import type {EditorPlugin} from "../../plugins";
-import type {EditorDomResolver} from "../../dom";
+import type {EditorDomResolver} from "../../dom/contracts";
 import type {TextareaBridge} from "../../textarea";
 import type {
     BuiltinCommandName,

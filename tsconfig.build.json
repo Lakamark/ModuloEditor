@@ -8,7 +8,8 @@
     "declarationMap": true,
 
     /* Build compatibility */
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "emitDeclarationOnly": true
   },
   "include": ["src"]
 }

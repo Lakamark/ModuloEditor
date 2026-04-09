@@ -15,12 +15,14 @@ import {
 } from "../commands";
 import {
     DefaultEditorDomResolver,
-    type EditorDomResolver,
-    type EditorDomSlots
 } from "../dom";
 import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
 import {DefaultModuloEditorBuilder} from "./Builder";
+import type {
+    EditorDomResolver,
+    EditorDomSlots
+} from "../dom/contracts";
 
 
 /**
