@@ -1,12 +1,10 @@
-import type {EditorPreset} from "../../src/presets";
 import type {ModuloEditorBuilder} from "../../src/core";
 
-
-export class FakeEditorPreset implements EditorPreset {
+export class FakeEditorPreset {
     public readonly name = "fake";
     public applied = false;
 
-    apply(_builder: ModuloEditorBuilder) {
+    public apply(_builder: ModuloEditorBuilder): void {
         this.applied = true;
     }
 }

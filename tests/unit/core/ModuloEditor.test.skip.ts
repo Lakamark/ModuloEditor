@@ -1,8 +1,7 @@
 import {describe, it, expect} from "vitest";
-import {FakeEditorCommand, FakeEditorPlugin} from "../../fakes";
+import {FakeEditorCommand} from "../../fakes";
 import {createEditorTestContext} from "../../helpers";
 import {BoldToolbarPlugin} from "../../../src/plugins";
-import {ModuloEditor} from "../../../src";
 
 describe("ModuloEditor", () => {
     it("renders the initial preview on init", () => {
@@ -202,33 +201,5 @@ describe("ModuloEditor", () => {
         button?.click();
 
         expect(input.getValue()).toBe("**Hello**");
-    });
-});
-
-describe('ModuloEditor.create', () => {
-    it('returns a fluent builder', () => {
-        const builder = ModuloEditor.create('#editor');
-
-        expect(builder).toBeDefined();
-        expect(typeof builder.use).toBe('function');
-        expect(typeof builder.withoutPlugins).toBe('function');
-        expect(typeof builder.init).toBe('function');
-    });
-
-    it('returns the same builder instance when calling use', () => {
-        const builder = ModuloEditor.create('#editor');
-        const plugin = new FakeEditorPlugin();
-
-        const result = builder.use(plugin);
-
-        expect(result).toBe(builder);
-    });
-
-    it('returns the same builder instance when calling withoutPlugins', () => {
-        const builder = ModuloEditor.create('#editor');
-
-        const result = builder.withoutPlugins();
-
-        expect(result).toBe(builder);
     });
 });

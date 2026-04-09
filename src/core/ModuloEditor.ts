@@ -1,6 +1,5 @@
 import type {
     EditorDocument,
-    ModuloEditorBuilder,
     ModuloEditorOptions
 } from "./contracts";
 import type {
@@ -18,7 +17,6 @@ import {
 } from "../dom";
 import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
-import {DefaultModuloEditorBuilder} from "./Builder";
 import type {
     EditorDomResolver,
     EditorDomSlots
@@ -101,9 +99,11 @@ export class ModuloEditor {
         );
     }
 
+    /*
     public static create(root: string | HTMLElement): ModuloEditorBuilder  {
         return new DefaultModuloEditorBuilder(root);
     }
+     */
 
     /**
      * Initializes the editor.

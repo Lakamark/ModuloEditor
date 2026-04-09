@@ -1,28 +1,17 @@
-import type {EditorPlugin} from "../../plugins";
-import type {ModuloEditor} from "../ModuloEditor";
 import type {EditorPreset} from "../../presets";
+import type {EditorDomResolver} from "../../dom/contracts";
+import type {EditorInputAdapter} from "../../input";
+import type {EditorOutputAdapter} from "../../output";
+import type {TextareaBridge} from "../../textarea";
+import type {MarkdownProcessor} from "../../markdown";
+import type {EditorPlugin} from "../../plugins";
 
-/**
- * Fluent builder used to configure and create a ModuloEditor instance.
- *
- * This builder provides a higher-level API for common editor setups while
- * keeping the low-level `ModuloEditor` constructor available for advanced use cases.
- */
 export interface ModuloEditorBuilder {
-    /**
-     * Replaces the default plugin list with the provided plugins.
-     */
-    use(...plugins: EditorPlugin[]): this;
-
-    usePreset(preset: EditorPreset): void;
-
-    /**
-     * Disables all default plugins.
-     */
-    withoutPlugins(): this;
-
-    /**
-     * Builds and initializes the editor instance.
-     */
-    init(): ModuloEditor;
+    usePreset(preset: EditorPreset): this;
+    withDomResolver(domResolver: EditorDomResolver): this;
+    withInput(input: EditorInputAdapter): this;
+    withOutput(output: EditorOutputAdapter): this;
+    withTextareaBridge(textareaBridge: TextareaBridge): this;
+    withMarkdown(markdown: MarkdownProcessor): this;
+    withPlugins(plugins: readonly EditorPlugin[]): this;
 }
