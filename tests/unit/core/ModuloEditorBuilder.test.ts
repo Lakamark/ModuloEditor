@@ -1,6 +1,8 @@
 import {beforeEach, describe, expect, it} from "vitest";
 import {ModuloEditor} from "../../../src";
 import {BoldToolbarPlugin} from "../../../src/plugins";
+import {FakeEditorPreset} from "../../fakes";
+import {DefaultModuloEditorBuilder} from "../../../src/core/Builder";
 
 describe('ModuloEditor.create', () => {
     beforeEach(() => {
@@ -75,5 +77,40 @@ describe('ModuloEditor.create', () => {
         const toolbar = document.querySelector('[data-mo-editor-toolbar]');
 
         expect(toolbar?.querySelectorAll('button')).toHaveLength(1);
+    });
+
+    it('should appy the preset', () => {
+        const preset = new FakeEditorPreset();
+        const builder = new DefaultModuloEditorBuilder('test');
+
+        expect(preset.applied).toBe(false);
+
+        builder.usePreset(preset);
+
+        expect(preset.applied).toBe(true);
+
+    });
+
+    it('should return builder for chaining', () => {
+        const preset = new FakeEditorPreset();
+        const builder = new DefaultModuloEditorBuilder('test');
+
+        const result = builder.usePreset(preset);
+
+        expect(result).toBe(builder);
+    });
+
+    it('should allow multiple presets', () => {
+        const presetA = new FakeEditorPreset();
+        const presetB = new FakeEditorPreset();
+
+        const builder = new DefaultModuloEditorBuilder('test');
+
+        builder
+            .usePreset(presetA)
+            .usePreset(presetB);
+
+        expect(presetA.applied).toBe(true);
+        expect(presetB.applied).toBe(true);
     });
 });

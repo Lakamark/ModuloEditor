@@ -1,5 +1,6 @@
 import type {EditorPlugin} from "../../plugins";
 import type {ModuloEditor} from "../ModuloEditor";
+import type {EditorPreset} from "../../presets";
 
 /**
  * Fluent builder used to configure and create a ModuloEditor instance.
@@ -12,6 +13,8 @@ export interface ModuloEditorBuilder {
      * Replaces the default plugin list with the provided plugins.
      */
     use(...plugins: EditorPlugin[]): this;
+
+    usePreset(preset: EditorPreset): void;
 
     /**
      * Disables all default plugins.

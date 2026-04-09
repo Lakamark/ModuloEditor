@@ -14,6 +14,7 @@ import {
     PlainTextMarkdownParser
 } from "../../markdown";
 import type {ModuloEditorBuilder} from "../contracts";
+import type {EditorPreset} from "../../presets/contracts";
 
 /**
  * Default fluent builder implementation for ModuloEditor.
@@ -101,6 +102,12 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         return this;
     }
 
+    public usePreset(preset: EditorPreset): this {
+        preset.apply(this);
+
+        return this;
+    }
+
     /**
      * Disables all plugins for the editor instance.
      *
@@ -112,6 +119,12 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         this.assertNotInitialized();
 
         this.plugins = false;
+
+        return this;
+    }
+
+    public preset(preset: EditorPreset): this {
+        preset.apply(this);
 
         return this;
     }

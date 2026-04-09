@@ -7,3 +7,4 @@ export {FakeEditorPluginApi} from './FakeEditorPluginApi';
 export {FakeMarkdownProcessor} from './FakeMarkdownProcessor';
 export {FakeTextareaBridge} from './FakeTextareaBridge';
 export {FakeEditorDomResolver} from './FakeEditorDomResolver';
+export {FakeEditorPreset} from './FakeEditorPreset';
