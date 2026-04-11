@@ -3,7 +3,7 @@ import type {
     ModuloEditorBuilder,
 } from "../contracts";
 import type { EditorPreset } from "../../presets";
-import type { EditorDomResolver } from "../../dom/contracts";
+import type {EditorDomInitializer, EditorDomResolver} from "../../dom/contracts";
 import type { EditorInputAdapter } from "../../input";
 import type { EditorOutputAdapter } from "../../output";
 import type { TextareaBridge } from "../../textarea";
@@ -24,6 +24,8 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
     private commands: EditorCommand[] = [];
 
     private readonly root: string | HTMLElement;
+    private textarea?:  HTMLTextAreaElement;
+    private domInitializer?: EditorDomInitializer;
 
     public constructor(root: string | HTMLElement) {
         this.root = root;
@@ -31,6 +33,34 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
 
     public usePreset(preset: EditorPreset): this {
         preset.apply(this);
+
+        return this;
+    }
+
+    public fromTextarea(input: string | HTMLTextAreaElement): this {
+        if (typeof input === "string") {
+            const element = document.querySelector(input);
+            if(element === null) {
+                throw new Error(`No element found for selector ${input}`);
+            } else if (!(element instanceof HTMLTextAreaElement)) {
+                throw new Error(`Element ${input} is not a textarea`)
+            }
+            this.textarea = element;
+
+            return this;
+        }
+
+        if (!(input instanceof HTMLTextAreaElement)) {
+            throw new Error(`The ${input} is not a textarea`);
+        }
+
+        this.textarea = input;
+
+        return this;
+    }
+
+    public withDomInitializer(domInitializer: EditorDomInitializer): this {
+        this.domInitializer = domInitializer;
 
         return this;
     }
@@ -85,7 +115,7 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
 
     public build(): ModuloEditor {
         return new ModuloEditor({
-            root: this.requireRootElement(),
+            root: this.resolveRootElement(),
             domResolver: this.domResolver,
             input: this.requireInput(),
             output: this.requireOutput(),
@@ -137,5 +167,18 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
 
     private resolveDocument(): EditorDocument {
         return this.document ?? new DefaultEditorDocument();
+    }
+
+    private resolveRootElement(): HTMLElement {
+       if (this.textarea) {
+           if (this.domInitializer === undefined) {
+               return this.requireRootElement();
+           }
+
+           const result = this.domInitializer.initialize(this.textarea);
+           return result.root;
+       }
+
+       return this.requireRootElement();
     }
 }
