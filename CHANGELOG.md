@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## 0.2.0-alpha.2
+
+### Fixed
+- Builder no longer requires explicit document
+- Default document fallback now used
+
+### Added
+- ModuloEditorBuilder integration tests
+- validation tests for required builder dependencies
+
+### Internal
+- improve builder stability
+- align builder behavior with ModuloEditor defaults
 ---
 ## 0.2.0-alpha.1
 
@@ -49,14 +62,14 @@ and this project adheres to Semantic Versioning.
 - Add builtin commands factory
 - Add editor input state concept
 - Add barrel exports across modules
-- Add new test fakes (input, output, markdown)
+- Add new test fakes (input, output, Markdown)
 
 ### Refactor
 - Reorganize commands into:
     - contracts
     - registry
     - builtin
-- Reorganize markdown into:
+- Reorganize Markdown into:
     - contracts
     - parser
     - sanitizers
@@ -75,7 +88,7 @@ and this project adheres to Semantic Versioning.
 - Add command registry tests
 - Add bold command tests
 
-### 🗑 Removed
+### Removed
 - Temporary remove playground compatibility
 - Remove legacy command execution flow
 

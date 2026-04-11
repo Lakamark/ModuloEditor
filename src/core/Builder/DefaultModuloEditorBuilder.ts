@@ -9,8 +9,9 @@ import type { EditorOutputAdapter } from "../../output";
 import type { TextareaBridge } from "../../textarea";
 import type { MarkdownProcessor } from "../../markdown";
 import type { EditorPlugin } from "../../plugins";
-import {ModuloEditor} from "../ModuloEditor";
-import type {EditorCommand} from "../../commands";
+import { ModuloEditor } from "../ModuloEditor";
+import { DefaultEditorDocument } from "../DefaultEditorDocument";
+import type { EditorCommand } from "../../commands";
 
 export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
     private domResolver?: EditorDomResolver;
@@ -92,7 +93,7 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
             markdown: this.requireMarkdown(),
             plugins: this.plugins,
             commands: this.commands,
-            document: this.requireDocument()
+            document: this.resolveDocument()
         });
     }
 
@@ -134,11 +135,7 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         return this.markdown;
     }
 
-    private requireDocument(): EditorDocument {
-        if (!this.document) {
-            throw new Error("ModuloEditorBuilder requires a document.");
-        }
-
-        return this.document;
+    private resolveDocument(): EditorDocument {
+        return this.document ?? new DefaultEditorDocument();
     }
 }

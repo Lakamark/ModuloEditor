@@ -9,7 +9,7 @@ import {
 } from "../../markdown";
 
 export class SafeMarkdownPreset implements EditorPreset {
-    public readonly name = "starter-kit";
+    public readonly name = "safe-markdown";
 
     public apply(builder: ModuloEditorBuilder): void {
         builder

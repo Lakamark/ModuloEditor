@@ -8,12 +8,19 @@ export class FakeEditorCommand implements EditorCommand {
     public executed = false;
     public receivedContext: EditorCommandContext | null = null;
 
-    public constructor(name = "fake") {
+    private readonly nextValue?: string;
+
+    public constructor(name = "fake", nextValue?: string) {
         this.name = name;
+        this.nextValue = nextValue;
     }
 
     public execute(context: EditorCommandContext): void {
         this.executed = true;
         this.receivedContext = context;
+
+        if (this.nextValue !== undefined) {
+            context.input.setValue(this.nextValue);
+        }
     }
 }

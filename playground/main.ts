@@ -3,21 +3,21 @@ import {
     ModuloEditor
 } from "../src";
 import {
-    BoldToolbarPlugin,
+    BoldToolbarPlugin, HeadingToolbarPlugin,
     ItalicToolbarPlugin
 } from "../src/plugins";
-import {
-    DefaultEditorPreset,
-    SafeMarkdownPreset
-} from "../src/presets";
+import {StarterKitPreset} from "../src/presets";
 
 
 ModuloEditor
     .create('[data-mo-editor]')
     .withPlugins([
         new BoldToolbarPlugin(),
-        new ItalicToolbarPlugin()
+        new ItalicToolbarPlugin(),
+        new HeadingToolbarPlugin(1),
+        new HeadingToolbarPlugin(2),
+        new HeadingToolbarPlugin(3),
     ])
-    .usePreset(new DefaultEditorPreset())
-    .usePreset(new SafeMarkdownPreset())
-    .build();
+    .usePreset(new StarterKitPreset())
+    .build()
+    .init()
