@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## 0.3.0-alpha.1
+
+### Added
+
+- add `EditorDomInitializer` contract
+- add `DefaultEditorDomInitializer`
+- support initialization from textarea
+- add `fromTextarea()` builder method
+- add `withDomInitializer()` builder method
+- add automatic textareaBridge mounting
+- support `ModuloEditor.create()` without root
+
+### Changed
+
+- improve `DefaultModuloEditorBuilder` DOM resolution
+- root resolution now prioritizes textarea initializer
+- builder now resolves textarea via initializer result
+
+### Internal
+
+- add `resolveTextareaElement()` helper
+- add DOM initializer tests
+- improve builder test coverage
+---
+
 ## 0.2.0-alpha.2
 
 ### Fixed
@@ -18,6 +43,7 @@ and this project adheres to Semantic Versioning.
 ### Internal
 - improve builder stability
 - align builder behavior with ModuloEditor defaults
+
 ---
 ## 0.2.0-alpha.1
 

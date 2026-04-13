@@ -1,37 +1,47 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>Modulo Editor Demo</title>
+<head>
+    <title>ModuloEditor Dev</title>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/playground/main.ts" defer></script>
-  </head>
-  <body>
-  <div class="app">
-    <h1>ModuloEditor Playground</h1>
-    <form>
-      <div class="mo-editor" data-mo-editor>
-        <div class="mo-editor__header" data-mo-editor-header>
-          <div class="mo-editor__toolbar" data-mo-editor-toolbar></div>
-        </div>
+    <script type="module" src="/main.ts" defer></script>
+    <style>
+        body {
+            font-family: ui-sans-serif sans-serif;
+            padding: 40px;
+            max-width: 900px;
+            margin: auto;
+        }
 
-        <div class="mo-editor__body" data-mo-editor-body>
-          <div class="mo-editor__input" data-mo-editor-input></div>
-          <div class="mo-editor__preview" data-mo-editor-preview></div>
-        </div>
+        .docs-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #0ea5e9;
+            text-decoration: none;
+            font-weight: 500;
+        }
 
-        <div class="mo-editor__footer" data-mo-editor-footer>
-          <div class="mo-editor__status" data-mo-editor-status></div>
-        </div>
-        <label for="editor-content" class="sr-only">Content</label>
-        <textarea
-                hidden
-                name="content"
-                id="editor-content"
-                data-mo-editor-textarea># Hello ModuloEditor</textarea>
-      </div>
-    </form>
-  </div>
-  </body>
+        .docs-link:hover {
+            text-decoration: underline;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<label for="content">Content</label>
+<textarea id="content">
+# Hello ModuloEditor
+
+This is a development entry point.
+</textarea>
+<p>
+    <a class="docs-link" href="https://github.com/lakamark/ModuloEditor" target="_blank">
+        → View official documentation
+    </a>
+</p>
+</body>
 </html>

@@ -101,8 +101,16 @@ export class ModuloEditor {
         );
     }
 
-
-    public static create(root: string | HTMLElement): ModuloEditorBuilder  {
+    /**
+     * Creates a new ModuloEditor builder.
+     *
+     * A root element can be provided for explicit DOM mode, but it is optional
+     * when using textarea-based initialization with a DOM initializer.
+     *
+     * @param root The editor root element or selector.
+     * @returns A new ModuloEditor builder instance.
+     */
+    public static create(root?: string | HTMLElement): ModuloEditorBuilder  {
         return new DefaultModuloEditorBuilder(root);
     }
 
