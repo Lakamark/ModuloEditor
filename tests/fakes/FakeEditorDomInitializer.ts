@@ -1,7 +1,7 @@
 import type {
     EditorDomInitializationResult,
     EditorDomInitializer
-} from "../../src/dom/contracts";
+} from "../../src";
 
 export class FakeEditorDomInitializer implements EditorDomInitializer {
     public called = false;

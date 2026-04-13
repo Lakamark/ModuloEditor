@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {createDefaultToolbarPlugins} from "../../../../src/plugins";
+import {createDefaultToolbarPlugins} from "../../../../src";
 import {FakeEditorPluginApi} from "../../../fakes";
 
 describe('createDefaultToolbarPlugins', () => {

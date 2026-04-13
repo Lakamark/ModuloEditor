@@ -1,5 +1,7 @@
-import type {EditorInputAdapter} from "../../src/input";
-import type {EditorCommandContext} from "../../src";
+import type {
+    EditorCommandContext,
+    EditorInputAdapter
+} from "../../src";
 
 export function createEditorContext(
     input: EditorInputAdapter

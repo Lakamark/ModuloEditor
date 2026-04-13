@@ -1,4 +1,8 @@
-import {FakeEditorDomInitializer, FakeEditorDomResolver, FakeEditorPreset} from "../../fakes";
+import {
+    FakeEditorDomInitializer,
+    FakeEditorDomResolver,
+    FakeEditorPreset
+} from "../../fakes";
 import {DefaultModuloEditorBuilder} from "../../../src/core/Builder";
 import {expect} from "vitest";
 

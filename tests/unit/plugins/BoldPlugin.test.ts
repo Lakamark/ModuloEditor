@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BoldToolbarPlugin } from "../../../src/plugins";
+import { BoldToolbarPlugin } from "../../../src";
 import { FakeEditorPluginApi } from "../../fakes";
 
 describe("BoldToolbarPlugin", () => {

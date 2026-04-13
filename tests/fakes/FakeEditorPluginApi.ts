@@ -1,5 +1,5 @@
 import type {EditorCommandsApi, EditorPluginApi} from "../../src";
-import type {EditorDomSlots} from "../../src/dom/contracts";
+import type {EditorDomSlots} from "../../src";
 
 /**
  * Mutable version of EditorDomSlots used for testing.

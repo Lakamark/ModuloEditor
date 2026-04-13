@@ -1,6 +1,8 @@
-import {ModuloEditor} from "./src";
-import {DefaultEditorDomInitializer} from "./src/dom";
-import {StarterKitPreset} from "./src/presets";
+import {
+    DefaultEditorDomInitializer,
+    ModuloEditor,
+    StarterKitPreset
+} from "./src";
 
 ModuloEditor
     .create()

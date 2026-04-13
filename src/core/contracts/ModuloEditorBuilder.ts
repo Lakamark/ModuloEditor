@@ -1,5 +1,4 @@
 import type {EditorPreset} from "../../presets";
-import type {EditorDomInitializer, EditorDomResolver} from "../../dom/contracts";
 import type {EditorInputAdapter} from "../../input";
 import type {EditorOutputAdapter} from "../../output";
 import type {TextareaBridge} from "../../textarea";
@@ -8,6 +7,10 @@ import type {EditorPlugin} from "../../plugins";
 import type {ModuloEditor} from "../ModuloEditor";
 import type {EditorDocument} from "./EditorDocument";
 import type {EditorCommand} from "../../commands";
+import type {
+    EditorDomInitializer,
+    EditorDomResolver
+} from "../../dom";
 
 export interface ModuloEditorBuilder {
     usePreset(preset: EditorPreset): this;

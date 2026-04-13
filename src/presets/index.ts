@@ -1,2 +1,7 @@
-export type {EditorPreset} from "./contracts";
-export * from "./builtin";
+export type { EditorPreset } from "./contracts";
+
+export {
+    DefaultEditorPreset,
+    SafeMarkdownPreset,
+    StarterKitPreset
+} from "./builtin";

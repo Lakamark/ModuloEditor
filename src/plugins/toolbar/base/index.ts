@@ -1,2 +1,2 @@
-export type {CommandButtonPluginOptions} from './CommandButtonPluginOptions';
-export {CommandButtonPlugin} from './CommandButtonPlugin';
+export { CommandButtonPlugin } from './CommandButtonPlugin';
+export type { CommandButtonPluginOptions } from './CommandButtonPluginOptions';

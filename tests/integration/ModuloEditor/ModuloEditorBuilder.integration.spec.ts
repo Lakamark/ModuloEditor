@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { ModuloEditor } from "../../../src";
 import {
-    FakeEditorInput,
+    FakeEditorDomResolver,
+    FakeEditorInput, FakeEditorInputAdapter,
     FakeEditorOutputAdapter,
     FakeMarkdownProcessor,
     FakeTextareaBridge
@@ -91,5 +92,19 @@ describe('ModuloEditorBuilder integration', () => {
                 .withMarkdown(new FakeMarkdownProcessor())
                 .build();
         }).toThrow('ModuloEditorBuilder could not resolve root element');
+    });
+
+    it("should create editor using builder", () => {
+        const root = document.createElement("div");
+
+        const editor = ModuloEditor
+            .create(root)
+            .withDomResolver(new FakeEditorDomResolver())
+            .withInput(new FakeEditorInputAdapter())
+            .withOutput(new FakeEditorOutputAdapter())
+            .withMarkdown(new FakeMarkdownProcessor())
+            .build();
+
+        expect(editor).toBeInstanceOf(ModuloEditor);
     });
 });

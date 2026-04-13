@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DefaultEditorDomInitializer } from "../../../src/dom";
+import { DefaultEditorDomInitializer } from "../../../src";
 
 describe("DefaultEditorDomInitializer", () => {
     it("should create a root element with the editor data attribute", () => {

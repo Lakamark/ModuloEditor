@@ -1,5 +1,5 @@
 import {describe, it, expect} from "vitest";
-import {HiddenTextareaBridge} from "../../../src/textarea";
+import {HiddenTextareaBridge} from "../../../src";
 
 describe('HiddenTextareaBridge', () => {
     it('returns empty string before mount', () => {

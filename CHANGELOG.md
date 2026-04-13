@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## 0.3.0-alpha.2
+
+### fix
+- stabilize module index exports
+- fix broken import paths
+- fix test helper imports
+- normalize internal barrels
+
 ## 0.3.0-alpha.1
 
 ### Added

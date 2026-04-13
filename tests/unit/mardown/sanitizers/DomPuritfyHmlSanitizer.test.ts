@@ -2,7 +2,7 @@ import {describe, it, expect} from "vitest";
 import {
     DEFAULT_HTML_SANITIZER_CONFIG,
     DomPurifyHtmlSanitizer
-} from "../../../../src/markdown";
+} from "../../../../src";
 
 describe('DomPurifyHtmlSanitizer', () => {
     it('keeps allowed tags', () => {

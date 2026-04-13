@@ -15,16 +15,13 @@ import {
 } from "../commands";
 import {
     DefaultEditorDomResolver,
+    type EditorDomResolver,
+    type EditorDomSlots
 } from "../dom";
 import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
-import type {
-    EditorDomResolver,
-    EditorDomSlots
-} from "../dom/contracts";
 import {DefaultModuloEditorBuilder} from "./Builder";
 
-// TODO: rewrite ModuloEditor unit/integration tests after builder refactor
 /**
  * Main editor orchestrator.
  *

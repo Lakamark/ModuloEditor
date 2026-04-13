@@ -1,4 +1,4 @@
-import type {TextareaBridge} from "../../src/textarea";
+import type {TextareaBridge} from "../../src";
 
 export class FakeTextareaBridge implements TextareaBridge {
     public mountedTextarea: HTMLTextAreaElement | null = null;

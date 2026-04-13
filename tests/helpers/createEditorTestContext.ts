@@ -1,9 +1,9 @@
 import {
     DefaultEditorDocument,
+    type EditorPlugin,
     ModuloEditor,
-    type ModuloEditorOptions
-} from "../../src/core";
-import type {EditorPlugin} from "../../src";
+} from "../../src";
+
 import {
     FakeEditorDomResolver,
     FakeEditorInputAdapter,
@@ -14,12 +14,10 @@ import {
 } from "../fakes";
 
 export function createEditorTestContext(
-    overrides: Partial<ModuloEditorOptions> = {},
     createPlugins?: (context: { toolbar: HTMLDivElement }) => readonly EditorPlugin[]
 ) {
     const root = document.createElement("div");
     const toolbar = document.createElement("div");
-
     const inputElement = document.createElement("div");
     const previewElement = document.createElement("div");
     const textarea = document.createElement("textarea");
@@ -43,25 +41,21 @@ export function createEditorTestContext(
         textarea,
     });
 
-    const plugins = createPlugins?.({toolbar}) ?? [defaultPlugin];
+    const plugins = createPlugins?.({ toolbar }) ?? [defaultPlugin];
 
-    const options: ModuloEditorOptions = {
-        root,
-        domResolver,
-        document: documentModel,
-        input,
-        output,
-        markdown,
-        plugins,
-        textareaBridge,
-        ...overrides,
-    };
-
-    const editor = new ModuloEditor(options);
+    const editor = ModuloEditor
+        .create(root)
+        .withDomResolver(domResolver)
+        .withInput(input)
+        .withOutput(output)
+        .withMarkdown(markdown)
+        .withTextareaBridge(textareaBridge)
+        .withPlugins(plugins)
+        .withDocument(documentModel)
+        .build();
 
     return {
         editor,
-        options,
         root,
         toolbar,
         textarea,
@@ -74,5 +68,6 @@ export function createEditorTestContext(
         textareaBridge,
         plugin: defaultPlugin,
         domResolver,
+        plugins,
     };
 }

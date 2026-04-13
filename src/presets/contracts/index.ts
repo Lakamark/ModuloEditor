@@ -1,1 +1,1 @@
-export type {EditorPreset} from './EditorPreset'
+export type { EditorPreset } from "./EditorPreset";

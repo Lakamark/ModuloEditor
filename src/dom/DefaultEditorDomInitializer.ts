@@ -1,4 +1,7 @@
-import type {EditorDomInitializationResult, EditorDomInitializer} from "./contracts";
+import type {
+    EditorDomInitializationResult,
+    EditorDomInitializer
+} from "./contracts";
 
 /**
  * Default implementation of EditorDomInitializer.

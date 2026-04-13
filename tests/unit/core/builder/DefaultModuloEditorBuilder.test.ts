@@ -5,7 +5,7 @@ import {
     FakeEditorDomResolver,
     FakeEditorPreset, FakeTextareaBridge
 } from "../../../fakes";
-import {DefaultEditorDomInitializer} from "../../../../src/dom";
+import {DefaultEditorDomInitializer} from "../../../../src";
 
 describe("DefaultModuloEditorBuilder", () => {
     it("should apply the preset", () => {

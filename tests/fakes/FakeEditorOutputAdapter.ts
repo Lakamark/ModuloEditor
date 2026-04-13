@@ -1,4 +1,4 @@
-import type { EditorOutputAdapter } from "../../src/output";
+import type { EditorOutputAdapter } from "../../src";
 
 export class FakeEditorOutputAdapter implements EditorOutputAdapter {
     public mountedElement?: HTMLElement;

@@ -1,3 +1,6 @@
-export type {EditorInputState} from './EditorInputState';
-export type {EditorInputAdapter} from './EditorInputAdapter';
+export type {
+    EditorInputAdapter,
+    EditorInputState
+} from './contracts';
+
 export {TextareaInputAdapter} from './TextareaInputAdapter';

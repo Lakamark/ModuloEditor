@@ -1,7 +1,7 @@
 import type {
     EditorInputAdapter,
     EditorInputState
-} from "../../src/input";
+} from "../../src";
 
 export class FakeEditorInput implements EditorInputAdapter {
     public value = '';

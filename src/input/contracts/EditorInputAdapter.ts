@@ -1,4 +1,4 @@
-import type {EditorInput} from "../commands";
+import type {EditorInput} from "../../commands";
 
 /**
  * Adapter responsible for handling editor input.

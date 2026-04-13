@@ -1,21 +1,14 @@
-import type {
-    EditorDocument,
-    ModuloEditorBuilder,
-} from "../contracts";
-import type {
-    EditorDomInitializationResult,
-    EditorDomInitializer,
-    EditorDomResolver
-} from "../../dom/contracts";
-import type { EditorPreset } from "../../presets";
-import type { EditorInputAdapter } from "../../input";
-import type { EditorOutputAdapter } from "../../output";
-import type { TextareaBridge } from "../../textarea";
-import type { MarkdownProcessor } from "../../markdown";
-import type { EditorPlugin } from "../../plugins";
-import { ModuloEditor } from "../ModuloEditor";
-import { DefaultEditorDocument } from "../DefaultEditorDocument";
-import type { EditorCommand } from "../../commands";
+import type {EditorDocument, ModuloEditorBuilder} from "../contracts";
+import type {EditorDomInitializationResult, EditorDomInitializer, EditorDomResolver} from "../../dom";
+import type {EditorInputAdapter} from "../../input";
+import type {EditorOutputAdapter} from "../../output";
+import type {TextareaBridge} from "../../textarea";
+import type {MarkdownProcessor} from "../../markdown";
+import type {EditorPlugin} from "../../plugins";
+import type {EditorCommand} from "../../commands";
+import type {EditorPreset} from "../../presets";
+import {ModuloEditor} from "../ModuloEditor";
+import {DefaultEditorDocument} from "../DefaultEditorDocument";
 
 /**
  * Default implementation of the ModuloEditor builder.

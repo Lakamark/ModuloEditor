@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {DefaultModuloEditorBuilder} from "../../../src/core/Builder";
-import {DefaultEditorPreset} from "../../../src/presets";
+import {DefaultEditorPreset} from "../../../src";
 
 describe("DefaultEditorPreset", () => {
     it("should apply without throwing", () => {

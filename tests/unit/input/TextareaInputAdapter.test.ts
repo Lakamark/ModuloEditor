@@ -1,5 +1,5 @@
 import {describe, it, expect, vi} from "vitest";
-import {TextareaInputAdapter} from "../../../src/input";
+import {TextareaInputAdapter} from "../../../src";
 
 describe('TextareaInputAdapter', () => {
     it('mounts textarea', () => {
