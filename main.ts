@@ -1,3 +1,4 @@
+import '/src/style/modulo-editor.css';
 import {
     DefaultEditorDomInitializer,
     ModuloEditor,

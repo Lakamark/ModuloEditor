@@ -96,4 +96,51 @@ describe("DefaultEditorDomInitializer", () => {
         expect(wrapper.children[1]).toBe(result.root);
         expect(wrapper.children[2]).toBe(after);
     });
+
+    it("should apply default CSS classes to generated elements", () => {
+        const textarea = document.createElement("textarea");
+        document.body.append(textarea);
+
+        const initializer = new DefaultEditorDomInitializer();
+
+        const result = initializer.initialize(textarea);
+
+        expect(result.root.className).toBe("mo-editor");
+        expect(result.root.querySelector("[data-mo-editor-header]")?.className).toBe("mo-editor__header");
+        expect(result.root.querySelector("[data-mo-editor-toolbar]")?.className).toBe("mo-editor__toolbar");
+        expect(result.root.querySelector("[data-mo-editor-body]")?.className).toBe("mo-editor__body");
+        expect(result.root.querySelector("[data-mo-editor-input]")?.className).toBe("mo-editor__input");
+        expect(result.root.querySelector("[data-mo-editor-preview]")?.className).toBe("mo-editor__preview");
+        expect(result.root.querySelector("[data-mo-editor-footer]")?.className).toBe("mo-editor__footer");
+        expect(result.root.querySelector("[data-mo-editor-status]")?.className).toBe("mo-editor__status");
+        expect(result.textarea.className).toBe("mo-editor__textarea");
+    });
+
+    it("should allow overriding CSS classes", () => {
+        const textarea = document.createElement("textarea");
+        document.body.append(textarea);
+
+        const initializer = new DefaultEditorDomInitializer({
+            classes: {
+                root: "custom-root",
+                toolbar: "custom-toolbar",
+                input: "custom-input",
+                preview: "custom-preview",
+                textarea: "custom-textarea",
+            }
+        });
+
+        const result = initializer.initialize(textarea);
+
+        expect(result.root.className).toBe("custom-root");
+        expect(result.root.querySelector("[data-mo-editor-toolbar]")?.className).toBe("custom-toolbar");
+        expect(result.root.querySelector("[data-mo-editor-input]")?.className).toBe("custom-input");
+        expect(result.root.querySelector("[data-mo-editor-preview]")?.className).toBe("custom-preview");
+        expect(result.textarea.className).toBe("custom-textarea");
+
+        expect(result.root.querySelector("[data-mo-editor-header]")?.className).toBe("mo-editor__header");
+        expect(result.root.querySelector("[data-mo-editor-body]")?.className).toBe("mo-editor__body");
+        expect(result.root.querySelector("[data-mo-editor-footer]")?.className).toBe("mo-editor__footer");
+        expect(result.root.querySelector("[data-mo-editor-status]")?.className).toBe("mo-editor__status");
+    });
 });

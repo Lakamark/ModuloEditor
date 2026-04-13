@@ -1,7 +1,40 @@
 import type {
+    DefaultEditorDomInitializerOptions,
+    EditorCssClassMap,
     EditorDomInitializationResult,
     EditorDomInitializer
 } from "./contracts";
+import {
+    EDITOR_CSS_CLASSES,
+    EDITOR_DOM_ATTRIBUTES
+} from "./constants";
+
+/**
+ * Creates a div element with the given data attribute.
+ *
+ * @param attribute The data attribute to assign.
+ * @returns A new div element with the given attribute.
+ */
+function createSlotElement(attribute: string): HTMLDivElement {
+    const element = document.createElement("div");
+    element.setAttribute(attribute, "");
+
+    return element;
+}
+
+/**
+ * Applies a class name to an element when provided.
+ *
+ * @param element The target element.
+ * @param className The class name to apply.
+ */
+function applyClassName(element: HTMLElement, className: string): void {
+    if (className === "") {
+        return;
+    }
+
+    element.className = className;
+}
 
 /**
  * Default implementation of EditorDomInitializer.
@@ -12,8 +45,25 @@ import type {
  * The original textarea is preserved for classic form submission,
  * moved inside the generated editor root, marked with the internal
  * textarea data attribute, and hidden from view.
+ *
+ * The generated structure relies on stable data attributes for DOM
+ * resolution and optional CSS classes for presentation.
  */
 export class DefaultEditorDomInitializer implements EditorDomInitializer {
+    private readonly classes: Required<EditorCssClassMap>;
+
+    /**
+     * Creates a new default DOM initializer.
+     *
+     * @param options Optional initializer configuration.
+     */
+    public constructor(options: DefaultEditorDomInitializerOptions = {}) {
+        this.classes = {
+            ...EDITOR_CSS_CLASSES,
+            ...options.classes
+        }
+    }
+
     /**
      * Creates the default editor DOM structure from a textarea.
      *
@@ -24,36 +74,31 @@ export class DefaultEditorDomInitializer implements EditorDomInitializer {
      * @returns The initialized editor root and textarea references.
      */
     public initialize(textarea: HTMLTextAreaElement): EditorDomInitializationResult {
-        const root = document.createElement("div");
-        root.setAttribute("data-mo-editor", "");
+        const root = createSlotElement(EDITOR_DOM_ATTRIBUTES.root);
+        const header = createSlotElement(EDITOR_DOM_ATTRIBUTES.header);
+        const toolbar = createSlotElement(EDITOR_DOM_ATTRIBUTES.toolbar);
+        const body = createSlotElement(EDITOR_DOM_ATTRIBUTES.body);
+        const input = createSlotElement(EDITOR_DOM_ATTRIBUTES.input);
+        const preview = createSlotElement(EDITOR_DOM_ATTRIBUTES.preview);
+        const footer = createSlotElement(EDITOR_DOM_ATTRIBUTES.footer);
+        const status = createSlotElement(EDITOR_DOM_ATTRIBUTES.status);
 
-        const header = document.createElement("div");
-        header.setAttribute("data-mo-editor-header", "");
+        applyClassName(root, this.classes.root);
+        applyClassName(header, this.classes.header);
+        applyClassName(toolbar, this.classes.toolbar);
+        applyClassName(body, this.classes.body);
+        applyClassName(input, this.classes.input);
+        applyClassName(preview, this.classes.preview);
+        applyClassName(footer, this.classes.footer);
+        applyClassName(status, this.classes.status);
 
-        const toolbar = document.createElement("div");
-        toolbar.setAttribute("data-mo-editor-toolbar", "");
         header.append(toolbar);
-
-        const body = document.createElement("div");
-        body.setAttribute("data-mo-editor-body", "");
-
-        const input = document.createElement("div");
-        input.setAttribute("data-mo-editor-input", "");
-
-        const preview = document.createElement("div");
-        preview.setAttribute("data-mo-editor-preview", "");
-
         body.append(input, preview);
-
-        const footer = document.createElement("div");
-        footer.setAttribute("data-mo-editor-footer", "");
-
-        const status = document.createElement("div");
-        status.setAttribute("data-mo-editor-status", "");
         footer.append(status);
 
         textarea.hidden = true;
-        textarea.setAttribute("data-mo-editor-textarea", "");
+        textarea.setAttribute(EDITOR_DOM_ATTRIBUTES.textarea, "");
+        applyClassName(textarea, this.classes.textarea);
 
         const parent = textarea.parentNode;
 
@@ -66,6 +111,6 @@ export class DefaultEditorDomInitializer implements EditorDomInitializer {
         return {
             root,
             textarea
-        }
+        };
     }
 }
