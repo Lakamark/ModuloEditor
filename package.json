@@ -48,7 +48,7 @@
       "import": "./dist/modulo-editor.js",
       "default": "./dist/modulo-editor.js"
     },
-    "./style.css": "./dist/style/modulo-editor.css"
+    "./style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",
