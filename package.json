@@ -1,7 +1,7 @@
 {
   "name": "@lakamark/modulo-editor",
   "private": false,
-  "version": "0.3.0-alpha.1",
+  "version": "0.3.0-alpha.2",
   "description": "Modular, extensible and safe Markdown editor with plugin API and textarea form integration.",
   "type": "module",
   "author": {
