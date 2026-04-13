@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## 0.3.0-alpha.3
+
+- add minimal base editor layout
+- split editor / preview grid
+- scrollable editor and preview
+- configurable DOM initializer classes
+- improved textarea sizing
+- base.css available for consumers
+---
+
 ## 0.3.0-alpha.2
 
 ### fix
