@@ -3,9 +3,7 @@ import {
     BoldToolbarPlugin,
     DefaultEditorDomInitializer,
     HeadingToolbarPlugin,ItalicToolbarPlugin,
-    MarkedPreset,
     ModuloEditor,
-    SafeMarkdownPreset,
     StarterKitPreset,
 } from "./src";
 ModuloEditor
@@ -13,8 +11,6 @@ ModuloEditor
     .fromTextarea("#content")
     .withDomInitializer(new DefaultEditorDomInitializer())
     .usePreset(new StarterKitPreset())
-    .usePreset(new MarkedPreset())
-    .usePreset(new SafeMarkdownPreset())
     .withPlugins([
         new BoldToolbarPlugin(),
         new ItalicToolbarPlugin(),

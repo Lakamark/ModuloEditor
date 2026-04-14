@@ -10,6 +10,6 @@ export class MarkedPreset implements EditorPreset {
     public readonly name = "marked-markdown";
 
     public apply(builder: ModuloEditorBuilder) {
-        builder.withMarkdownParser(new MarkedMarkdownParser());
+        builder.withMarkdownParserIfMissing(new MarkedMarkdownParser());
     }
 }

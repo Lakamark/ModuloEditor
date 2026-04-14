@@ -247,6 +247,54 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         return this;
     }
 
+    public withTextareaBridgeIfMissing(textareaBridge: TextareaBridge): this {
+        if (this.textareaBridge === undefined) {
+            this.textareaBridge = textareaBridge;
+        }
+
+        return this;
+    }
+
+    public withMarkdownParserIfMissing(parser: MarkdownParser): this {
+        if (this.markdownParser === undefined) {
+            this.markdownParser = parser;
+        }
+
+        return this;
+    }
+
+    public withHtmlSanitizerIfMissing(sanitizer: HtmlSanitizer): this {
+        if (this.htmlSanitizer === undefined) {
+            this.htmlSanitizer = sanitizer;
+        }
+
+        return this;
+    }
+
+    public withDomResolverIfMissing(domResolver: EditorDomResolver): this {
+        if (this.domResolver === undefined) {
+            this.domResolver = domResolver;
+        }
+
+        return this;
+    }
+
+    public withInputIfMissing(input: EditorInputAdapter): this {
+        if (this.input === undefined) {
+            this.input = input;
+        }
+
+        return this;
+    }
+
+    public withOutputIfMissing(output: EditorOutputAdapter): this {
+        if (this.output === undefined) {
+            this.output = output;
+        }
+
+        return this;
+    }
+
     /**
      * Resolves the textarea element associated with the editor.
      *

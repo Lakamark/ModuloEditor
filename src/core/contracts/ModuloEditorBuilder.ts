@@ -1,12 +1,16 @@
-import type {EditorPreset} from "../../presets";
-import type {EditorInputAdapter} from "../../input";
-import type {EditorOutputAdapter} from "../../output";
-import type {TextareaBridge} from "../../textarea";
-import {type HtmlSanitizer, type MarkdownProcessor, MarkedMarkdownParser} from "../../markdown";
-import type {EditorPlugin} from "../../plugins";
-import type {ModuloEditor} from "../ModuloEditor";
-import type {EditorDocument} from "./EditorDocument";
-import type {EditorCommand} from "../../commands";
+import type { EditorPreset } from "../../presets";
+import type { EditorInputAdapter } from "../../input";
+import type { EditorOutputAdapter } from "../../output";
+import type { TextareaBridge } from "../../textarea";
+import type {
+    HtmlSanitizer,
+    MarkdownProcessor,
+    MarkdownParser
+} from "../../markdown";
+import type { EditorPlugin } from "../../plugins";
+import type { ModuloEditor } from "../ModuloEditor";
+import type { EditorDocument } from "./EditorDocument";
+import type { EditorCommand } from "../../commands";
 import type {
     EditorDomInitializer,
     EditorDomResolver
@@ -16,15 +20,30 @@ export interface ModuloEditorBuilder {
     usePreset(preset: EditorPreset): this;
     fromTextarea(input: string | HTMLTextAreaElement): this;
     withDomInitializer(domInitializer: EditorDomInitializer): this;
+
     withDomResolver(domResolver: EditorDomResolver): this;
+    withDomResolverIfMissing(domResolver: EditorDomResolver): this;
+
     withInput(input: EditorInputAdapter): this;
+    withInputIfMissing(input: EditorInputAdapter): this;
+
     withOutput(output: EditorOutputAdapter): this;
+    withOutputIfMissing(output: EditorOutputAdapter): this;
+
     withTextareaBridge(textareaBridge: TextareaBridge): this;
+    withTextareaBridgeIfMissing(textareaBridge: TextareaBridge): this;
+
     withHtmlSanitizer(sanitizer: HtmlSanitizer): this;
-    withMarkdownParser(parser: MarkedMarkdownParser): this;
+    withHtmlSanitizerIfMissing(sanitizer: HtmlSanitizer): this;
+
+    withMarkdownParser(parser: MarkdownParser): this;
+    withMarkdownParserIfMissing(parser: MarkdownParser): this;
+
     withMarkdown(markdown: MarkdownProcessor): this;
+
     withPlugins(plugins: readonly EditorPlugin[]): this;
     withDocument(document: EditorDocument): this;
     withCommands(commands: readonly EditorCommand[]): this;
+
     build(): ModuloEditor;
 }
