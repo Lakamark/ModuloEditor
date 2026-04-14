@@ -1,5 +1,3 @@
-import "./style/modulo-editor.css";
-
 // core
 export { ModuloEditor } from "./core";
 export type {
