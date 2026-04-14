@@ -106,5 +106,6 @@ export type {
 export {
     DefaultEditorPreset,
     SafeMarkdownPreset,
-    StarterKitPreset
+    StarterKitPreset,
+    MarkedPreset
 } from "./presets";

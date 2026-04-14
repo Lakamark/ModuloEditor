@@ -2,7 +2,7 @@ import type {EditorPreset} from "../../presets";
 import type {EditorInputAdapter} from "../../input";
 import type {EditorOutputAdapter} from "../../output";
 import type {TextareaBridge} from "../../textarea";
-import type {MarkdownProcessor} from "../../markdown";
+import {type HtmlSanitizer, type MarkdownProcessor, MarkedMarkdownParser} from "../../markdown";
 import type {EditorPlugin} from "../../plugins";
 import type {ModuloEditor} from "../ModuloEditor";
 import type {EditorDocument} from "./EditorDocument";
@@ -20,6 +20,8 @@ export interface ModuloEditorBuilder {
     withInput(input: EditorInputAdapter): this;
     withOutput(output: EditorOutputAdapter): this;
     withTextareaBridge(textareaBridge: TextareaBridge): this;
+    withHtmlSanitizer(sanitizer: HtmlSanitizer): this;
+    withMarkdownParser(parser: MarkedMarkdownParser): this;
     withMarkdown(markdown: MarkdownProcessor): this;
     withPlugins(plugins: readonly EditorPlugin[]): this;
     withDocument(document: EditorDocument): this;

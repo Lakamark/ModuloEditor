@@ -3,12 +3,19 @@ import type {EditorDomInitializationResult, EditorDomInitializer, EditorDomResol
 import type {EditorInputAdapter} from "../../input";
 import type {EditorOutputAdapter} from "../../output";
 import type {TextareaBridge} from "../../textarea";
-import type {MarkdownProcessor} from "../../markdown";
+import {type MarkdownProcessor, MarkedMarkdownParser} from "../../markdown";
 import type {EditorPlugin} from "../../plugins";
 import type {EditorCommand} from "../../commands";
 import type {EditorPreset} from "../../presets";
 import {ModuloEditor} from "../ModuloEditor";
 import {DefaultEditorDocument} from "../DefaultEditorDocument";
+import type { MarkdownParser, HtmlSanitizer } from "../../markdown";
+import {
+    DefaultMarkdownProcessor,
+    PlainTextMarkdownParser,
+    DomPurifyHtmlSanitizer,
+    DEFAULT_HTML_SANITIZER_CONFIG
+} from "../../markdown";
 
 /**
  * Default implementation of the ModuloEditor builder.
@@ -37,6 +44,8 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
     private textarea?: HTMLTextAreaElement;
     private domInitializer?: EditorDomInitializer;
     private domInitializationResult?: EditorDomInitializationResult;
+    private markdownParser?: MarkdownParser;
+    private htmlSanitizer?: HtmlSanitizer;
 
     /**
      * Creates a new builder instance.
@@ -187,6 +196,18 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         return this;
     }
 
+    public withMarkdownParser(parser:MarkedMarkdownParser): this {
+        this.markdownParser = parser;
+
+        return this;
+    }
+
+    public withHtmlSanitizer(sanitizer: HtmlSanitizer): this {
+        this.htmlSanitizer = sanitizer;
+
+        return this;
+    }
+
     /**
      * Replaces the current plugin collection with the provided plugins.
      *
@@ -321,11 +342,17 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
      * @throws Error When no Markdown processor has been configured.
      */
     private requireMarkdown(): MarkdownProcessor {
-        if (!this.markdown) {
-            throw new Error("ModuloEditorBuilder requires a markdown processor.");
-        }
+       if (this.markdown !== undefined) {
+           return this.markdown;
+       }
 
-        return this.markdown;
+       const parser = this.markdownParser ?? new PlainTextMarkdownParser();
+       const sanitizer = this.htmlSanitizer
+           ?? new DomPurifyHtmlSanitizer(
+               DEFAULT_HTML_SANITIZER_CONFIG
+           );
+
+        return new DefaultMarkdownProcessor(parser, sanitizer)
     }
 
     /**

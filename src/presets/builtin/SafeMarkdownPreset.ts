@@ -1,23 +1,14 @@
 import type {EditorPreset} from "../contracts";
 import type {ModuloEditorBuilder} from "../../core";
-import {DefaultEditorDomResolver} from "../../dom";
-import {
-    DEFAULT_HTML_SANITIZER_CONFIG,
-    DefaultMarkdownProcessor,
-    DomPurifyHtmlSanitizer,
-    PlainTextMarkdownParser
-} from "../../markdown";
+import {DEFAULT_HTML_SANITIZER_CONFIG, DomPurifyHtmlSanitizer} from "../../markdown";
+
 
 export class SafeMarkdownPreset implements EditorPreset {
     public readonly name = "safe-markdown";
 
     public apply(builder: ModuloEditorBuilder): void {
-        builder
-            .withDomResolver(new DefaultEditorDomResolver())
-            .withMarkdown(new DefaultMarkdownProcessor(
-                new PlainTextMarkdownParser(),
-                new DomPurifyHtmlSanitizer(DEFAULT_HTML_SANITIZER_CONFIG)
-            ))
-        ;
+        builder.withHtmlSanitizer(
+            new DomPurifyHtmlSanitizer(DEFAULT_HTML_SANITIZER_CONFIG)
+        )
     }
 }

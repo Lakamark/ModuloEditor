@@ -58,7 +58,7 @@ describe('ModuloEditorBuilder integration', () => {
         }).toThrow('ModuloEditorBuilder requires an output adapter.');
     });
 
-    it('throws when building without a markdown processor', () => {
+    it("uses a default markdown processor when no markdown processor is configured", () => {
         const root = createEditorDomFixture();
 
         expect(() => {
@@ -67,7 +67,7 @@ describe('ModuloEditorBuilder integration', () => {
                 .withInput(new FakeEditorInput())
                 .withOutput(new FakeEditorOutputAdapter())
                 .build();
-        }).toThrow('ModuloEditorBuilder requires a markdown processor.');
+        }).not.toThrow();
     });
 
     it('builds regardless of required method call order', () => {
