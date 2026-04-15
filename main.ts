@@ -1,4 +1,4 @@
-import '/src/style/modulo-editor.css';
+import '/src/style/reset.css';
 import '/src/style/preset-default.css';
 
 import {

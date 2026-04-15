@@ -48,12 +48,13 @@
       "import": "./dist/modulo-editor.js",
       "default": "./dist/modulo-editor.js"
     },
-    "./style.css": "./dist/modulo-editor.css"
+    "./reset.css": "./dist/reset.css",
+    "./preset-default.css": "./dist/preset-default.css"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc -p tsconfig.build.json && npm run copy:css",
-    "copy:css": "shx cp src/style/modulo-editor.css dist/modulo-editor.css",
+    "copy:css": "shx cp src/style/*.css dist/",
     "prepublishOnly": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest",
