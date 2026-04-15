@@ -1,4 +1,6 @@
 import '/src/style/modulo-editor.css';
+import '/src/style/preset-default.css';
+
 import {
     BoldToolbarPlugin,
     DefaultEditorDomInitializer,

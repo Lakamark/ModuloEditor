@@ -1,63 +1,94 @@
-/* Root */
+/**
+ * ModuloEditor reset.
+ *
+ * Provides a minimal, non-opinionated base using scoped data-* attributes.
+ * No visual styles are applied at this level.
+ *
+ * Consumers are expected to style the editor with their own CSS.
+ */
+
+[data-mo-editor],
+[data-mo-editor] * {
+    box-sizing: border-box;
+}
+
 [data-mo-editor] {
     display: flex;
     flex-direction: column;
-    border: 1px solid #ddd;
-    background: #fff;
+    margin: 0;
+    padding: 0;
 }
 
-/* Toolbar */
+[data-mo-editor-header],
+[data-mo-editor-body],
+[data-mo-editor-footer],
+[data-mo-editor-toolbar],
+[data-mo-editor-input],
+[data-mo-editor-preview],
+[data-mo-editor-status] {
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+[data-mo-editor-header] {
+    display: flex;
+}
+
 [data-mo-editor-toolbar] {
-    border-bottom: 1px solid #eee;
-    padding: 6px;
-    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
 }
 
-/* Split editor / preview */
+[data-mo-editor-toolbar] button {
+    appearance: none;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
 [data-mo-editor-body] {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    height: 320px;
+    height: 350px;
 }
 
-[data-mo-editor-input],
-[data-mo-editor-preview] {
+[data-mo-editor-body] > * {
     min-width: 0;
     min-height: 0;
-    box-sizing: border-box;
 }
 
-/* Input */
 [data-mo-editor-input] {
-    padding: 8px;
     display: flex;
 }
 
 [data-mo-editor-input] textarea {
-    flex: 1;
+    display: block;
     width: 100%;
     height: 100%;
-    min-width: 0;
-    min-height: 0;
-    box-sizing: border-box;
+    margin: 0;
+    padding: 0.5rem;
+    border: none;
+    outline: none;
     resize: none;
+    background: transparent;
+    font: inherit;
+    color: inherit;
 }
 
-/* Preview */
 [data-mo-editor-preview] {
-    padding: 8px;
-    border-left: 1px solid #eee;
-    background: #fafafa;
     overflow: auto;
-}
-
-/* Footer */
-[data-mo-editor-footer] {
-    border-top: 1px solid #eee;
+    padding: 0.5rem;
 }
 
 [data-mo-editor-status] {
-    padding: 4px 8px;
-    font-size: 12px;
-    opacity: 0.7;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
 }

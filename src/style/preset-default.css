@@ -1,0 +1,62 @@
+/**
+ * ModuloEditor Default Preset (Example)
+ *
+ * This file provides a minimal visual example of how the editor can be styled.
+ *
+ * It is not required and should be considered as a starting point.
+ */
+
+[data-mo-editor] {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+}
+
+/* Header */
+[data-mo-editor-header] {
+    border-bottom: 1px solid #eee;
+}
+
+/* Toolbar */
+[data-mo-editor-toolbar] {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: #fafafa;
+}
+
+[data-mo-editor-toolbar] button {
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+[data-mo-editor-toolbar] button:hover {
+    background: #f0f0f0;
+}
+
+/* Body */
+[data-mo-editor-body] {
+    background: #fff;
+}
+
+/* Input */
+[data-mo-editor-input] textarea {
+    font-family: monospace;
+}
+
+/* Preview */
+[data-mo-editor-preview] {
+    border-left: 1px solid #eee;
+    background: #fcfcfc;
+}
+
+/* Footer */
+[data-mo-editor-footer] {
+    border-top: 1px solid #eee;
+}
+
+/* Status */
+[data-mo-editor-status] {
+    color: #666;
+}
