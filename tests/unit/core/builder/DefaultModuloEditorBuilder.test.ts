@@ -158,7 +158,7 @@ describe("DefaultModuloEditorBuilder", () => {
             .withMarkdown({} as any);
 
         expect(() => builder.build()).toThrow(
-            "ModuloEditorBuilder requires a root element when no DOM initializer is configured."
+            "ModuloEditor requires a root element when no DOM initializer is configured. Provide one with .create(root) or configure a DOM initializer."
         );
     });
 

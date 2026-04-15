@@ -43,7 +43,7 @@ describe('ModuloEditorBuilder integration', () => {
                 .withOutput(new FakeEditorOutputAdapter())
                 .withMarkdown(new FakeMarkdownProcessor())
                 .build();
-        }).toThrow('ModuloEditorBuilder requires an input adapter.');
+        }).toThrow('ModuloEditor is not fully configured: missing input adapter. Use .usePreset(new DefaultEditorPreset()) or configure the editor manually with .withInput().');
     });
 
     it('throws when building without an output adapter', () => {
@@ -55,7 +55,7 @@ describe('ModuloEditorBuilder integration', () => {
                 .withInput(new FakeEditorInput())
                 .withMarkdown(new FakeMarkdownProcessor())
                 .build();
-        }).toThrow('ModuloEditorBuilder requires an output adapter.');
+        }).toThrow('ModuloEditor is not fully configured: missing output adapter. Use .usePreset(new DefaultEditorPreset()) or configure the editor manually with .withOutput().');
     });
 
     it("uses a default markdown processor when no markdown processor is configured", () => {
@@ -91,7 +91,7 @@ describe('ModuloEditorBuilder integration', () => {
                 .withOutput(new FakeEditorOutputAdapter())
                 .withMarkdown(new FakeMarkdownProcessor())
                 .build();
-        }).toThrow('ModuloEditorBuilder could not resolve root element');
+        }).toThrow('ModuloEditor could not resolve a root element from selector "[data-missing-editor]".');
     });
 
     it("should create editor using builder", () => {

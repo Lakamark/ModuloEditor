@@ -338,7 +338,8 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
     private requireRootElement(): HTMLElement {
         if (this.root === undefined) {
             throw new Error(
-                "ModuloEditorBuilder requires a root element when no DOM initializer is configured."
+                "ModuloEditor requires a root element when no DOM initializer is configured. " +
+                "Provide one with .create(root) or configure a DOM initializer."
             );
         }
 
@@ -349,7 +350,9 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         const element = document.querySelector(this.root);
 
         if (!(element instanceof HTMLElement)) {
-            throw new Error(`ModuloEditorBuilder could not resolve root element from selector "${this.root}".`);
+            throw new Error(
+                `ModuloEditor could not resolve a root element from selector "${this.root}".`
+            );
         }
 
         return element;
@@ -363,7 +366,7 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
      */
     private requireInput(): EditorInputAdapter {
         if (!this.input) {
-            throw new Error("ModuloEditorBuilder requires an input adapter.");
+            throw this.createMissingConfigurationError("input adapter", ".withInput()");
         }
 
         return this.input;
@@ -377,7 +380,7 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
      */
     private requireOutput(): EditorOutputAdapter {
         if (!this.output) {
-            throw new Error("ModuloEditorBuilder requires an output adapter.");
+            throw this.createMissingConfigurationError("output adapter", ".withOutput()");
         }
 
         return this.output;
@@ -480,5 +483,34 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         }
 
         return this.textarea ?? null;
+    }
+
+    /**
+     * Creates a standardized configuration error for missing builder dependencies.
+     *
+     * This error is thrown when the editor is not fully configured before calling {@link build}.
+     * It provides guidance to the user by suggesting either the use of a preset or
+     * manual configuration through the builder API.
+     *
+     * @param missingPart - The missing configuration part (e.g. "input adapter", "output adapter").
+     * @param manualMethod - The builder method to configure the missing part (e.g. ".withInput()", ".withOutput()").
+     *
+     * @returns An Error instance with a descriptive and user-friendly message.
+     *
+     * @example
+     * throw this.createMissingConfigurationError("input adapter", ".withInput()");
+     *
+     * // Message:
+     * // "ModuloEditor is not fully configured: missing input adapter.
+     * //  Use .usePreset(new DefaultEditorPreset()) or configure the editor manually with .withInput()."
+     */
+    private createMissingConfigurationError(
+        missingPart: string,
+        manualMethod: string
+    ): Error {
+        return new Error(
+            `ModuloEditor is not fully configured: missing ${missingPart}. ` +
+            `Use .usePreset(new DefaultEditorPreset()) or configure the editor manually with ${manualMethod}.`
+        );
     }
 }
