@@ -93,6 +93,7 @@ export type {
 export {
     DefaultMarkdownProcessor,
     PlainTextMarkdownParser,
+    MarkedMarkdownParser,
     DomPurifyHtmlSanitizer,
     DEFAULT_HTML_SANITIZER_CONFIG
 } from "./markdown";
