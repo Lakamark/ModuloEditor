@@ -1,13 +1,12 @@
 // core
-export { ModuloEditor } from "./core";
+export {
+    ModuloEditor as ModuloEditorBuilder,
+    DefaultEditorDocument
+} from "./core";
+
 export type {
     ModuloEditorOptions,
     EditorDocument,
-    ModuloEditorBuilder
-} from "./core";
-
-export {
-    DefaultEditorDocument
 } from "./core";
 
 

@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, it} from "vitest";
-import {DefaultEditorPreset, ModuloEditor} from "../../../src";
+import {DefaultEditorPreset, ModuloEditorBuilder} from "../../../src";
 import {
     FakeEditorDomResolver,
     FakeEditorInput, FakeEditorInputAdapter,
@@ -22,7 +22,7 @@ describe('ModuloEditorBuilder integration', () => {
         const markdown = new FakeMarkdownProcessor();
         const textareaBridge = new FakeTextareaBridge();
 
-        const editor = ModuloEditor
+        const editor = ModuloEditorBuilder
             .create(root)
             .withInput(input)
             .withOutput(output)
@@ -42,7 +42,7 @@ describe('ModuloEditorBuilder integration', () => {
         const root = createEditorDomFixture();
 
         expect(() => {
-            ModuloEditor
+            ModuloEditorBuilder
                 .create(root)
                 .withOutput(new FakeEditorOutputAdapter())
                 .withMarkdown(new FakeMarkdownProcessor())
@@ -54,7 +54,7 @@ describe('ModuloEditorBuilder integration', () => {
         const root = createEditorDomFixture();
 
         expect(() => {
-            ModuloEditor
+            ModuloEditorBuilder
                 .create(root)
                 .withInput(new FakeEditorInput())
                 .withMarkdown(new FakeMarkdownProcessor())
@@ -66,7 +66,7 @@ describe('ModuloEditorBuilder integration', () => {
         const root = createEditorDomFixture();
 
         expect(() => {
-            ModuloEditor
+            ModuloEditorBuilder
                 .create(root)
                 .withInput(new FakeEditorInput())
                 .withOutput(new FakeEditorOutputAdapter())
@@ -77,7 +77,7 @@ describe('ModuloEditorBuilder integration', () => {
     it('builds regardless of required method call order', () => {
         const root = createEditorDomFixture();
 
-        const editor = ModuloEditor
+        const editor = ModuloEditorBuilder
             .create(root)
             .withMarkdown(new FakeMarkdownProcessor())
             .withOutput(new FakeEditorOutputAdapter())
@@ -89,7 +89,7 @@ describe('ModuloEditorBuilder integration', () => {
 
     it('throws when the root selector cannot be resolved', () => {
         expect(() => {
-            ModuloEditor
+            ModuloEditorBuilder
                 .create('[data-missing-editor]')
                 .withInput(new FakeEditorInput())
                 .withOutput(new FakeEditorOutputAdapter())
@@ -101,7 +101,7 @@ describe('ModuloEditorBuilder integration', () => {
     it("should create editor using builder", () => {
         const root = document.createElement("div");
 
-        const editor = ModuloEditor
+        const editor = ModuloEditorBuilder
             .create(root)
             .withDomResolver(new FakeEditorDomResolver())
             .withInput(new FakeEditorInputAdapter())
@@ -109,7 +109,7 @@ describe('ModuloEditorBuilder integration', () => {
             .withMarkdown(new FakeMarkdownProcessor())
             .build();
 
-        expect(editor).toBeInstanceOf(ModuloEditor);
+        expect(editor).toBeInstanceOf(ModuloEditorBuilder);
     });
 
     it('builds with the default preset', () => {
@@ -122,7 +122,7 @@ describe('ModuloEditorBuilder integration', () => {
     `;
 
         expect(() => {
-            ModuloEditor.create('[data-mo-editor]')
+            ModuloEditorBuilder.create('[data-mo-editor]')
                 .usePreset(new DefaultEditorPreset())
                 .build();
         }).not.toThrow();

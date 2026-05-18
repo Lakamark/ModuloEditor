@@ -1,8 +1,14 @@
 import { useEffect, useRef } from 'react';
 
+import type {
+    EditorPlugin,
+    EditorPreset,
+    ModuloEditorBuilder,
+} from '../index';
+
+import { ModuloEditor as CoreEditor } from '../core';
+
 import {
-    type EditorPlugin, type EditorPreset,
-    ModuloEditor as CoreEditor,
     StarterKitPreset,
 } from '../index';
 
@@ -26,13 +32,11 @@ export interface ModuloEditorProps {
 
 export function ModuloEditor({className, name, value, onChange, plugins = [], presets = []}: ModuloEditorProps) {
     const rootRef = useRef<HTMLDivElement | null>(null);
-
-    const editorRef = useRef<CoreEditor | null>(null);
-
+    const editorRef = useRef<ModuloEditorBuilder | null>(null);
 
     useEffect(() => {
         if (!rootRef.current || editorRef.current) {
-            return;
+            return undefined;
         }
 
         const builder = CoreEditor.create(rootRef.current);
@@ -50,7 +54,7 @@ export function ModuloEditor({className, name, value, onChange, plugins = [], pr
 
         editor.init();
 
-        if (value) {
+        if (value !== undefined) {
             editor.setValue(value);
         }
 
@@ -66,6 +70,19 @@ export function ModuloEditor({className, name, value, onChange, plugins = [], pr
             editorRef.current = null;
         };
     }, []);
+
+    useEffect(() => {
+        const editor = editorRef.current;
+
+        if (!editor || value === undefined) {
+            return;
+        }
+
+        if (editor.getValue() !== value) {
+            editor.setValue(value);
+        }
+
+    }, [value]);
 
     return (
         <div ref={rootRef} className={className} data-mo-editor>
