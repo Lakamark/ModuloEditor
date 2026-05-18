@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import type {
+    EditorDomInitializer,
     EditorPlugin,
     EditorPreset,
     ModuloEditorBuilder,
@@ -28,9 +29,19 @@ export interface ModuloEditorProps {
     onChange?: (value: string) => void;
     plugins?: readonly EditorPlugin[];
     presets?: readonly EditorPreset[];
+    domInitializer?: EditorDomInitializer;
 }
 
-export function ModuloEditor({className, name, value, onChange, plugins = [], presets = []}: ModuloEditorProps) {
+export function ModuloEditor(
+    {
+        className,
+        name,
+        value,
+        onChange,
+        plugins = [],
+        presets = [],
+        domInitializer,
+    }: ModuloEditorProps) {
     const rootRef = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<ModuloEditorBuilder | null>(null);
 
@@ -40,6 +51,10 @@ export function ModuloEditor({className, name, value, onChange, plugins = [], pr
         }
 
         const builder = CoreEditor.create(rootRef.current);
+
+        if (domInitializer) {
+            builder.withDomInitializer(domInitializer);
+        }
 
         const resolvedPresets =
             presets.length > 0 ? presets : [new StarterKitPreset()];
