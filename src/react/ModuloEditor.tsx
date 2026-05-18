@@ -13,8 +13,11 @@ import {
     StarterKitPreset,
 } from '../index';
 
+import type { EditorCssClassMap } from "../dom/contracts";
+
 export interface ModuloEditorProps {
     className?: string;
+    classes?: EditorCssClassMap;
     name?: string;
     value?: string;
 
@@ -35,6 +38,7 @@ export interface ModuloEditorProps {
 export function ModuloEditor(
     {
         className,
+        classes,
         name,
         value,
         onChange,
@@ -100,21 +104,27 @@ export function ModuloEditor(
     }, [value]);
 
     return (
-        <div ref={rootRef} className={className} data-mo-editor>
-            <div data-mo-editor-header></div>
+        <div
+            ref={rootRef}
+            className={[className, classes?.root].filter(Boolean).join(' ')}
+            data-mo-editor
+        >
 
-            <div data-mo-editor-toolbar></div>
+            <div className={classes?.header} data-mo-editor-header />
 
-            <div data-mo-editor-body>
-                <div data-mo-editor-input></div>
-                <div data-mo-editor-preview></div>
+            <div className={classes?.toolbar} data-mo-editor-toolbar />
+
+            <div className={classes?.body} data-mo-editor-body>
+                <div className={classes?.input} data-mo-editor-input/>
+                <div className={classes?.preview} data-mo-editor-preview/>
             </div>
 
-            <div data-mo-editor-footer></div>
-            <div data-mo-editor-status></div>
+            <div  className={classes?.footer} data-mo-editor-footer />
+            <div className={classes?.status} data-mo-editor-status />
 
             <textarea
                 name={name}
+                className={classes?.textarea}
                 data-mo-editor-textarea
                 hidden
                 readOnly
