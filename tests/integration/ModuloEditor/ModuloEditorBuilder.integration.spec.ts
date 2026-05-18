@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { ModuloEditor } from "../../../src";
+import {beforeEach, describe, expect, it} from "vitest";
+import {DefaultEditorPreset, ModuloEditor} from "../../../src";
 import {
     FakeEditorDomResolver,
     FakeEditorInput, FakeEditorInputAdapter,
@@ -10,6 +10,10 @@ import {
 import { createEditorDomFixture } from "./helpers/createEditorDomFixture";
 
 describe('ModuloEditorBuilder integration', () => {
+    beforeEach(() => {
+        document.body.innerHTML = '';
+    })
+
     it('builds and initializes a working editor instance without an explicit document', () => {
         const root = createEditorDomFixture();
 
@@ -106,5 +110,21 @@ describe('ModuloEditorBuilder integration', () => {
             .build();
 
         expect(editor).toBeInstanceOf(ModuloEditor);
+    });
+
+    it('builds with the default preset', () => {
+        document.body.innerHTML = `
+        <div data-mo-editor>
+            <div data-mo-editor-input></div>
+            <div data-mo-editor-preview></div>
+            <textarea data-mo-editor-textarea></textarea>
+        </div>
+    `;
+
+        expect(() => {
+            ModuloEditor.create('[data-mo-editor]')
+                .usePreset(new DefaultEditorPreset())
+                .build();
+        }).not.toThrow();
     });
 });

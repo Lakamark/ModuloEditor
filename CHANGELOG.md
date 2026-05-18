@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## [0.3.1-alpha.3]
+
+### Added
+- Added integration tests for editor presets and starter kits.
+- Added coverage for preset ordering and repeated preset application.
+- Added Markdown rendering integration tests.
+
+### Changed
+- Clarified the default editor DOM contract.
+- Improved editor diagnostic and DOM resolution error messages.
+
+### Fixed
+- Fixed incomplete DOM fixtures in integration tests.
+- Fixed starter kit integration expectations for textarea bridge elements.
+
 ## 0.3.0-alpha.3
 
 - add minimal base editor layout
