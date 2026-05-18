@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createEditorTestBed } from './helpers/createEditorTestBed';
+import {createEditorDomFixture} from "./helpers/createEditorDomFixture";
+import {ModuloEditor} from "../../../src";
+import {FakeEditorInputAdapter, FakeEditorOutputAdapter, FakeMarkdownProcessor} from "../../fakes";
 
 describe('ModuloEditor integration: init', () => {
     it('mounts the input with the initial document content', () => {
@@ -90,5 +93,47 @@ describe('ModuloEditor integration: init', () => {
         expect(output.mountedElement).toBe(firstOutputElement);
         expect(textareaBridge.mountedTextarea).toBe(firstTextarea);
         expect(output.renderedHtml).toBe(firstRenderedHtml);
+    });
+
+    it('notifies change listeners when input changes', (): void => {
+        const root = createEditorDomFixture();
+
+        const editor = ModuloEditor
+            .create(root)
+            .withInput(new FakeEditorInputAdapter())
+            .withOutput(new FakeEditorOutputAdapter())
+            .withMarkdown(new FakeMarkdownProcessor())
+            .build();
+
+        const listener = vi.fn();
+
+        editor.onChange(listener);
+        editor.init();
+
+        editor.setValue('Hello');
+
+        expect(listener).toHaveBeenCalledWith('Hello');
+    });
+
+    it('stops notifying change listeners after unsubscribe', (): void => {
+        const root = createEditorDomFixture();
+
+        const editor = ModuloEditor
+            .create(root)
+            .withInput(new FakeEditorInputAdapter())
+            .withOutput(new FakeEditorOutputAdapter())
+            .withMarkdown(new FakeMarkdownProcessor())
+            .build();
+
+        const listener = vi.fn();
+
+        const unsubscribe = editor.onChange(listener);
+
+        unsubscribe();
+
+        editor.init();
+        editor.setValue('Hello');
+
+        expect(listener).not.toHaveBeenCalled();
     });
 });

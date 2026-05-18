@@ -54,6 +54,7 @@ export class ModuloEditor {
     private readonly textareaBridge?: ModuloEditorOptions["textareaBridge"];
 
     private unsubscribeInputChange?: () => void;
+    private readonly changeListeners = new Set<(value: string) => void>();
     private initialized = false;
     private slots!: EditorDomSlots;
 
@@ -176,6 +177,30 @@ export class ModuloEditor {
     }
 
     /**
+     * Registers a listener that is called whenever
+     * the editor content changes.
+     *
+     * Listeners are triggered for:
+     *
+     * - user input changes
+     * - programmatic value updates via setValue()
+     *
+     * Returns an unsubscribe function that removes
+     * the listener.
+     *
+     * @param listener - Change listener callback.
+     *
+     * @returns Function used to unsubscribe the listener.
+     */
+    public onChange(listener: (value: string) => void): () => void {
+        this.changeListeners.add(listener);
+
+        return () => {
+            this.changeListeners.delete(listener);
+        };
+    }
+
+    /**
      * Sets the editor value and synchronizes all layers.
      */
     public setValue(value: string): void {
@@ -184,6 +209,8 @@ export class ModuloEditor {
         this.textareaBridge?.setValue(value);
 
         this.output.render(this.markdown.toHtml(value));
+
+        this.notifyChange(value);
     }
 
     /**
@@ -219,6 +246,8 @@ export class ModuloEditor {
         this.document.setRawContent(value);
         this.textareaBridge?.setValue(value);
         this.output.render(this.markdown.toHtml(value));
+
+        this.notifyChange(value);
     }
 
     /**
@@ -252,5 +281,17 @@ export class ModuloEditor {
                 this.executeCommand(name);
             }
         }
+    }
+
+    /**
+     * Notifies all registered change listeners
+     * with the latest editor value.
+     *
+     * @param value - Current editor raw content.
+     */
+    private notifyChange(value: string): void {
+        this.changeListeners.forEach((listener) => {
+            listener(value);
+        });
     }
 }

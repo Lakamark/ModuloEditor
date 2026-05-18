@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## [0.5.0-alpha.1]
+
+### Added
+- Added an initial React wrapper for ModuloEditor.
+- Added support for React editor lifecycle management.
+- Added React `value` and `onChange` integration support.
+- Added support for custom presets and plugins in the React wrapper.
+- Added React playground integration for development testing.
+
+### Changed
+- Improved editor integration coverage and DOM contract validation.
+- Improved preset and starter kit integration behavior.
+
+### Fixed
+- Fixed starter kit DOM fixture inconsistencies in integration tests.
+- Fixed Markdown rendering integration edge cases.
+
 ## [0.3.1-alpha.3]
 
 ### Added
