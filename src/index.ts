@@ -9,6 +9,11 @@ export type {
     EditorDocument,
 } from "./core";
 
+// Dom contracts
+export type {
+    EditorCssClassMap,
+    DefaultEditorDomInitializerOptions,
+} from './dom/contracts';
 
 // commands
 export type {
