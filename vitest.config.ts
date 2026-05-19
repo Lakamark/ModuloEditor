@@ -6,7 +6,6 @@ export default defineConfig({
         globals: true,
         include: [
             'tests/**/*.{test,spec}.ts',
-            'tests/**/*.spec.tsx',
         ],
         setupFiles: ['./tests/setup.ts'],
         coverage: {

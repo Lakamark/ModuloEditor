@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## [0.5.0-alpha.7]
+
+### Changed
+
+- ModuloEditor is now focused again on a vanilla JavaScript core architecture.
+- Temporary React integration APIs have been removed from the core package.
+- Framework integrations are being redesigned as dedicated external packages.
+
+### Notes
+
+- React integration will return later as an official dedicated package.
+- Community wrappers and custom integrations remain fully supported through the vanilla API.
+
 ## [0.5.0-alpha.1]
 
 ### Added
