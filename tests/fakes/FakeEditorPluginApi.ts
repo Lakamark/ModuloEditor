@@ -9,7 +9,7 @@ import {EDITOR_CSS_CLASSES} from "../../src/dom/constants";
 import {
     type EditorEventBus,
     SimpleEditorEventBus
-} from "../../src/events";
+} from "../../src";
 
 /**
  * Mutable version of EditorDomSlots used for testing.
