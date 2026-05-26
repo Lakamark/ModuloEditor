@@ -53,7 +53,16 @@ export interface ModuloEditorOptions {
      */
     readonly builtinCommands?: boolean | readonly BuiltinCommandName[];
 
-    readonly root: HTMLElement;
+    /**
+     * Optional DOM resolver used by the editor to resolve
+     * internal UI slots and editor elements.
+     *
+     * The resolver acts as the bridge between the editor core
+     * and the rendered DOM structure.
+     *
+     * When omitted, the editor falls back to its default
+     * DOM resolution strategy.
+     */
     readonly domResolver?: EditorDomResolver;
 
     /**

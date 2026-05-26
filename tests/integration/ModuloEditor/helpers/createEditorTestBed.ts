@@ -32,8 +32,7 @@ export function createEditorTestBed(
     const textareaBridge = new FakeTextareaBridge();
     const plugin = new FakeEditorPlugin();
 
-    const editor = new ModuloEditor({
-        root,
+    const editor = new ModuloEditor(root, {
         document,
         input,
         output,
@@ -45,7 +44,6 @@ export function createEditorTestBed(
     });
 
     return {
-        root,
         editor,
         document,
         input,

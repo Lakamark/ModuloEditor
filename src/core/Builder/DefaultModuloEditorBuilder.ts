@@ -313,17 +313,18 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
         }
 
 
-        return new ModuloEditor({
+        return new ModuloEditor(
             root,
-            domResolver: this.domResolver,
-            input: this.requireInput(),
-            output: this.requireOutput(),
-            textareaBridge: this.textareaBridge,
-            markdown: this.requireMarkdown(),
-            plugins: this.plugins,
-            commands: this.commands,
-            document: this.resolveDocument()
-        });
+            {
+                domResolver: this.domResolver,
+                input: this.requireInput(),
+                output: this.requireOutput(),
+                textareaBridge: this.textareaBridge,
+                markdown: this.requireMarkdown(),
+                plugins: this.plugins,
+                commands: this.commands,
+                document: this.resolveDocument()
+            });
     }
 
     /**

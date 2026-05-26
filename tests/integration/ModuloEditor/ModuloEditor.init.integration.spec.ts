@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { createEditorTestBed } from './helpers/createEditorTestBed';
 import {createEditorDomFixture} from "./helpers/createEditorDomFixture";
-import {ModuloEditorBuilder} from "../../../src";
 import {
     FakeEditorInputAdapter,
     FakeEditorOutputAdapter,
     FakeMarkdownProcessor
 } from "../../fakes";
+import {ModuloEditorCore} from "../../../src";
 
 describe('ModuloEditor integration: init', () => {
     it('mounts the input with the initial document content', () => {
@@ -102,7 +102,7 @@ describe('ModuloEditor integration: init', () => {
     it('notifies change listeners when input changes', (): void => {
         const root = createEditorDomFixture();
 
-        const editor = ModuloEditorBuilder
+        const editor = ModuloEditorCore
             .create(root)
             .withInput(new FakeEditorInputAdapter())
             .withOutput(new FakeEditorOutputAdapter())
@@ -122,7 +122,7 @@ describe('ModuloEditor integration: init', () => {
     it('stops notifying change listeners after unsubscribe', (): void => {
         const root = createEditorDomFixture();
 
-        const editor = ModuloEditorBuilder
+        const editor = ModuloEditorCore
             .create(root)
             .withInput(new FakeEditorInputAdapter())
             .withOutput(new FakeEditorOutputAdapter())

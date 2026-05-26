@@ -55,7 +55,7 @@ export class ModuloEditor {
 
     private unsubscribeInputChange?: () => void;
     private readonly changeListeners = new Set<(value: string) => void>();
-    private initialized = false;
+    private initialized: boolean = false;
     private slots!: EditorDomSlots;
 
     /**
@@ -65,6 +65,7 @@ export class ModuloEditor {
      * until `init()` is called.
      */
     public constructor(
+        root: HTMLElement,
         {
             document = new DefaultEditorDocument(),
             input,
@@ -73,16 +74,15 @@ export class ModuloEditor {
             commands = [],
             plugins = [],
             builtinCommands = true,
-            root,
             domResolver,
             textareaBridge,
         }: ModuloEditorOptions) {
+        this.root = root;
         this.document = document;
         this.input = input;
         this.output = output;
         this.markdown = markdown;
         this.plugins = plugins;
-        this.root = root;
         this.domResolver = domResolver ?? new DefaultEditorDomResolver();
         this.textareaBridge = textareaBridge;
 

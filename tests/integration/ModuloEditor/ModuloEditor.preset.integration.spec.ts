@@ -6,7 +6,8 @@ import {
 } from "../../fakes";
 import {
     DefaultEditorPreset,
-    ModuloEditorBuilder, StarterKitPreset
+    ModuloEditorCore,
+    StarterKitPreset
 } from "../../../src";
 
 describe("ModuloEditor presets integration", (): void => {
@@ -22,7 +23,7 @@ describe("ModuloEditor presets integration", (): void => {
         const markdown = new FakeMarkdownProcessor();
 
         expect(() => {
-            ModuloEditorBuilder
+            ModuloEditorCore
                 .create(root)
                 .usePreset(new DefaultEditorPreset())
                 .withInput(input)
@@ -38,7 +39,7 @@ describe("ModuloEditor presets integration", (): void => {
         const root = document.createElement('div');
 
         expect(() => {
-            ModuloEditorBuilder
+            ModuloEditorCore
                 .create(root)
                 .usePreset(new DefaultEditorPreset())
                 .usePreset(new DefaultEditorPreset())
@@ -51,7 +52,7 @@ describe("ModuloEditor presets integration", (): void => {
         const root = document.createElement('div');
 
         expect(() => {
-            ModuloEditorBuilder
+            ModuloEditorCore
                 .create(root)
                 .usePreset(new DefaultEditorPreset())
                 .usePreset(new StarterKitPreset())
@@ -68,7 +69,7 @@ describe("ModuloEditor presets integration", (): void => {
     </div>
 `;
 
-        const editor = ModuloEditorBuilder
+        const editor = ModuloEditorCore
             .create('[data-mo-editor]')
             .usePreset(new StarterKitPreset())
             .build();

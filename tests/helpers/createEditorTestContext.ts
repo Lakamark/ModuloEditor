@@ -1,7 +1,7 @@
 import {
     DefaultEditorDocument,
     type EditorPlugin,
-    ModuloEditor,
+    ModuloEditorCore,
 } from "../../src";
 
 import {
@@ -43,7 +43,7 @@ export function createEditorTestContext(
 
     const plugins = createPlugins?.({ toolbar }) ?? [defaultPlugin];
 
-    const editor = ModuloEditor
+    const editor = ModuloEditorCore
         .create(root)
         .withDomResolver(domResolver)
         .withInput(input)

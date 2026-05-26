@@ -1,6 +1,6 @@
 // core
 export {
-    ModuloEditor as ModuloEditorBuilder,
+    ModuloEditor as ModuloEditorCore,
     DefaultEditorDocument
 } from "./core";
 
@@ -17,6 +17,7 @@ export type {
 
 // commands
 export type {
+    BuiltinCommandName,
     EditorCommand,
     EditorCommandContext,
     EditorCommandsApi,

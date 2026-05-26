@@ -5,11 +5,11 @@ import {
     BoldToolbarPlugin,
     DefaultEditorDomInitializer,
     HeadingToolbarPlugin,ItalicToolbarPlugin,
-    ModuloEditorBuilder,
+    ModuloEditorCore,
     StarterKitPreset,
 } from "./src";
 
-ModuloEditorBuilder
+ModuloEditorCore
     .create()
     .fromTextarea("#content")
     .withDomInitializer(new DefaultEditorDomInitializer())

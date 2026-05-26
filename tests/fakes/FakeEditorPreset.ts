@@ -1,4 +1,4 @@
-import type {ModuloEditorBuilder} from "../../src";
+import type {ModuloEditorBuilder} from "../../src/core";
 
 export class FakeEditorPreset {
     public readonly name = "fake";
