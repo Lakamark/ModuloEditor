@@ -21,6 +21,8 @@ import {
 import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
 import {DefaultModuloEditorBuilder} from "./Builder";
+import type {EditorCssClassMap} from "../dom/contracts";
+import {EDITOR_CSS_CLASSES} from "../dom/constants";
 
 /**
  * Main editor orchestrator.
@@ -52,6 +54,7 @@ export class ModuloEditor {
     private readonly root: HTMLElement;
     private readonly domResolver: EditorDomResolver;
     private readonly textareaBridge?: ModuloEditorOptions["textareaBridge"];
+    private readonly classes: Required<EditorCssClassMap>;
 
     private unsubscribeInputChange?: () => void;
     private readonly changeListeners = new Set<(value: string) => void>();
@@ -76,6 +79,7 @@ export class ModuloEditor {
             builtinCommands = true,
             domResolver,
             textareaBridge,
+            classes = {},
         }: ModuloEditorOptions) {
         this.root = root;
         this.document = document;
@@ -97,6 +101,11 @@ export class ModuloEditor {
             registry,
             () => this.createCommandContext()
         );
+
+        this.classes = {
+            ...EDITOR_CSS_CLASSES,
+            ...classes,
+        };
     }
 
     /**
@@ -277,6 +286,7 @@ export class ModuloEditor {
         return {
             commands: this.commands,
             slots: this.slots,
+            classes: this.classes,
             executeCommand: (name: string): void => {
                 this.executeCommand(name);
             }

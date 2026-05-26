@@ -4,6 +4,10 @@ import type {
     ToolbarContent
 } from "../../contracts";
 import type {CommandButtonPluginOptions} from "./CommandButtonPluginOptions";
+import {
+    applyToolbarButtonA11y,
+    createToolbarButton
+} from "../helpers";
 
 /**
  * Generic toolbar plugin responsible for rendering
@@ -29,7 +33,7 @@ export class CommandButtonPlugin implements EditorPlugin {
     /**
      * Mounts the button and binds click interaction.
      */
-    public setup(api: EditorPluginApi):void {
+    public setup(api: EditorPluginApi): void {
         const toolbar = api.slots.toolbar;
 
         if (!toolbar) {
@@ -38,10 +42,15 @@ export class CommandButtonPlugin implements EditorPlugin {
 
         this.api = api;
 
-        const button = document.createElement("button");
-        button.type = "button";
+        const button = createToolbarButton(api);
 
         this.renderButtonContent(button);
+
+        applyToolbarButtonA11y(button,
+            typeof this.content === "string"
+                ? this.content
+                : this.name
+        )
 
         button.addEventListener("click", this.handleClick);
 

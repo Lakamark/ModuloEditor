@@ -9,6 +9,7 @@ import type {
     BuiltinCommandName,
     EditorCommand
 } from "../../commands";
+import type {EditorCssClassMap} from "../../dom/contracts";
 
 /**
  * Options used to configure a ModuloEditor instance.
@@ -69,4 +70,9 @@ export interface ModuloEditorOptions {
      * Optional bridge used to synchronize a hidden textarea.
      */
     readonly textareaBridge?: TextareaBridge;
+
+    /**
+     * Passé throught the CSS options
+     */
+    readonly classes?: Partial<EditorCssClassMap>;
 }

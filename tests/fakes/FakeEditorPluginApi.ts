@@ -3,6 +3,7 @@ import type {
     EditorPluginApi
 } from "../../src";
 import type {EditorDomSlots} from "../../src";
+import {EDITOR_CSS_CLASSES} from "../../src/dom/constants";
 
 /**
  * Mutable version of EditorDomSlots used for testing.
@@ -13,6 +14,8 @@ type MutableEditorDomSlots = {
 };
 
 export class FakeEditorPluginApi implements EditorPluginApi {
+    public classes = EDITOR_CSS_CLASSES;
+
     public commands: EditorCommandsApi  = {
         has: vi.fn(() => true),
         execute: vi.fn(() => true),
