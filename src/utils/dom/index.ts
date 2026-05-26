@@ -1,0 +1,1 @@
+export { createSvgElement } from './createSvgElement';

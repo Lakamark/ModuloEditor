@@ -1,16 +1,6 @@
 export type {
     EditorPlugin,
-    EditorPluginApi
+    EditorPluginApi,
 } from './contracts';
 
-export {
-    CommandButtonPlugin,
-    BoldToolbarPlugin,
-    ItalicToolbarPlugin,
-    HeadingToolbarPlugin,
-    createDefaultToolbarPlugins
-} from './toolbar';
-
-export type {
-    CommandButtonPluginOptions
-} from './toolbar';
+export * from './toolbar';

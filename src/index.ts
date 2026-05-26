@@ -23,7 +23,6 @@ export type {
     EditorCommandsApi,
 } from "./commands";
 
-
 // dom
 export type {
     EditorDomResolver,
@@ -69,24 +68,23 @@ export {
 } from "./textarea";
 
 
-// plugins
-export type {
-    EditorPlugin,
-    EditorPluginApi
-} from "./plugins";
-
+// Plugins
 export {
     CommandButtonPlugin,
+    ToolbarDropdownPlugin,
     BoldToolbarPlugin,
     ItalicToolbarPlugin,
     HeadingToolbarPlugin,
+    LinkToolbarPlugin,
+    HeadingDropdownPlugin,
     createDefaultToolbarPlugins
-} from "./plugins";
+} from './plugins'
 
 export type {
+    EditorPlugin,
+    EditorPluginApi,
     CommandButtonPluginOptions
-} from "./plugins";
-
+} from './plugins'
 
 // markdown
 export type {
@@ -115,3 +113,12 @@ export {
     StarterKitPreset,
     MarkedPreset
 } from "./presets";
+
+// Global Util Helpers
+export {
+    getCurrentLine,
+    splitSelection,
+    replaceCurrentLine,
+    normalizeHeadingLine,
+    createSvgElement,
+} from './utils';

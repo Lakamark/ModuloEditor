@@ -1,3 +1,5 @@
+import type {ToolbarContent} from "../../contracts";
+
 /**
  * Options used to create a command button plugin.
  */
@@ -13,12 +15,26 @@ export interface CommandButtonPluginOptions {
     readonly commandName: string;
 
     /**
-     * Button content.
+     * Button visual content.
      *
-     * Can be:
-     * - plain text
-     * - an HTMLElement
-     * - a factory returning an HTMLElement
+     * Supports:
+     *
+     * - plain text labels
+     * - custom DOM elements (SVG, icons, spans, etc.)
+     * - factories returning fresh DOM elements
+     *
+     * Factories are recommended when the same plugin
+     * instance may be mounted multiple times.
      */
-    readonly content: string | HTMLElement | (() => HTMLElement);
+    readonly content: ToolbarContent;
+
+    /**
+     * Optional keyboard shortcut triggering the command.
+     *
+     * Examples:
+     * - "Ctrl+B"
+     * - "Meta+B"
+     * - "Shift+Alt+1"
+     */
+    readonly shortcut?: string;
 }

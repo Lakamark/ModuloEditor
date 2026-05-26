@@ -1,6 +1,7 @@
 import type {
     EditorPlugin,
-    EditorPluginApi
+    EditorPluginApi,
+    ToolbarContent
 } from "../../contracts";
 import type {CommandButtonPluginOptions} from "./CommandButtonPluginOptions";
 
@@ -12,7 +13,8 @@ export class CommandButtonPlugin implements EditorPlugin {
     public readonly name: string;
 
     private readonly commandName: string;
-    private readonly content: string | HTMLElement | (() => HTMLElement);
+    private readonly content: ToolbarContent;
+    private readonly shortcut?: string;
 
     private button: HTMLButtonElement | null = null;
     private api: EditorPluginApi | null = null;
@@ -21,6 +23,7 @@ export class CommandButtonPlugin implements EditorPlugin {
         this.name = options.pluginName;
         this.commandName = options.commandName;
         this.content = options.content;
+        this.shortcut = options.shortcut;
     }
 
     /**
@@ -42,6 +45,10 @@ export class CommandButtonPlugin implements EditorPlugin {
 
         button.addEventListener("click", this.handleClick);
 
+        if (this.shortcut) {
+            document.addEventListener("keydown", this.handleShortcut);
+        }
+
        toolbar.appendChild(button);
         this.button = button;
     }
@@ -54,6 +61,13 @@ export class CommandButtonPlugin implements EditorPlugin {
             this.button.removeEventListener("click", this.handleClick);
             this.button.remove();
             this.button = null;
+        }
+
+        if (this.shortcut) {
+            document.removeEventListener(
+                "keydown",
+                this.handleShortcut
+            );
         }
 
         this.api = null;
@@ -87,4 +101,46 @@ export class CommandButtonPlugin implements EditorPlugin {
 
         this.api.executeCommand(this.commandName);
     };
+
+    private readonly handleShortcut =(event: KeyboardEvent): void => {
+        if (!this.shortcut) {
+            return;
+        }
+
+        if (!this.matchesShortcut(event, this.shortcut)) {
+            return;
+        }
+
+        event.preventDefault();
+
+        this.api?.executeCommand(this.commandName);
+    }
+
+    /**
+     * Checks whether the keyboard event matches
+     * the configured shortcut string.
+     */
+    private matchesShortcut(
+        event: KeyboardEvent,
+        shortcut: string
+    ): boolean {
+        const parts: string[] = shortcut
+            .toLowerCase()
+            .split("+");
+
+        const key = parts[parts.length - 1];
+
+        const requiresCtrl = parts.includes("ctrl");
+        const requiresMeta = parts.includes("meta");
+        const requiresShift = parts.includes("shift");
+        const requiresAlt = parts.includes("alt");
+
+        return (
+            event.key.toLowerCase() === key &&
+            event.ctrlKey === requiresCtrl &&
+            event.metaKey === requiresMeta &&
+            event.shiftKey === requiresShift &&
+            event.altKey === requiresAlt
+        );
+    }
 }

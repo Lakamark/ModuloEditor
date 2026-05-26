@@ -1,0 +1,1 @@
+export { normalizeHeadingLine } from './normalizeHeadingLine';

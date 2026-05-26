@@ -1,16 +1,6 @@
-export {
-    CommandButtonPlugin
-} from './base';
-
-export type {
-    CommandButtonPluginOptions
-} from './base';
-
-export {
-    BoldToolbarPlugin,
-    ItalicToolbarPlugin,
-    HeadingToolbarPlugin
-} from './buttons';
+export * from './base';
+export * from './buttons';
+export * from './dropdown';
 
 export {
     createDefaultToolbarPlugins

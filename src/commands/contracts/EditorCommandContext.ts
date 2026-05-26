@@ -1,4 +1,7 @@
-import type {EditorInputAdapter, EditorInputState} from "../../input";
+import type {
+    EditorInputAdapter,
+    EditorInputState
+} from "../../input";
 
 /**
  * Runtime context provided to editor commands.

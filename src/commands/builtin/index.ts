@@ -1,11 +1,13 @@
 import {BoldCommand} from "./BoldCommand";
 import {ItalicCommand} from "./ItalicCommand";
 import {HeadingCommand} from "./HeadingCommand";
+import {LinkCommand} from "./LinkCommand";
 import type {EditorCommand} from "../contracts";
 
 export {BoldCommand} from "./BoldCommand";
 export {ItalicCommand} from "./ItalicCommand";
 export {HeadingCommand} from "./HeadingCommand";
+export {LinkCommand} from "./LinkCommand";
 
 /**
  * Creates all builtin editor commands.
@@ -16,6 +18,7 @@ export function createBuiltinCommands(): readonly EditorCommand[] {
     return [
         new BoldCommand(),
         new ItalicCommand(),
+        new LinkCommand(),
         new HeadingCommand(1),
         new HeadingCommand(2),
         new HeadingCommand(3),

@@ -1,0 +1,1 @@
+export { HeadingDropdownPlugin } from './HeadingDropdownPlugin';

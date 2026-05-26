@@ -1,5 +1,5 @@
 import type {EditorCommandsApi} from "../../commands";
-import type {EditorDomSlots} from "../../dom/contracts";
+import type {EditorDomSlots} from "../../dom";
 
 /**
  * Public API exposed to editor plugins.

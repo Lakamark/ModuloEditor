@@ -1,4 +1,7 @@
-import type {EditorCommandsApi, EditorPluginApi} from "../../src";
+import type {
+    EditorCommandsApi,
+    EditorPluginApi
+} from "../../src";
 import type {EditorDomSlots} from "../../src";
 
 /**

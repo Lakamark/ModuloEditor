@@ -2,6 +2,7 @@ import type {
     EditorCommand,
     EditorCommandContext
 } from "../contracts";
+import {splitSelection} from "../../utils";
 
 export class ItalicCommand implements EditorCommand {
     public readonly name = "italic";
@@ -9,10 +10,11 @@ export class ItalicCommand implements EditorCommand {
     public execute(context: EditorCommandContext): void {
         const {input, state} = context;
         const {value, selectionStart, selectionEnd} = state;
-
-        const before = value.slice(0, selectionStart);
-        const selected = value.slice(selectionStart, selectionEnd);
-        const after = value.slice(selectionEnd);
+        const {before, selected, after } = splitSelection(
+            value,
+            selectionStart,
+            selectionEnd,
+        );
 
         if (selectionStart === selectionEnd) {
             input.setValue(`${before}**${after}`);

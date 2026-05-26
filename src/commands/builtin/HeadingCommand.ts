@@ -1,7 +1,14 @@
 import type {
+    CurrentLine,
     EditorCommand,
     EditorCommandContext
 } from "../contracts";
+import {
+    getCurrentLine,
+    normalizeHeadingLine,
+    replaceCurrentLine
+} from "../../utils";
+
 
 export class HeadingCommand implements EditorCommand {
     public readonly name: string;
@@ -20,18 +27,14 @@ export class HeadingCommand implements EditorCommand {
         const {input, state} = context;
         const {value, selectionStart} = state;
 
-        const lineStart = value.lastIndexOf("\n", selectionStart - 1) + 1;
-        const nextLineBreak = value.indexOf("\n", selectionStart);
-        const lineEnd = nextLineBreak === -1 ? value.length : nextLineBreak;
-
-        const line = value.slice(lineStart, lineEnd);
+        const line: CurrentLine = getCurrentLine(value, selectionStart);
         const prefix = `${"#".repeat(this.level)} `;
 
-        const newValue =
-            value.slice(0, lineStart) +
-            prefix +
-            line +
-            value.slice(lineEnd);
+        const normalized = normalizeHeadingLine(line.content)
+
+        const replacement = `${prefix}${normalized}`;
+
+        const newValue = replaceCurrentLine(value, line, replacement);
 
         input.setValue(newValue);
         input.setSelection(

@@ -2,6 +2,7 @@ import type {
     EditorCommand,
     EditorCommandContext
 } from "../contracts";
+import {splitSelection} from "../../utils";
 
 /**
  * Wraps the current selection with Markdown bold markers.
@@ -12,12 +13,13 @@ export class BoldCommand implements EditorCommand {
     public execute(context: EditorCommandContext): void {
         const { input, state } = context;
         const { value, selectionStart, selectionEnd } = state;
+        const { before, selected, after } = splitSelection(
+            value,
+            selectionStart,
+            selectionEnd,
+        );
 
-        const before = value.slice(0, selectionStart);
-        const selected = value.slice(selectionStart, selectionEnd);
-        const after = value.slice(selectionEnd);
-
-        if (selected.length > 0) {
+        if (selected) {
             const wrapped = `**${selected}**`;
             const nextValue = `${before}${wrapped}${after}`;
 

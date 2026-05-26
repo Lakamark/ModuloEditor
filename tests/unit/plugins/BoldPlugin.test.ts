@@ -50,4 +50,40 @@ describe("BoldToolbarPlugin", () => {
             plugin.setup(api);
         }).not.toThrow();
     });
+
+    it("should execute bold command when shortcut is pressed", () => {
+        const api = new FakeEditorPluginApi();
+        const plugin = new BoldToolbarPlugin();
+
+        plugin.setup(api);
+
+        document.dispatchEvent(
+            new KeyboardEvent("keydown", {
+                key: "b",
+                ctrlKey: true,
+            })
+        );
+
+        expect(api.executeCommand).toHaveBeenCalledWith("bold");
+
+        plugin.destroy();
+    });
+
+    it("should not execute bold command when shortcut does not match", () => {
+        const api = new FakeEditorPluginApi();
+        const plugin = new BoldToolbarPlugin();
+
+        plugin.setup(api);
+
+        document.dispatchEvent(
+            new KeyboardEvent("keydown", {
+                key: "i",
+                ctrlKey: true,
+            })
+        );
+
+        expect(api.executeCommand).not.toHaveBeenCalled();
+
+        plugin.destroy();
+    });
 });
