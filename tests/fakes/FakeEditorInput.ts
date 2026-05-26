@@ -21,6 +21,13 @@ export class FakeEditorInput implements EditorInputAdapter {
 
     public setValue(value: string): void {
         this.value = value;
+    }
+
+    /**
+     * Simulates a real user input change.
+     */
+    public triggerInput(value: string): void {
+        this.value = value;
 
         for (const listener of this.listeners) {
             listener(value);

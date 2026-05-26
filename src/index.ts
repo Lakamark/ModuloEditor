@@ -1,4 +1,4 @@
-// core
+// Core
 export {
     ModuloEditor as ModuloEditorCore,
     DefaultEditorDocument
@@ -9,7 +9,7 @@ export type {
     EditorDocument,
 } from "./core";
 
-// Dom contracts
+// DOM contracts
 export type {
     EditorCssClassMap,
     DefaultEditorDomInitializerOptions,
@@ -23,7 +23,7 @@ export type {
     EditorCommandsApi,
 } from "./commands";
 
-// dom
+// DOM
 export type {
     EditorDomResolver,
     EditorDomSlots,
@@ -36,8 +36,7 @@ export {
     DefaultEditorDomInitializer,
 } from "./dom";
 
-
-// input
+// Input
 export type {
     EditorInputAdapter,
     EditorInputState
@@ -47,8 +46,7 @@ export {
     TextareaInputAdapter
 } from "./input";
 
-
-// output
+// Output
 export type {
     EditorOutputAdapter
 } from "./output";
@@ -57,8 +55,7 @@ export {
     HtmlPreviewAdapter
 } from "./output";
 
-
-// textarea
+// Textarea
 export type {
     TextareaBridge
 } from "./textarea";
@@ -66,7 +63,6 @@ export type {
 export {
     HiddenTextareaBridge
 } from "./textarea";
-
 
 // Plugins
 export {
@@ -86,7 +82,7 @@ export type {
     CommandButtonPluginOptions
 } from './plugins'
 
-// markdown
+// Markdown
 export type {
     MarkdownParser,
     MarkdownProcessor,
@@ -102,7 +98,7 @@ export {
 } from "./markdown";
 
 
-// presets
+// Presets
 export type {
     EditorPreset
 } from "./presets";
@@ -114,7 +110,22 @@ export {
     MarkedPreset
 } from "./presets";
 
-// Global Util Helpers
+// Events
+export {
+    SimpleEditorEventBus,
+} from './events';
+
+export type {
+    EditorEventBus,
+    EditorEventListener,
+    EditorEventUnsubscribe,
+    EditorEventMap,
+    EditorLifecycleEventMap,
+    EditorContentEventMap,
+    EditorCommandEventMap,
+} from './events';
+
+// Utilities
 export {
     getCurrentLine,
     splitSelection,

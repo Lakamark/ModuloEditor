@@ -31,7 +31,7 @@ describe('ModuloEditor integration: value synchronization', () => {
         });
 
         editor.init();
-        input.setValue('Changed from input');
+        input.triggerInput('Changed from input');
 
         expect(document.getRawContent()).toBe('Changed from input');
         expect(textareaBridge.getValue()).toBe('Changed from input');

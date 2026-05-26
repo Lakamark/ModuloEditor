@@ -1,8 +1,15 @@
 import type {
     EditorCommandsApi,
+    EditorEventMap,
     EditorPluginApi
 } from "../../src";
 import type {EditorDomSlots} from "../../src";
+import {EDITOR_CSS_CLASSES} from "../../src/dom/constants";
+
+import {
+    type EditorEventBus,
+    SimpleEditorEventBus
+} from "../../src/events";
 
 /**
  * Mutable version of EditorDomSlots used for testing.
@@ -13,12 +20,18 @@ type MutableEditorDomSlots = {
 };
 
 export class FakeEditorPluginApi implements EditorPluginApi {
+    public classes = EDITOR_CSS_CLASSES;
+
     public commands: EditorCommandsApi  = {
         has: vi.fn(() => true),
         execute: vi.fn(() => true),
     };
 
+    public events: EditorEventBus<EditorEventMap> =
+        new SimpleEditorEventBus<EditorEventMap>();
+
     public executeCommand = vi.fn();
+
 
     public slots: MutableEditorDomSlots = {
         root: document.createElement("div"),

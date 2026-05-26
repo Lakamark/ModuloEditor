@@ -3,22 +3,69 @@ import type {
     EditorPluginApi,
     ToolbarDropdownPluginOptions
 } from "../../contracts";
+import {
+    applyDropdownTriggerA11y,
+    applyToolbarButtonA11y,
+    createToolbarButton,
+    createToolbarDropdownMenu,
+    createToolbarDropdownRoot,
+    syncDropdownExpandedState
+} from "../helpers";
+import {EDITOR_DOM_ATTRIBUTES} from "../../../dom/constants";
 
+/**
+ * Generic toolbar dropdown plugin.
+ *
+ * This plugin creates a dropdown menu inside the editor toolbar
+ * and executes commands when a dropdown item is selected.
+ *
+ * The plugin relies on the editor DOM contract through
+ * stable data attributes and customizable CSS classes.
+ *
+ * DOM contract:
+ *
+ * - data-mo-toolbar-dropdown
+ * - data-mo-toolbar-dropdown-trigger
+ * - data-mo-toolbar-dropdown-menu
+ * - data-mo-toolbar-dropdown-item
+ */
 export class ToolbarDropdownPlugin implements EditorPlugin {
+    /**
+     * Unique plugin name.
+     */
     public readonly name: string;
 
+    /**
+     * Dropdown trigger label.
+     */
     private readonly label: string;
+
+    /**
+     * Dropdown item definitions.
+     */
     private readonly items: ToolbarDropdownPluginOptions["items"];
 
+    /**
+     * Root dropdown element.
+     */
     private root: HTMLDivElement | null = null;
-    private api: EditorPluginApi | null = null;
 
+    /**
+     * Creates a new toolbar dropdown plugin.
+     *
+     * @param options Plugin configuration.
+     */
     public constructor(options: ToolbarDropdownPluginOptions) {
         this.name = options.pluginName;
         this.label = options.label;
         this.items = options.items;
     }
 
+    /**
+     * Mounts the dropdown into the editor toolbar.
+     *
+     * @param api Editor plugin API.
+     */
     public setup(api: EditorPluginApi): void {
         const toolbar = api.slots.toolbar;
 
@@ -26,50 +73,66 @@ export class ToolbarDropdownPlugin implements EditorPlugin {
             return;
         }
 
-        this.api = api;
 
-        const root = document.createElement("div");
-        root.className = "mo-toolbar-dropdown";
+        const root = createToolbarDropdownRoot(api);
 
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = this.label;
+        const button = createToolbarButton(
+            api,
+            this.label,
+            api.classes.toolbarDropdownTrigger,
+            EDITOR_DOM_ATTRIBUTES.toolbarDropdownTrigger
+        );
 
-        const menu = document.createElement("div");
-        menu.className = "mo-toolbar-dropdown__menu";
-        menu.hidden = true;
+        applyToolbarButtonA11y(button, this.label);
+        applyDropdownTriggerA11y(button, this.label);
 
-        button.addEventListener("click", () => {
+
+        const menu = createToolbarDropdownMenu(api);
+        menu.setAttribute("role", "menu");
+
+        button.addEventListener("click", (): void => {
             menu.hidden = !menu.hidden;
+
+            syncDropdownExpandedState(button, menu);
         });
 
         for (const item of this.items) {
-            const itemButton = document.createElement("button");
-            itemButton.type = "button";
-            itemButton.textContent = item.label;
+            const itemButton = createToolbarButton(
+                api,
+                item.label,
+                api.classes.toolbarDropdownItem,
+                EDITOR_DOM_ATTRIBUTES.toolbarDropdownItem
+            );
 
-            itemButton.addEventListener("click", () => {
-                if (!this.api?.commands.has(item.commandName)) {
+            itemButton.setAttribute("role", "menuitem");
+
+            itemButton.addEventListener("click", (): void => {
+                if (!api.commands.has(item.commandName)) {
                     return;
                 }
 
-                this.api.executeCommand(item.commandName);
+                api.executeCommand(item.commandName);
+
                 menu.hidden = true;
+
+                syncDropdownExpandedState(button, menu);
             });
 
             menu.appendChild(itemButton);
         }
 
-        root.appendChild(button);
-        root.appendChild(menu);
-
+        root.append(button, menu);
         toolbar.appendChild(root);
+
         this.root = root;
     }
 
+    /**
+     * Removes the dropdown from the DOM.
+     */
     public destroy(): void {
         this.root?.remove();
+
         this.root = null;
-        this.api = null;
     }
 }

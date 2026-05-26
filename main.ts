@@ -9,9 +9,12 @@ import {
     StarterKitPreset,
 } from "./src";
 import {createSvgElement} from "./src";
-import {HeadingDropdownPlugin, LinkToolbarPlugin} from "./src/plugins/toolbar";
+import {
+    HeadingDropdownPlugin,
+    LinkToolbarPlugin
+} from "./src";
 
-ModuloEditorCore
+const editor = ModuloEditorCore
     .create()
     .fromTextarea("#content")
     .withDomInitializer(new DefaultEditorDomInitializer())
@@ -38,5 +41,42 @@ ModuloEditorCore
         new HeadingDropdownPlugin(),
         new LinkToolbarPlugin(),
     ])
-    .build()
-    .init();
+    .build();
+editor.on('editor:init', ({ timestamp }) => {
+    console.log(`[ModuloEditor] Editor initialized at ${timestamp}`);
+});
+
+editor.on('content:change', ({ value, html, source }) => {
+    console.log({ value, html, source });
+});
+
+editor.on('command:execute', ({ name }) => {
+    if (name === 'bold') {
+        console.log('Bold command executed');
+    }
+
+    if (name === 'italic') {
+        console.log('Italic command executed');
+    }
+
+    if (name === 'heading-1') {
+        console.log('Heading 1');
+    }
+});
+
+editor.on('command:execute', ({ name }) => {
+    console.log(`[ModuloEditor] Command executed: ${name}`);
+});
+
+/**
+ * editor.on('content:change', debounce(({ value }) => {
+ *     saveContent(value);
+ * }, 500));
+ */
+
+editor.init();
+
+// Manual emit used only to demonstrate the event bus.
+editor.emit('command:execute', {
+    name: 'demo-command',
+});

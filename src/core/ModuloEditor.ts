@@ -21,6 +21,13 @@ import {
 import {DefaultEditorDocument} from "./DefaultEditorDocument";
 import {setupEditorCommands} from "../commands/setup/setupEditorCommands";
 import {DefaultModuloEditorBuilder} from "./Builder";
+import type {EditorCssClassMap} from "../dom/contracts";
+import {EDITOR_CSS_CLASSES} from "../dom/constants";
+import {
+    type EditorEventBus, type EditorEventListener,
+    type EditorEventMap, type EditorEventUnsubscribe,
+    SimpleEditorEventBus
+} from "../events";
 
 /**
  * Main editor orchestrator.
@@ -52,6 +59,8 @@ export class ModuloEditor {
     private readonly root: HTMLElement;
     private readonly domResolver: EditorDomResolver;
     private readonly textareaBridge?: ModuloEditorOptions["textareaBridge"];
+    private readonly classes: Required<EditorCssClassMap>;
+    private readonly events: EditorEventBus<EditorEventMap>;
 
     private unsubscribeInputChange?: () => void;
     private readonly changeListeners = new Set<(value: string) => void>();
@@ -76,6 +85,7 @@ export class ModuloEditor {
             builtinCommands = true,
             domResolver,
             textareaBridge,
+            classes = {},
         }: ModuloEditorOptions) {
         this.root = root;
         this.document = document;
@@ -85,6 +95,7 @@ export class ModuloEditor {
         this.plugins = plugins;
         this.domResolver = domResolver ?? new DefaultEditorDomResolver();
         this.textareaBridge = textareaBridge;
+        this.events = new SimpleEditorEventBus<EditorEventMap>();
 
         const registry = new EditorCommandRegistry()
 
@@ -97,6 +108,11 @@ export class ModuloEditor {
             registry,
             () => this.createCommandContext()
         );
+
+        this.classes = {
+            ...EDITOR_CSS_CLASSES,
+            ...classes,
+        };
     }
 
     /**
@@ -125,6 +141,10 @@ export class ModuloEditor {
             return;
         }
 
+        this.events.emit('editor:before-init', {
+            timestamp: Date.now(),
+        });
+
         this.slots = this.domResolver.resolve(this.root);
         const content = this.document.getRawContent();
 
@@ -147,6 +167,10 @@ export class ModuloEditor {
         }
 
         this.initialized = true;
+
+        this.events.emit('editor:init', {
+            timestamp: Date.now(),
+        });
     }
 
     /**
@@ -161,6 +185,10 @@ export class ModuloEditor {
             return;
         }
 
+        this.events.emit('editor:before-destroy', {
+            timestamp: Date.now(),
+        });
+
         this.unsubscribeInputChange?.();
         this.unsubscribeInputChange = undefined;
 
@@ -174,6 +202,59 @@ export class ModuloEditor {
         this.output.destroy();
 
         this.initialized = false;
+
+        this.events.emit('editor:destroy', {
+            timestamp: Date.now(),
+        });
+
+        this.events.clear();
+    }
+
+    /**
+     * Registers an editor event listener.
+     *
+     * This method provides a public subscription API
+     * for the internal editor event bus.
+     *
+     * Listeners may subscribe to:
+     *
+     * - editor lifecycle events
+     * - content synchronization events
+     * - command execution events
+     *
+     * Returns a cleanup callback that unsubscribes
+     * the listener from the event bus.
+     *
+     * @template EventName Event name.
+     *
+     * @param eventName Event to subscribe to.
+     * @param listener Event listener callback.
+     *
+     * @returns Event unsubscribe callback.
+     */
+    public on<EventName extends keyof EditorEventMap>(
+        eventName: EventName,
+        listener:  EditorEventListener<EditorEventMap[EventName]>
+    ): EditorEventUnsubscribe {
+        return this.events.on(eventName, listener);
+    }
+
+    /**
+     * Emits an editor event.
+     *
+     * Mainly intended for advanced integrations,
+     * testing and development tooling.
+     *
+     * @template EventName Event name.
+     *
+     * @param eventName Event name.
+     * @param payload Event payload.
+     */
+    public emit<EventName extends keyof EditorEventMap>(
+        eventName: EventName,
+        payload: EditorEventMap[EventName]
+    ): void {
+        this.events.emit(eventName, payload);
     }
 
     /**
@@ -204,13 +285,26 @@ export class ModuloEditor {
      * Sets the editor value and synchronizes all layers.
      */
     public setValue(value: string): void {
+        this.events.emit('content:before-change', {
+            value,
+            source: 'programmatic',
+        });
+
         this.document.setRawContent(value);
         this.input.setValue(value);
         this.textareaBridge?.setValue(value);
 
-        this.output.render(this.markdown.toHtml(value));
+        const html = this.markdown.toHtml(value);
+
+        this.output.render(html);
 
         this.notifyChange(value);
+
+        this.events.emit('content:change', {
+            value,
+            html,
+            source: 'programmatic',
+        });
     }
 
     /**
@@ -228,8 +322,16 @@ export class ModuloEditor {
             return;
         }
 
+        this.events.emit('command:before-execute', {
+            name,
+        });
+
         this.commands.execute(name);
         this.syncFromInput();
+
+        this.events.emit('command:execute', {
+            name,
+        });
     }
 
     /**
@@ -243,11 +345,24 @@ export class ModuloEditor {
      *  Handles input changes by synchronizing the document and preview.
      */
     private handleInputChange(value: string): void {
+        this.events.emit('content:before-change', {
+            value,
+            source: 'input',
+        });
+
         this.document.setRawContent(value);
         this.textareaBridge?.setValue(value);
-        this.output.render(this.markdown.toHtml(value));
+
+        const html = this.markdown.toHtml(value);
+        this.output.render(html);
 
         this.notifyChange(value);
+
+        this.events.emit('content:change', {
+            value,
+            html,
+            source: 'input',
+        });
     }
 
     /**
@@ -257,7 +372,19 @@ export class ModuloEditor {
         const value = this.input.getValue();
 
         this.document.setRawContent(value);
-        this.output.render(this.markdown.toHtml(value));
+        this.textareaBridge?.setValue(value);
+
+        const html = this.markdown.toHtml(value);
+
+        this.output.render(html);
+
+        this.notifyChange(value);
+
+        this.events.emit('content:change', {
+            value,
+            html,
+            source: 'command',
+        });
     }
 
     /**
@@ -277,6 +404,8 @@ export class ModuloEditor {
         return {
             commands: this.commands,
             slots: this.slots,
+            classes: this.classes,
+            events: this.events,
             executeCommand: (name: string): void => {
                 this.executeCommand(name);
             }
