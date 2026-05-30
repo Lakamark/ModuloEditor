@@ -10,3 +10,10 @@ export type {
     EditorContentEventMap,
     EditorLifecycleEventMap
 } from './maps';
+
+// Uploader Contracts
+export type {
+    EditorUploadErrorEvent,
+    EditorUploadSuccessEvent,
+    EditorUploadRequestEvent,
+} from './upload';

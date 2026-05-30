@@ -466,9 +466,14 @@ export class ModuloEditor {
             commands: this.commands,
             slots: this.slots,
             classes: this.classes,
-            events: this.events,
             executeCommand: (name: string): void => {
                 this.executeCommand(name);
+            },
+            emit: (event, payload): void => {
+                this.events.emit(event, payload);
+            },
+            on: (event, listener) => {
+                return this.events.on(event, listener);
             }
         }
     }

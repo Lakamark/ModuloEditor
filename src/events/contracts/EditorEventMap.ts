@@ -1,10 +1,12 @@
 import type {
     EditorLifecycleEventMap,
     EditorContentEventMap,
-    EditorCommandEventMap
+    EditorCommandEventMap,
+    EditorUploadMap
 } from './maps';
 
 export type EditorEventMap =
     EditorLifecycleEventMap
     & EditorContentEventMap
-    & EditorCommandEventMap;
+    & EditorCommandEventMap
+    & EditorUploadMap;

@@ -5,7 +5,10 @@ export type {
     EditorLifecycleEventMap,
     EditorEventMap,
     EditorCommandEventMap,
-    EditorContentEventMap
+    EditorContentEventMap,
+    EditorUploadRequestEvent,
+    EditorUploadSuccessEvent,
+    EditorUploadErrorEvent,
 } from './contracts';
 
 // Event Bus

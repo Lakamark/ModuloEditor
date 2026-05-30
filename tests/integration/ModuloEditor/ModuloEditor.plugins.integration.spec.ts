@@ -89,15 +89,13 @@ describe('ModuloEditor integration: plugins', () => {
         expect(plugin.destroyCalled).toBe(true);
     });
 
-    it('provides the event bus api to plugins', () => {
+    it('provides the event api to plugins', () => {
         const { editor, plugin } = createEditorTestBed();
 
         editor.init();
 
-        expect(plugin.receivedApi?.events).toBeDefined();
-        expect(typeof plugin.receivedApi?.events.on).toBe('function');
-        expect(typeof plugin.receivedApi?.events.emit).toBe('function');
-        expect(typeof plugin.receivedApi?.events.clear).toBe('function');
+        expect(typeof plugin.receivedApi?.on).toBe("function");
+        expect(typeof plugin.receivedApi?.emit).toBe("function");
     });
 
     it('emits editor init event through the plugin api', () => {
@@ -107,9 +105,9 @@ describe('ModuloEditor integration: plugins', () => {
 
         const listener = vi.fn();
 
-        plugin.receivedApi?.events.on('editor:init', listener);
+        plugin.receivedApi?.on('editor:init', listener);
 
-        plugin.receivedApi?.events.emit('editor:init', {
+        plugin.receivedApi?.emit('editor:init', {
             timestamp: Date.now(),
         });
 
@@ -123,7 +121,7 @@ describe('ModuloEditor integration: plugins', () => {
 
         const listener = vi.fn();
 
-        plugin.receivedApi?.events.on('content:change', listener);
+        plugin.receivedApi?.on('content:change', listener);
 
         editor.setValue('Changed from test');
 
@@ -143,7 +141,7 @@ describe('ModuloEditor integration: plugins', () => {
 
         const listener = vi.fn();
 
-        plugin.receivedApi?.events.on('content:change', listener);
+        plugin.receivedApi?.on('content:change', listener);
 
         input.triggerInput('Changed from input');
 

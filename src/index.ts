@@ -136,6 +136,9 @@ export type {
     EditorLifecycleEventMap,
     EditorContentEventMap,
     EditorCommandEventMap,
+    EditorUploadRequestEvent,
+    EditorUploadSuccessEvent,
+    EditorUploadErrorEvent,
 } from './events';
 
 // Scroll
