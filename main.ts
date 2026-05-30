@@ -47,6 +47,10 @@ editor.on('editor:init', ({ timestamp }) => {
     console.log(`[ModuloEditor] Editor initialized at ${timestamp}`);
 });
 
+editor.on('editor:init', () => {
+    console.log(`[ModuloEditor] Editor is ready`);
+})
+
 editor.on('content:change', ({ value, html, source }) => {
     console.log({ value, html, source });
 });

@@ -141,6 +141,12 @@ export type {
 // Scroll
 export type {
     EditorScrollSync,
+    EditorScrollSectionDecorator,
+} from './scroll'
+
+export {
+    DefaultEditorScrollSectionDecorator,
+    DefaultEditorScrollSync,
 } from './scroll'
 
 
