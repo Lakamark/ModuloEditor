@@ -49,4 +49,28 @@ describe('ModuloEditor integration: value synchronization', () => {
 
         expect(editor.getValue()).toBe('After');
     });
+
+    it("inserts content through the public editor API", () => {
+        const { editor, textareaBridge, markdown, output } = createEditorTestBed({
+            content: "Before",
+        });
+
+        editor.init();
+
+        const changes: string[] = [];
+
+        editor.on("content:change", ({ value }) => {
+            changes.push(value);
+        });
+
+        editor.insertContent("\n\n![image](url)");
+
+        const expected = "Before\n\n![image](url)";
+
+        expect(editor.getValue()).toBe(expected);
+        expect(textareaBridge.getValue()).toBe(expected);
+        expect(markdown.lastValue).toBe(expected);
+        expect(changes).toEqual([expected]);
+        expect(output.renderedHtml).toBe(`<p>${expected}</p>`);
+    });
 });

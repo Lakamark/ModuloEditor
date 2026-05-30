@@ -17,10 +17,29 @@ export class FakeEditorInput implements EditorInputAdapter {
         this.mounted = true;
         this.mountedElement = element;
         this.value = initialValue;
+
+        this.selectionStart = initialValue.length;
+        this.selectionEnd = initialValue.length;
     }
 
     public setValue(value: string): void {
         this.value = value;
+    }
+
+    public insertContent(content: string) {
+        const nextValue =
+            this.value.slice(0, this.selectionStart) +
+            content +
+            this.value.slice(this.selectionEnd);
+
+        const cursor = this.selectionStart + content.length;
+
+        this.value = nextValue;
+        this.setSelection(cursor, cursor);
+
+        for (const listener of this.listeners) {
+            listener(nextValue);
+        }
     }
 
     /**

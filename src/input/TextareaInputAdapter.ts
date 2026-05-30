@@ -3,10 +3,29 @@ import type {
     EditorInputState
 } from "./contracts";
 
+/**
+ * Default textarea-based input adapter.
+ *
+ * This adapter provides a lightweight editing experience
+ * using a native HTMLTextAreaElement.
+ *
+ * Responsibilities:
+ *
+ * - manage editor content
+ * - track cursor and selection state
+ * - notify content changes
+ * - support content insertion at the current selection
+ */
 export class TextareaInputAdapter implements EditorInputAdapter {
     private textarea: HTMLTextAreaElement | null = null;
     private listeners: Array<(value: string) => void> = [];
 
+    /**
+     * Creates and mounts the editor textarea.
+     *
+     * Change events are forwarded to all registered
+     * listeners.
+     */
     public mount(element: HTMLElement, initialValue: string): void {
         const textarea = document.createElement('textarea');
 
@@ -25,6 +44,13 @@ export class TextareaInputAdapter implements EditorInputAdapter {
         this.textarea = textarea;
     }
 
+    /**
+     * Returns the current editor state.
+     *
+     * The returned state contains the current content
+     * and selection information used by commands and
+     * content insertion operations.
+     */
     public getState(): EditorInputState {
         const element = this.getElement();
 
@@ -51,6 +77,39 @@ export class TextareaInputAdapter implements EditorInputAdapter {
         this.textarea.value = value;
     }
 
+    /**
+     * Inserts content at the current cursor position.
+     *
+     * If text is currently selected, the selection is
+     * replaced by the provided content.
+     *
+     * After insertion, the cursor is moved to the end
+     * of the inserted content and change listeners are
+     * notified.
+     */
+    public insertContent(content: string): void {
+        const element = this.getElement();
+
+        const start = element.selectionStart ?? element.value.length;
+        const end = element.selectionEnd ?? element.value.length;
+        const value = element.value;
+
+        const nextValue =
+            value.slice(0, start) +
+            content +
+            value.slice(end);
+
+        const cursor = start + content.length;
+
+        element.value = nextValue;
+        element.setSelectionRange(cursor, cursor);
+        element.focus();
+
+        this.listeners.forEach((listener) => {
+            listener(nextValue);
+        });
+    }
+
     public focus(): void {
         this.textarea?.focus();
     }
@@ -75,6 +134,9 @@ export class TextareaInputAdapter implements EditorInputAdapter {
         return `mo-editor-${Math.random().toString(36).slice(2)}`;
     }
 
+    /**
+     * Applies default attributes to the editor textarea.
+     */
     private setTextareaAttributes(
         textarea: HTMLTextAreaElement,
         initialValue: string
@@ -86,6 +148,11 @@ export class TextareaInputAdapter implements EditorInputAdapter {
         textarea.ariaLabel = 'Markdown editor';
     }
 
+    /**
+     * Returns the mounted textarea element.
+     *
+     * @throws Error When the adapter has not been mounted.
+     */
     private getElement(): HTMLTextAreaElement {
         if (!this.textarea) {
             throw new Error("Textarea input adapter is not mounted.");

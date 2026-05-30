@@ -8,6 +8,7 @@ import {
     FakeEditorInput,
     FakeEditorOutputAdapter,
     FakeEditorPlugin,
+    FakeEditorScrollSectionDecorator,
     FakeMarkdownProcessor,
     FakeTextareaBridge
 } from "../../../fakes";
@@ -33,6 +34,7 @@ export function createEditorTestBed(
     const markdown = new FakeMarkdownProcessor();
     const textareaBridge = new FakeTextareaBridge();
     const plugin = new FakeEditorPlugin();
+    const scrollSectionDecorator = new FakeEditorScrollSectionDecorator();
 
     const editor = new ModuloEditor(root, {
         document,
@@ -43,6 +45,7 @@ export function createEditorTestBed(
         plugins: [plugin],
         commands,
         builtinCommands: false,
+        scrollSectionDecorator
     });
 
     return {

@@ -13,8 +13,13 @@ import {
 } from "../src";
 
 import {DemoEditorInstance} from "./DemoEditorInstance";
+import {DemoImageUploadToolbarPlugin, DemoToolbarAdvancedPlugin} from "./plugins";
 import {registerDemoUpload} from "./upload/uploadFile";
-import {DemoImageUploadToolbarPlugin} from "./plugins/DemoImageUploadToolbarPlugin";
+import {
+    registerCommandEvents,
+    registerContentEvents,
+    registerLifecycleEvents
+} from "./events";
 
 
 const editor = ModuloEditorCore
@@ -27,21 +32,18 @@ const editor = ModuloEditorCore
         new ItalicToolbarPlugin(),
         new HeadingDropdownPlugin(),
         new LinkToolbarPlugin(),
-        new DemoImageUploadToolbarPlugin()
+        new DemoImageUploadToolbarPlugin(),
+        new DemoToolbarAdvancedPlugin()
     ])
     .withStatus(new WordCountStatusAdapter())
     .build();
 
 DemoEditorInstance.set(editor);
 
+
+registerLifecycleEvents();
+registerContentEvents();
+registerCommandEvents();
 registerDemoUpload();
 
-editor.on("asset:upload-success", ({ file, url }) => {
-    const markdown = `![${file.name}](${url})`;
-
-    console.log("Inserted:", markdown);
-
-    // Insert the value in the editor.
-});
-
-editor.init()
+editor.init();

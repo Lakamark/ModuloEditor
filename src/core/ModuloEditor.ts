@@ -364,6 +364,17 @@ export class ModuloEditor {
     }
 
     /**
+     * Inserts content into the editor.
+     *
+     * The content is inserted at the current cursor position
+     * or replaces the current selection, depending on the
+     * active input adapter implementation.
+     */
+    public insertContent(content: string): void {
+        this.input.insertContent(content);
+    }
+
+    /**
      * Executes a registered command and synchronizes editor state.
      */
     public executeCommand(name: string): void {

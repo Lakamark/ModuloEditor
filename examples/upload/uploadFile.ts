@@ -23,7 +23,7 @@ export async function uploadFile(file: File): Promise<string> {
 export function registerDemoUpload(): () => void {
     const editor = DemoEditorInstance.get();
 
-    return editor.on("asset:upload-request", async ({ file }) => {
+    const unsubscribeUploadRequest = editor.on("asset:upload-request", async ({ file }) => {
         try {
             const url = await uploadFile(file);
 
@@ -38,4 +38,20 @@ export function registerDemoUpload(): () => void {
             });
         }
     });
+
+    const unsubscribeUploadSuccess = editor.on("asset:upload-success", ({ file, url }) => {
+        editor.insertContent(
+            `![${file.name}](${url})`
+        );
+    });
+
+    const unsubscribeUploadError = editor.on("asset:upload-error", ({ file, error }) => {
+        console.error("[ModuloEditor] Upload failed:", file.name, error);
+    });
+
+    return () => {
+        unsubscribeUploadRequest();
+        unsubscribeUploadSuccess();
+        unsubscribeUploadError();
+    };
 }

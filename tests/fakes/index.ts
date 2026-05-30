@@ -9,3 +9,4 @@ export {FakeTextareaBridge} from './FakeTextareaBridge';
 export {FakeEditorDomResolver} from './FakeEditorDomResolver';
 export {FakeEditorPreset} from './FakeEditorPreset';
 export {FakeEditorDomInitializer} from './FakeEditorDomInitializer';
+export {FakeEditorScrollSectionDecorator} from './FakeEditorScrollSectionDecorator';

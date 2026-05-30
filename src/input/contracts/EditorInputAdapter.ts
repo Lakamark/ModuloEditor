@@ -4,7 +4,12 @@ import type {EditorInput} from "../../commands";
  * Adapter responsible for handling editor input.
  *
  * This abstraction allows different input implementations
- * like textarea, contenteditable, or CodeMirror.
+ * such as:
+ *
+ * - textarea
+ * - contenteditable
+ * - CodeMirror
+ * - Monaco
  */
 export interface EditorInputAdapter extends EditorInput {
     /**
