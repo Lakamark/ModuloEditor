@@ -1,17 +1,15 @@
 /**
- * Synchronizes scrolling between editor surfaces.
- *
- * Implementations may use a simple ratio-based strategy or a more
- * advanced section-based strategy.
+ * Synchronizes scroll position between the editor input
+ * and the rendered preview.
  */
 export interface EditorScrollSync {
     /**
-     * Initializes scroll synchronization.
+     * Starts listening to scroll events.
      */
-    init(): void;
+    mount(source: HTMLElement, target: HTMLElement): void;
 
     /**
-     * Stops scroll synchronization and releases resources.
+     * Removes listeners and clears internal state.
      */
     destroy(): void;
 }

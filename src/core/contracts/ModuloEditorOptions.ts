@@ -11,6 +11,7 @@ import type {
 } from "../../commands";
 import type {EditorCssClassMap} from "../../dom/contracts";
 import type {EditorStatusAdapter} from "../../status";
+import type {EditorScrollSectionDecorator, EditorScrollSync} from "../../scroll";
 /**
  * Options used to configure a ModuloEditor instance.
  */
@@ -83,4 +84,11 @@ export interface ModuloEditorOptions {
      * Passé throught the CSS options
      */
     readonly classes?: Partial<EditorCssClassMap>;
+
+    /**
+     * Optional scroll synchronization service.
+     */
+    readonly scrollSync?: EditorScrollSync;
+
+    readonly scrollSectionDecorator: EditorScrollSectionDecorator;
 }

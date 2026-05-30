@@ -1,5 +1,12 @@
-export  type {
+export type {
     EditorScrollSync,
-    EditorScrollSectionAnalyzer,
-    EditorScrollSection,
+    EditorScrollSectionDecorator,
 } from './contracts';
+
+export {
+    DefaultEditorScrollSync,
+} from './DefaultEditorScrollSync';
+
+export {
+    DefaultEditorScrollSectionDecorator
+} from './DefaultEditorScrollSectionDecorator';

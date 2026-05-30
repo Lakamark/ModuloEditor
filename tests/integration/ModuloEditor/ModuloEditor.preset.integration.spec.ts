@@ -59,35 +59,4 @@ describe("ModuloEditor presets integration", (): void => {
                 .build();
         }).not.toThrow();
     });
-
-    it('renders markdown to preview html', (): void => {
-        document.body.innerHTML = `
-    <div data-mo-editor>
-        <div data-mo-editor-input></div>
-        <div data-mo-editor-preview></div>
-        <div data-mo-editor-footer>
-            <div data-mo-editor-status></div>
-        </div>
-        <textarea data-mo-editor-textarea></textarea>
-    </div>
-`;
-
-        const editor = ModuloEditorCore
-            .create('[data-mo-editor]')
-            .usePreset(new StarterKitPreset())
-            .build();
-
-        editor.init();
-
-        const input = document.querySelector(
-            '[data-mo-editor-input] textarea'
-        ) as HTMLTextAreaElement;
-
-        input.value = '# Hello';
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-
-        const preview = document.querySelector('[data-mo-editor-preview]');
-
-        expect(preview?.innerHTML).toContain('<h1>Hello</h1>');
-    });
 })

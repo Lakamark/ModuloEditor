@@ -30,7 +30,7 @@ import {
     DEFAULT_HTML_SANITIZER_CONFIG
 } from "../../markdown";
 import type {EditorStatusAdapter} from "../../status";
-
+import {DefaultEditorScrollSectionDecorator, DefaultEditorScrollSync} from "../../scroll";
 /**
  * Default implementation of the ModuloEditor builder.
  *
@@ -353,6 +353,8 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
                 commands: this.commands,
                 document: this.resolveDocument(),
                 status: this.status,
+                scrollSync: new DefaultEditorScrollSync(),
+                scrollSectionDecorator: new DefaultEditorScrollSectionDecorator()
             });
     }
 

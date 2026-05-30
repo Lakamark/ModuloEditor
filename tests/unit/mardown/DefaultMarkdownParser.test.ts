@@ -2,7 +2,9 @@ import {describe, it, expect} from "vitest";
 import {
     DefaultMarkdownProcessor,
     type HtmlSanitizer,
-    type MarkdownParser
+    type MarkdownParser,
+    ModuloEditorCore,
+    StarterKitPreset
 } from "../../../src";
 
 
@@ -45,5 +47,39 @@ describe('DefaultMarkdownProcessor', () => {
         const html = processor.toHtml('Hello');
 
         expect(html).toBe('<p>Hello</p>alert(1)');
+    });
+
+    it('renders markdown to preview html', (): void => {
+        document.body.innerHTML = `
+        <div data-mo-editor>
+            <div data-mo-editor-input></div>
+            <div data-mo-editor-preview></div>
+            <div data-mo-editor-footer>
+                <div data-mo-editor-status></div>
+            </div>
+            <textarea data-mo-editor-textarea></textarea>
+        </div>
+    `;
+
+        const editor = ModuloEditorCore
+            .create('[data-mo-editor]')
+            .usePreset(new StarterKitPreset())
+            .build();
+
+        editor.init();
+
+        const input = document.querySelector(
+            '[data-mo-editor-input] textarea'
+        ) as HTMLTextAreaElement;
+
+        input.value = '# Hello';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+
+        const preview = document.querySelector('[data-mo-editor-preview]');
+
+        const heading = preview?.querySelector('h1');
+
+        expect(heading?.textContent).toBe('Hello');
+        expect(heading?.getAttribute('data-mo-scroll-section')).toBe('0');
     });
 });

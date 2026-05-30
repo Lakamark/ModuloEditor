@@ -140,10 +140,9 @@ export type {
 
 // Scroll
 export type {
-    EditorScrollSection,
-    EditorScrollSectionAnalyzer,
     EditorScrollSync,
 } from './scroll'
+
 
 // Utilities
 export {

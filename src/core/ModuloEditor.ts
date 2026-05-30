@@ -34,6 +34,7 @@ import {
     type EditorStatusAdapter,
     EmptyStatusAdapter
 } from "../status";
+import type {EditorScrollSectionDecorator, EditorScrollSync} from "../scroll";
 /**
  * Main editor orchestrator.
  *
@@ -67,6 +68,8 @@ export class ModuloEditor {
     private readonly classes: Required<EditorCssClassMap>;
     private readonly events: EditorEventBus<EditorEventMap>;
     private readonly status: EditorStatusAdapter;
+    private readonly scrollSync?: EditorScrollSync;
+    private readonly scrollSectionDecorator: EditorScrollSectionDecorator;
 
     private unsubscribeInputChange?: () => void;
     private readonly changeListeners = new Set<(value: string) => void>();
@@ -93,6 +96,8 @@ export class ModuloEditor {
             textareaBridge,
             status = new EmptyStatusAdapter(),
             classes = {},
+            scrollSync,
+            scrollSectionDecorator,
         }: ModuloEditorOptions) {
         this.root = root;
         this.document = document;
@@ -104,6 +109,8 @@ export class ModuloEditor {
         this.textareaBridge = textareaBridge;
         this.events = new SimpleEditorEventBus<EditorEventMap>();
         this.status = status;
+        this.scrollSync = scrollSync;
+        this.scrollSectionDecorator = scrollSectionDecorator;
 
         const registry = new EditorCommandRegistry()
 
@@ -170,10 +177,21 @@ export class ModuloEditor {
         this.textareaBridge?.setValue(content);
 
         const html = this.markdown.toHtml(content);
+        const decoratedHtml = this.scrollSectionDecorator?.decorate(html) ?? html;
 
         this.output.mount(this.slots.preview);
-        this.output.render(html);
+        this.output.render(decoratedHtml);
 
+        const textarea = this.slots.input.querySelector(
+            'textarea'
+        );
+
+        if (textarea instanceof HTMLElement) {
+            this.scrollSync?.mount(
+                textarea,
+                this.slots.preview
+            );
+        }
 
         this.status.mount(this.slots.status);
         this.status.update({
@@ -229,6 +247,8 @@ export class ModuloEditor {
 
         this.input.destroy();
         this.output.destroy();
+
+        this.scrollSync?.destroy();
 
         this.initialized = false;
 
@@ -383,7 +403,9 @@ export class ModuloEditor {
         this.textareaBridge?.setValue(value);
 
         const html = this.markdown.toHtml(value);
-        this.output.render(html);
+        const decoratedHtml = this.scrollSectionDecorator?.decorate(html) ?? html;
+
+        this.output.render(decoratedHtml);
 
         this.status.update({
             value,
