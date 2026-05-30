@@ -97,6 +97,19 @@ export {
     DEFAULT_HTML_SANITIZER_CONFIG
 } from "./markdown";
 
+// Adapters
+export type {
+    EditorStatusAdapter,
+    EditorStatusState,
+    EditorDiagnostic,
+} from './status';
+
+export {
+    EmptyStatusAdapter,
+    WordCountStatusAdapter,
+    DiagnosticStatusAdapter,
+} from './status';
+
 
 // Presets
 export type {

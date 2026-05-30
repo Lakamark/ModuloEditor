@@ -15,7 +15,18 @@ import type {
     EditorDomInitializer,
     EditorDomResolver
 } from "../../dom";
-
+import type {EditorStatusAdapter} from "../../status";
+/**
+ * Builder responsible for configuring and creating
+ * a ModuloEditor instance.
+ *
+ * Supports registration of editor dependencies,
+ * presets, plugins, commands, and adapters before
+ * creating the final editor instance.
+ *
+ * All methods return the current builder instance
+ * to support fluent method chaining.
+ */
 export interface ModuloEditorBuilder {
     usePreset(preset: EditorPreset): this;
     fromTextarea(input: string | HTMLTextAreaElement): this;
@@ -44,6 +55,8 @@ export interface ModuloEditorBuilder {
     withPlugins(plugins: readonly EditorPlugin[]): this;
     withDocument(document: EditorDocument): this;
     withCommands(commands: readonly EditorCommand[]): this;
+
+    withStatus(status: EditorStatusAdapter): this;
 
     build(): ModuloEditor;
 }

@@ -60,7 +60,7 @@ export interface EditorDomSlots {
     /**
      * Optional status container.
      */
-    readonly status: HTMLElement | null;
+    readonly status: HTMLElement;
 
     /**
      * Hidden textarea used for form submission.

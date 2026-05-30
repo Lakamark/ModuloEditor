@@ -6,7 +6,7 @@ import {
     DefaultEditorDomInitializer,
     ItalicToolbarPlugin,
     ModuloEditorCore,
-    StarterKitPreset,
+    StarterKitPreset, WordCountStatusAdapter,
 } from "./src";
 import {createSvgElement} from "./src";
 import {
@@ -41,6 +41,7 @@ const editor = ModuloEditorCore
         new HeadingDropdownPlugin(),
         new LinkToolbarPlugin(),
     ])
+    .withStatus(new WordCountStatusAdapter())
     .build();
 editor.on('editor:init', ({ timestamp }) => {
     console.log(`[ModuloEditor] Editor initialized at ${timestamp}`);

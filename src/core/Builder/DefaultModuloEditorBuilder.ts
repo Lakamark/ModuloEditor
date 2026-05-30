@@ -1,21 +1,35 @@
-import type {EditorDocument, ModuloEditorBuilder} from "../contracts";
-import type {EditorDomInitializationResult, EditorDomInitializer, EditorDomResolver} from "../../dom";
+import type {
+    EditorDocument,
+    ModuloEditorBuilder
+} from "../contracts";
+import type {
+    EditorDomInitializationResult,
+    EditorDomInitializer,
+    EditorDomResolver
+} from "../../dom";
 import type {EditorInputAdapter} from "../../input";
 import type {EditorOutputAdapter} from "../../output";
 import type {TextareaBridge} from "../../textarea";
-import {type MarkdownProcessor, MarkedMarkdownParser} from "../../markdown";
+import {
+    type MarkdownProcessor,
+    MarkedMarkdownParser
+} from "../../markdown";
 import type {EditorPlugin} from "../../plugins";
 import type {EditorCommand} from "../../commands";
 import type {EditorPreset} from "../../presets";
 import {ModuloEditor} from "../ModuloEditor";
 import {DefaultEditorDocument} from "../DefaultEditorDocument";
-import type { MarkdownParser, HtmlSanitizer } from "../../markdown";
+import type {
+    MarkdownParser,
+    HtmlSanitizer
+} from "../../markdown";
 import {
     DefaultMarkdownProcessor,
     PlainTextMarkdownParser,
     DomPurifyHtmlSanitizer,
     DEFAULT_HTML_SANITIZER_CONFIG
 } from "../../markdown";
+import type {EditorStatusAdapter} from "../../status";
 
 /**
  * Default implementation of the ModuloEditor builder.
@@ -46,6 +60,7 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
     private domInitializationResult?: EditorDomInitializationResult;
     private markdownParser?: MarkdownParser;
     private htmlSanitizer?: HtmlSanitizer;
+    private status?: EditorStatusAdapter;
 
     /**
      * Creates a new builder instance.
@@ -166,6 +181,19 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
      */
     public withOutput(output: EditorOutputAdapter): this {
         this.output = output;
+
+        return this;
+    }
+
+    /**
+     * Registers a status adapter used to render information
+     * inside the editor status bar.
+     *
+     * @param status Status adapter instance.
+     * @returns Current builder instance.
+     */
+    public withStatus(status: EditorStatusAdapter): this {
+        this.status = status;
 
         return this;
     }
@@ -323,7 +351,8 @@ export class DefaultModuloEditorBuilder implements ModuloEditorBuilder {
                 markdown: this.requireMarkdown(),
                 plugins: this.plugins,
                 commands: this.commands,
-                document: this.resolveDocument()
+                document: this.resolveDocument(),
+                status: this.status,
             });
     }
 

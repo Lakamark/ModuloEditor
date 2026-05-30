@@ -10,6 +10,7 @@ import type {
     EditorCommand
 } from "../../commands";
 import type {EditorCssClassMap} from "../../dom/contracts";
+import type {EditorStatusAdapter} from "../../status";
 
 /**
  * Options used to configure a ModuloEditor instance.
@@ -34,6 +35,14 @@ export interface ModuloEditorOptions {
      * Markdown processor used to transform raw content into HTML.
      */
     readonly markdown: MarkdownProcessor;
+
+    /**
+     * Optional status adapter used to render information
+     * inside the editor status bar.
+     *
+     * If omitted, the status bar remains empty.
+     */
+    readonly status?: EditorStatusAdapter;
 
     /**
      * Custom commands provided by the user.

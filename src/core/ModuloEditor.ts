@@ -28,6 +28,10 @@ import {
     type EditorEventMap, type EditorEventUnsubscribe,
     SimpleEditorEventBus
 } from "../events";
+import {
+    type EditorStatusAdapter,
+    EmptyStatusAdapter
+} from "../status";
 
 /**
  * Main editor orchestrator.
@@ -61,6 +65,7 @@ export class ModuloEditor {
     private readonly textareaBridge?: ModuloEditorOptions["textareaBridge"];
     private readonly classes: Required<EditorCssClassMap>;
     private readonly events: EditorEventBus<EditorEventMap>;
+    private readonly status: EditorStatusAdapter;
 
     private unsubscribeInputChange?: () => void;
     private readonly changeListeners = new Set<(value: string) => void>();
@@ -85,6 +90,7 @@ export class ModuloEditor {
             builtinCommands = true,
             domResolver,
             textareaBridge,
+            status = new EmptyStatusAdapter(),
             classes = {},
         }: ModuloEditorOptions) {
         this.root = root;
@@ -96,6 +102,7 @@ export class ModuloEditor {
         this.domResolver = domResolver ?? new DefaultEditorDomResolver();
         this.textareaBridge = textareaBridge;
         this.events = new SimpleEditorEventBus<EditorEventMap>();
+        this.status = status;
 
         const registry = new EditorCommandRegistry()
 
@@ -161,8 +168,20 @@ export class ModuloEditor {
         this.input.mount(this.slots.input, content);
         this.textareaBridge?.setValue(content);
 
+        const html = this.markdown.toHtml(content);
+
         this.output.mount(this.slots.preview);
-        this.output.render(this.markdown.toHtml(content));
+        this.output.render(html);
+
+
+        this.status.mount(this.slots.status);
+        this.status.update({
+            value: content,
+            html,
+            characters: content.length,
+            words: this.countWords(content),
+            diagnostics: []
+        });
 
         this.unsubscribeInputChange = this.input.onChange((value: string) => {
             this.handleInputChange(value);
@@ -364,6 +383,16 @@ export class ModuloEditor {
         const html = this.markdown.toHtml(value);
         this.output.render(html);
 
+        this.status.update({
+            value,
+            html,
+            words: this.countWords(value),
+            characters: value.length,
+            diagnostics: []
+        });
+
+        this.textareaBridge?.setValue(value);
+
         this.notifyChange(value);
 
         this.events.emit('content:change', {
@@ -430,5 +459,15 @@ export class ModuloEditor {
         this.changeListeners.forEach((listener) => {
             listener(value);
         });
+    }
+
+    private countWords(value: string): number {
+        const trimmed = value.trim();
+
+        if (!trimmed) {
+            return 0;
+        }
+
+        return trimmed.split(/\s+/).length;
     }
 }
