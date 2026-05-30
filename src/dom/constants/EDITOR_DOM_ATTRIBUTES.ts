@@ -18,4 +18,5 @@ export const EDITOR_DOM_ATTRIBUTES = {
     toolbarDropdownTrigger: 'data-mo-toolbar-dropdown-trigger',
     toolbarDropdownMenu: 'data-mo-toolbar-dropdown-menu',
     toolbarDropdownItem: 'data-mo-toolbar-dropdown-item',
+    scrollSection: 'data-mo-scroll-section',
 } as const;

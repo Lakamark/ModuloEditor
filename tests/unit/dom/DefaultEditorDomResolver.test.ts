@@ -90,12 +90,15 @@ describe('DefaultEditorDomResolver', () => {
         );
     });
 
-    it('returns null for optional slots when they are not present', () => {
+    it('returns null for optional slots when header, toolbar and body are not present', () => {
         const root = document.createElement('div');
         root.innerHTML = `
             <div class="mo-editor" data-mo-editor>
                 <div data-mo-editor-input></div>
                 <div data-mo-editor-preview></div>
+                <div data-mo-editor-footer>
+                    <div data-mo-editor-status></div>
+                </div>
                 <textarea hidden data-mo-editor-textarea></textarea>
             </div>
         `;
@@ -112,7 +115,27 @@ describe('DefaultEditorDomResolver', () => {
         expect(slots.header).toBeNull();
         expect(slots.toolbar).toBeNull();
         expect(slots.body).toBeNull();
-        expect(slots.footer).toBeNull();
-        expect(slots.status).toBeNull();
+        expect(slots.footer).toBeInstanceOf(HTMLElement);
+        expect(slots.status).toBeInstanceOf(HTMLElement);
+    });
+
+    it('throws when the status slot is missing', () => {
+        const root = createARootMissingAttribute('[data-mo-editor-status]');
+
+        const resolver = new DefaultEditorDomResolver();
+
+        expect(() => resolver.resolve(root)).toThrow(
+            'ModuloEditor: missing [data-mo-editor-status].'
+        );
+    });
+
+    it('throws when the footer slot is missing', () => {
+        const root = createARootMissingAttribute('[data-mo-editor-footer]');
+
+        const resolver = new DefaultEditorDomResolver();
+
+        expect(() => resolver.resolve(root)).toThrow(
+            'ModuloEditor: missing [data-mo-editor-footer].'
+        );
     });
 });

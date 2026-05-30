@@ -138,6 +138,13 @@ export type {
     EditorCommandEventMap,
 } from './events';
 
+// Scroll
+export type {
+    EditorScrollSection,
+    EditorScrollSectionAnalyzer,
+    EditorScrollSync,
+} from './scroll'
+
 // Utilities
 export {
     getCurrentLine,

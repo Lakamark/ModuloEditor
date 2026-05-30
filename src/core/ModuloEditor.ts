@@ -24,15 +24,16 @@ import {DefaultModuloEditorBuilder} from "./Builder";
 import type {EditorCssClassMap} from "../dom/contracts";
 import {EDITOR_CSS_CLASSES} from "../dom/constants";
 import {
-    type EditorEventBus, type EditorEventListener,
-    type EditorEventMap, type EditorEventUnsubscribe,
+    type EditorEventBus,
+    type EditorEventListener,
+    type EditorEventMap,
+    type EditorEventUnsubscribe,
     SimpleEditorEventBus
 } from "../events";
 import {
     type EditorStatusAdapter,
     EmptyStatusAdapter
 } from "../status";
-
 /**
  * Main editor orchestrator.
  *
@@ -192,6 +193,7 @@ export class ModuloEditor {
         for (const plugin of this.plugins) {
             plugin.setup(pluginApi);
         }
+
 
         this.initialized = true;
 

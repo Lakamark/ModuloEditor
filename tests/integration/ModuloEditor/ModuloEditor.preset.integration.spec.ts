@@ -65,6 +65,9 @@ describe("ModuloEditor presets integration", (): void => {
     <div data-mo-editor>
         <div data-mo-editor-input></div>
         <div data-mo-editor-preview></div>
+        <div data-mo-editor-footer>
+            <div data-mo-editor-status></div>
+        </div>
         <textarea data-mo-editor-textarea></textarea>
     </div>
 `;

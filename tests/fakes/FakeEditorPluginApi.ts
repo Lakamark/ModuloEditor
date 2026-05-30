@@ -40,8 +40,8 @@ export class FakeEditorPluginApi implements EditorPluginApi {
         body: null,
         input: document.createElement("div"),
         preview: document.createElement("div"),
-        footer: null,
-        status: null,
+        footer:  document.createElement("div"),
+        status:  document.createElement("div"),
         textarea: document.createElement("textarea"),
     };
 }

@@ -11,7 +11,6 @@ import type {
 } from "../../commands";
 import type {EditorCssClassMap} from "../../dom/contracts";
 import type {EditorStatusAdapter} from "../../status";
-
 /**
  * Options used to configure a ModuloEditor instance.
  */

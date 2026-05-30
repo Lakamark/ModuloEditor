@@ -21,6 +21,8 @@ export function createEditorTestContext(
     const inputElement = document.createElement("div");
     const previewElement = document.createElement("div");
     const textarea = document.createElement("textarea");
+    const footer = document.createElement("div");
+    const status = document.createElement("div");
 
     const documentModel = new DefaultEditorDocument("Hello");
     const input = new FakeEditorInputAdapter();
@@ -36,8 +38,8 @@ export function createEditorTestContext(
         body: null,
         input: inputElement,
         preview: previewElement,
-        footer: null,
-        status: null,
+        footer: footer,
+        status: status,
         textarea,
     });
 

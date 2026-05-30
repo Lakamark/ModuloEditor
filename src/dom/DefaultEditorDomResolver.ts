@@ -57,6 +57,18 @@ export class DefaultEditorDomResolver implements EditorDomResolver {
             throw new Error('ModuloEditor: missing [data-mo-editor-textarea].');
         }
 
+        if (!footer) {
+            throw new Error(
+                'ModuloEditor: missing [data-mo-editor-footer].'
+            );
+        }
+
+        if (!status) {
+            throw new Error(
+                "ModuloEditor: missing [data-mo-editor-status]."
+            );
+        }
+
         return {
             root,
             header: header ?? null,
@@ -64,8 +76,8 @@ export class DefaultEditorDomResolver implements EditorDomResolver {
             body: body ?? null,
             input,
             preview,
-            footer: footer ?? null,
-            status: status ?? null,
+            footer: footer,
+            status: status,
             textarea
         };
     }
