@@ -22,6 +22,20 @@ describe('ModuloEditor integration: init', () => {
         expect(output.renderedHtml).toBe('<p>Initial content</p>');
     });
 
+    it('uses textarea content when document is empty', () => {
+        const { editor, input, markdown, output } = createEditorTestBed({
+            content: '',
+            textareaContent: '# Hello ModuloEditor',
+        });
+
+        editor.init();
+
+        expect(input.value).toBe('# Hello ModuloEditor');
+        expect(markdown.lastValue).toBe('# Hello ModuloEditor');
+        expect(output.renderedHtml).toBe('<p># Hello ModuloEditor</p>');
+
+    });
+
     it('mounts the input with the initial document content', () => {
         const { editor, input } = createEditorTestBed({
             content: 'Initial content',
@@ -41,6 +55,9 @@ describe('ModuloEditor integration: init', () => {
 
         expect(textareaBridge.mountedTextarea).toBeInstanceOf(HTMLTextAreaElement);
     });
+
+
+
 
     it('syncs the initial content to the textarea bridge on init', () => {
         const { editor, textareaBridge } = createEditorTestBed({
@@ -140,4 +157,5 @@ describe('ModuloEditor integration: init', () => {
 
         expect(listener).not.toHaveBeenCalled();
     });
+
 });

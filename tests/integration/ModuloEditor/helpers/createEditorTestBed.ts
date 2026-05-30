@@ -14,16 +14,18 @@ import {
 
 interface CreateEditorTestBedOptions {
     readonly content?: string;
+    readonly textareaContent?: string;
     readonly commands?: readonly EditorCommand[];
 }
 
 export function createEditorTestBed(
     {
         content = 'Hello world',
+        textareaContent = '',
         commands = [],
     }: CreateEditorTestBedOptions = {}
 ) {
-    const root = createEditorDomFixture();
+    const root = createEditorDomFixture(textareaContent);
 
     const document = new DefaultEditorDocument(content);
     const input = new FakeEditorInput();

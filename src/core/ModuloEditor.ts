@@ -146,15 +146,23 @@ export class ModuloEditor {
         });
 
         this.slots = this.domResolver.resolve(this.root);
-        const content = this.document.getRawContent();
+
+        this.textareaBridge?.mount(this.slots.textarea);
+
+        const documentContent = this.document.getRawContent();
+
+        const content =
+            documentContent !== ''
+                ? documentContent
+                : this.textareaBridge?.getValue() ?? '';
+
+        this.document.setRawContent(content);
 
         this.input.mount(this.slots.input, content);
-        this.textareaBridge?.mount(this.slots.textarea);
         this.textareaBridge?.setValue(content);
 
-        const html = this.markdown.toHtml(content);
-        this.output.render(html);
         this.output.mount(this.slots.preview);
+        this.output.render(this.markdown.toHtml(content));
 
         this.unsubscribeInputChange = this.input.onChange((value: string) => {
             this.handleInputChange(value);

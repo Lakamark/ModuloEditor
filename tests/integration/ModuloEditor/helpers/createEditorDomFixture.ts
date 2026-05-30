@@ -1,4 +1,6 @@
-export function createEditorDomFixture(): HTMLElement {
+export function createEditorDomFixture(
+    content = ""
+): HTMLElement {
     document.body.innerHTML = `
     <div data-mo-editor>
       <div data-mo-editor-header></div>
@@ -6,7 +8,7 @@ export function createEditorDomFixture(): HTMLElement {
       <div data-mo-editor-body>
         <textarea data-mo-editor-input></textarea>
         <div data-mo-editor-preview></div>
-        <textarea data-mo-editor-textarea name="content"></textarea>
+        <textarea data-mo-editor-textarea name="content">${content}</textarea>
       </div>
       <div data-mo-editor-footer></div>
       <div data-mo-editor-status></div>
