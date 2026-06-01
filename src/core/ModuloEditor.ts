@@ -34,7 +34,11 @@ import {
     type EditorStatusAdapter,
     EmptyStatusAdapter
 } from "../status";
-import type {EditorScrollSectionDecorator, EditorScrollSync} from "../scroll";
+import type {
+    EditorScrollSectionDecorator,
+    EditorScrollSync
+} from "../scroll";
+import {normalizeTextareaContent} from "../textarea";
 /**
  * Main editor orchestrator.
  *
@@ -164,15 +168,17 @@ export class ModuloEditor {
 
         this.textareaBridge?.mount(this.slots.textarea);
 
+        const textareaContent = this.textareaBridge?.getValue() ?? '';
+        const normalizedContent = normalizeTextareaContent(textareaContent);
+
         const documentContent = this.document.getRawContent();
 
         const content =
             documentContent !== ''
                 ? documentContent
-                : this.textareaBridge?.getValue() ?? '';
+                : normalizedContent;
 
         this.document.setRawContent(content);
-
         this.input.mount(this.slots.input, content);
         this.textareaBridge?.setValue(content);
 

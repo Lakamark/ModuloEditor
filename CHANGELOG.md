@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## 0.6.0-alpha.2
+
+### Fixed
+
+- Normalized initial textarea content before first render.
+- Prevented indented HTML textarea markup from being interpreted as Markdown code blocks.
+
 ## 0.6.0-alpha.1
 
 ### Added
