@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog
 and this project adheres to Semantic Versioning.
 
+## 0.6.0-alpha.1
+
+### Added
+
+* Public event system (`editor.on`, `editor.emit`)
+* Status adapter infrastructure
+* Scroll synchronization foundation
+* Asset upload event workflow
+
+### Changed
+
+* Stabilized core architecture
+* Improved plugin API
+* Standardized DOM contracts and resolver
+* Improved TypeScript exports
+* Refined builder API
+* Separated React wrapper from the core package
+* Optimized npm package distribution
+* Removed source maps and declaration maps from published packages
+
+### Fixed
+
+* Multiple API consistency issues
+* Various typing and export issues
+* Builder and plugin integration fixes
+* General stability improvements
+
+### Internal
+
+* Reduced npm package size
+* Improved build pipeline
+* Documentation preparation for future beta releases
+
 ## [0.5.0-alpha.7]
 
 ### Changed
