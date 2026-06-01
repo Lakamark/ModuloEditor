@@ -7,6 +7,6 @@ export default defineConfig({
             name: 'ModuloEditor',
             fileName: 'modulo-editor'
         },
-        sourcemap: true,
+        sourcemap: false,
     }
 });
